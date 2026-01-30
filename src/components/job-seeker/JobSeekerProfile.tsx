@@ -367,6 +367,7 @@ function QuickLinks() {
         <Link
           href="/job-seeker/jobs"
           className="flex items-center text-brand gap-2 text-sm rounded-md font-medium hover:underline w-fit transition-all"
+          prefetch={true}
         >
           <BriefcaseBusiness className="w-4 h-4" />
           Jobs
@@ -375,6 +376,7 @@ function QuickLinks() {
         <Link
           href="/job-seeker/bookmarks"
           className="flex items-center text-brand gap-2 text-sm rounded-md font-medium hover:underline w-fit transition-all"
+          prefetch={true}
         >
           <Bookmark className="w-4 h-4" />
           Bookmarks
@@ -383,6 +385,7 @@ function QuickLinks() {
         <Link
           href="/job-seeker/applications"
           className="flex items-center text-brand gap-2 text-sm rounded-md font-medium hover:underline w-fit transition-all"
+          prefetch={true}
         >
           <FileText className="w-4 h-4" />
           Applications
@@ -391,6 +394,7 @@ function QuickLinks() {
         <Link
           href="/job-seeker/profile/edit"
           className="flex items-center text-brand gap-2 text-sm rounded-md font-medium hover:underline w-fit transition-all"
+          prefetch={true}
         >
           <Edit className="w-4 h-4" />
           Edit Profile
