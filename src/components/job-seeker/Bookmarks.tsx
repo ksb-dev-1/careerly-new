@@ -120,7 +120,7 @@ export function Bookmarks({
         </span>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid md:grid-cols-2 gap-6">
         {bookmarks.map((job) => (
           <JobCard key={job.id} job={job} />
         ))}

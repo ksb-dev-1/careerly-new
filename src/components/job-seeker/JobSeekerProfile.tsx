@@ -428,7 +428,7 @@ export function JobSeekerProfile({ details }: JobSeekerProfileProps) {
   return (
     <div className="min-h-screen max-w-custom w-full pt-32 pb-16 mx-auto px-4">
       <div className="flex flex-col md:flex-row items-start gap-6">
-        <div className="w-full md:w-100 space-y-6">
+        <div className="w-full md:w-120 space-y-6">
           {/* User Details */}
           <UserDetails name={name} email={email} profileImage={profileImage} />
 

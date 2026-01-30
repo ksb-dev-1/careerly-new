@@ -90,7 +90,7 @@ export function JobCardMetadata({
 }: JobMetadataProps) {
   return (
     <CardContent>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Experience */}
         <JobDetailRow
           icon={<BriefcaseBusiness size={16} />}

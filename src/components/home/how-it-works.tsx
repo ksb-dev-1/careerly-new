@@ -53,7 +53,7 @@ const employerSteps = [
 // ----------------------------------------
 export function HowItWorks() {
   return (
-    <section className="w-full max-w-5xl mx-auto px-6 overflow--x-hidden">
+    <section className="w-full max-w-custom mx-auto px-6 overflow--x-hidden">
       {/* Header */}
       <div className="text-center mb-8 sm:mb-16 max-w-3xl mx-auto">
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4">

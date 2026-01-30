@@ -93,7 +93,7 @@ function AccordionSection() {
 // ----------------------------------------
 export function Faq() {
   return (
-    <div className="w-full max-w-5xl mx-auto px-6">
+    <div className="w-full max-w-custom mx-auto px-6">
       {/* Header */}
       <Header />
 

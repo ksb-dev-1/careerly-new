@@ -120,7 +120,7 @@ export function Applications({
         </span>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid md:grid-cols-2 gap-6">
         {applications.map((application) => (
           <JobCard key={application.id} job={application} />
         ))}
