@@ -113,9 +113,14 @@ export function Applications({
 }) {
   return (
     <div className="min-h-screen max-w-custom w-full pt-32 pb-16 mx-auto px-4">
-      <p className="text-lg font-bold mb-6">Applications</p>
+      <div className="mb-6 flex items-center gap-2">
+        <span className="text-lg font-bold">Applications</span>
+        <span className="h-6 w-6 rounded-full bg-brand text-white dark:text-background flex items-center justify-center text-xs font-semibold">
+          {applications.length}
+        </span>
+      </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid gap-6">
         {applications.map((application) => (
           <JobCard key={application.id} job={application} />
         ))}
