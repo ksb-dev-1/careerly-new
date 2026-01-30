@@ -1,0 +1,236 @@
+User visits Jobs Page
+    │
+    ▼
+[Browser requests page from server]
+    │
+    ▼
+Server receives /jobs request
+    │
+    ▼
+Server runs fetchJobs(userId) WITH "use cache":
+┌─────────────────────────────────────────┐
+│ export async function fetchJobs(userId) │
+│ {                                       │
+│   "use cache";                          │
+│   cacheTag(`jobs-${userId}`);           │
+│   console.log("🔵 DB HIT");            │ 
+│   // ... your Prisma query ...          │
+│ }                                       │
+└─────────────────────────────────────────┘
+    │
+    ▼
+Check Server Cache (in-memory, shared across all users):
+┌───────────────────────────────────────┐
+│ Server Cache (global memory)          │
+│ ┌─────────────────────────────────┐   │
+│ │ Key: fn-hash + "user-123"       │   │
+│ │ Status: ❌ EMPTY (first visit) │    │
+│ └─────────────────────────────────┘   │
+└───────────────────────────────────────┘
+    │
+    ▼
+[Cache MISS] → Execute fetchJobs function
+    │
+    ▼
+DB HIT → Fetch jobs
+    │
+    ▼
+Server stores result in global cache:
+┌───────────────────────────────────────┐
+│ Server Cache (global memory)          │
+│ ┌─────────────────────────────────┐  │
+│ │ Key: fn-hash + "user-123"       │  │
+│ │ Status: ✅ CACHED                │  │
+│ │ Data: {jobs: [...], ...}        │  │
+│ │ Tags: ["jobs-user-123"]         │  │
+│ └─────────────────────────────────┘  │
+└───────────────────────────────────────┘
+    │
+    ▼
+Server renders HTML with jobs data embedded
+    │
+    ▼
+Server sends complete HTML (no loading state)
+    │
+    ▼
+Browser displays jobs list instantly
+    │
+    ▼
+─────────────────────────────────────────
+USER INTERACTIONS:
+─────────────────────────────────────────
+
+1. User navigates away and returns:
+   → Server cache HIT ✅ (same user)
+   → NO DB query
+   → NO function execution
+   → Instant HTML with cached data
+
+2. User opens new tab:
+   → Same server cache HIT ✅ (global memory)
+   → NO DB query
+   → Instant HTML with cached data
+
+3. User refreshes page (F5):
+   → Same server cache HIT ✅ (global memory)
+   → NO DB query
+   → Instant HTML with cached data
+
+4. User bookmarks a job:
+   → POST /api/bookmark
+   → Server Action calls: revalidateTag(`jobs-${userId}`)
+   → Server cache INVALIDATED for this user
+   → Next visit: Cache MISS → DB HIT → Fresh data
+
+5. Different user visits:
+   → Different cache key (different userId)
+   → Cache MISS (if first time for that user)
+   → DB HIT for that user
+   → Store in cache with different key
+
+6. Server restart/redeploy:
+   → All cache cleared (in-memory)
+   → First visit after restart: Cache MISS → DB HIT
+   → Rebuild cache for each user as they visit
+
+          ┌─────────────┐
+          │ ALL USERS   │
+          │ share same  │
+          │ server      │
+          │ cache pool  │
+          └──────┬──────┘
+                 │
+    ┌────────────┼────────────┐
+    ▼            ▼            ▼
+User A        User A        User B
+(Chrome)     (Firefox)     (Chrome)
+ Cache Hit    Cache Hit    Cache Miss*
+
+// -------------------------------------
+
+User visits Jobs Page
+    │
+    ▼
+[Browser requests page from server]
+    │
+    ▼
+Server sends HTML + JS bundle (including TanStack)
+    │
+    ▼
+Browser renders initial HTML (empty/loading state)
+    │
+    ▼
+TanStack Query mounts with queryClient config:
+├── staleTime: Infinity (never refetches while mounted)
+└── gcTime: Infinity (never garbage collects)
+    │
+    ▼
+useQuery(['jobs', userId]) is called
+    │
+    ▼
+Check TanStack Query Cache (in browser memory):
+┌───────────────────────────────────────┐
+│ Client Cache (per browser tab/session)│
+│ ┌─────────────────────────────────┐   │
+│ │ Key: ['jobs', 'user-123']       │   │
+│ │ Status: ❌ EMPTY (first visit) │    │
+│ └─────────────────────────────────┘   │
+└───────────────────────────────────────┘
+    │
+    ▼
+[Cache MISS] → Make network request to /api/jobs
+    │
+    ▼
+Server receives /api/jobs request
+    │
+    ▼
+Server runs fetchJobs(userId)
+    │
+    ▼
+DB HIT → Fetch jobs
+    │
+    ▼
+Server returns JSON response
+    │
+    ▼
+TanStack Query stores in browser cache:
+┌───────────────────────────────────────┐
+│ Client Cache (per browser tab/session)│
+│ ┌─────────────────────────────────┐   │
+│ │ Key: ['jobs', 'user-123']       │   │
+│ │ Status: ✅ CACHED              │    │
+│ │ Data: {jobs: [...], ...}        │   │
+│ │ staleTime: Infinity             │   │
+│ └─────────────────────────────────┘   │
+└───────────────────────────────────────┘
+    │
+    ▼
+Component re-renders with fetched data
+    │
+    ▼
+Browser displays jobs list
+    │
+    ▼
+─────────────────────────────────────────
+USER INTERACTIONS:
+─────────────────────────────────────────
+
+1. User navigates away and returns:
+   → Cache HIT ✅ (staleTime: Infinity)
+   → NO network request
+   → Instant display
+
+2. User opens new tab:
+   → New QueryClient instance
+   → Cache MISS (different memory space)
+   → Network request to /api/jobs
+   → New cache entry in this tab
+
+3. User refreshes page (F5):
+   → Page reloads, cache cleared
+   → Cache MISS
+   → Network request to /api/jobs
+
+4. User bookmarks a job:
+   → POST /api/bookmark
+   → Manually invalidate cache:
+     queryClient.invalidateQueries({ 
+       queryKey: ['jobs', userId] 
+     })
+   → Network request to /api/jobs
+   → Update cache with fresh data
+
+   User A Chrome Tab 1   User A Chrome Tab 2   User A Firefox
+    ┌─────────┐           ┌─────────┐         ┌─────────┐
+    │ Cache   │           │ Cache   │         │ Cache   │
+    │ (Tab 1) │           │ (Tab 2) │         │ (Tab 1) │
+    │ MISS    │           │ MISS    │         │ MISS    │
+    └─────────┘           └─────────┘         └─────────┘
+        │                      │                    │
+        ▼                      ▼                    ▼
+   API Request            API Request          API Request
+
+// ----------------------------------------------------
+
+
+Cache Strategy Comparison
+
+Aspect                     | "use cache" (Server)           | TanStack Query (Client)
+---------------------------|--------------------------------|-------------------------
+Cache Location             | Server memory                  | Browser memory
+Cross-tab Sharing          | Yes (same server instance)     | No (per tab/session)
+Hard Refresh               | Cache persists                 | Cache lost
+Initial Load               | Data in HTML (fast, no loading)| Requires JS execution
+Dynamic Updates            | Needs manual revalidation      | Automatic refetching
+Offline Support            | No                             | With PWA setup
+Bundle Size                | Minimal (no client lib)        | Larger (TanStack bundle)
+DB Load                    | Reduced (shared cache)         | Higher (per user/tab)
+User-specific Data         | Cached per user                | Cached per user
+Cache Persistence          | Across sessions                | Only within session
+Network Requests           | Zero for cached users          | One per tab
+First Contentful Paint     | Fast (HTML ready)              | Slower (needs JS)
+Memory Usage               | Shared (efficient)             | Duplicated per tab
+Deployment Scaling         | Cache lost on restart          | Survives server restarts
+Real-time Updates          | Manual invalidation needed     | Easy with mutations
+Developer Experience       | Simple (React patterns)        | Excellent (DevTools, hooks)
+Learning Curve             | Low (built-in)                 | Medium (library to learn)

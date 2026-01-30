@@ -1,0 +1,152 @@
+erDiagram
+    USER ||--o{ ACCOUNT : has
+    USER ||--o{ SESSION : has
+    USER ||--o{ BOOKMARK : creates
+    USER ||--o{ JOBAPPLICATION : submits
+    USER ||--o{ JOB : posts
+    USER ||--o| RESUME : owns
+    USER ||--o| EMPLOYERPROFILE : has
+    USER ||--o| JOBSEEKERPROFILE : has
+    
+    USER {
+        String id PK
+        String name
+        String email UK
+        DateTime emailVerified
+        String image
+        String imagePublicId
+        UserRole role
+        DateTime createdAt
+        DateTime updatedAt
+    }
+    
+    ACCOUNT {
+        String id PK
+        String userId FK
+        String type
+        String provider
+        String providerAccountId
+        String refresh_token
+        String access_token
+        Int expires_at
+        String token_type
+        String scope
+        String id_token
+        String session_state
+        DateTime createdAt
+        DateTime updatedAt
+    }
+    
+    SESSION {
+        String id PK
+        String userId FK
+        String sessionToken UK
+        DateTime expires
+        DateTime createdAt
+        DateTime updatedAt
+    }
+    
+    JOB {
+        String id PK
+        String employerId FK "nullable"
+        String companyName
+        String role
+        JobType jobType
+        JobMode jobMode
+        String location
+        Int salary
+        Currency currency
+        String experience
+        Int openings
+        String[] skills
+        String description
+        JobStatus jobStatus
+        Boolean isDeleted
+        DateTime deletedAt
+        DateTime createdAt
+        DateTime updatedAt
+    }
+    
+    BOOKMARK {
+        String id PK
+        String userId FK
+        String jobId FK
+        DateTime createdAt
+        DateTime updatedAt
+    }
+    
+    RESUME {
+        String id PK
+        String userId FK "unique"
+        String url
+        String publicId
+        String fileName
+        Int fileSize
+        DateTime createdAt
+        DateTime updatedAt
+    }
+    
+    JOBAPPLICATION {
+        String id PK
+        String userId FK
+        String jobId FK
+        ApplicationStatus applicationStatus
+        DateTime createdAt
+        DateTime updatedAt
+    }
+    
+    EMPLOYERPROFILE {
+        String id PK
+        String userId FK "unique"
+        String companyName
+        String companyLogo
+        String companyLogoPublicId
+        String industry
+        String location
+        String about
+        DateTime createdAt
+        DateTime updatedAt
+    }
+    
+    JOBSEEKERPROFILE {
+        String id PK
+        String userId FK "unique"
+        String experience
+        String[] skills
+        String location
+        String about
+        DateTime createdAt
+        DateTime updatedAt
+    }
+    
+    PROJECT {
+        String id PK
+        String jobSeekerProfileId FK
+        String name
+        String link
+        DateTime createdAt
+        DateTime updatedAt
+    }
+    
+    SOCIALLINK {
+        String id PK
+        String jobSeekerProfileId FK
+        String platform
+        String url
+        DateTime createdAt
+        DateTime updatedAt
+    }
+    
+    VERIFICATIONTOKEN {
+        String id PK
+        String identifier
+        String token UK
+        DateTime expires
+        DateTime createdAt
+        DateTime updatedAt
+    }
+    
+    JOBSEEKERPROFILE ||--o{ PROJECT : has
+    JOBSEEKERPROFILE ||--o{ SOCIALLINK : has
+    JOB ||--o{ BOOKMARK : receives
+    JOB ||--o{ JOBAPPLICATION : receives

@@ -1,0 +1,270 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum JobStatus {
+  OPEN
+  CLOSED
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  OFFERED
+  REJECTED
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  INTERNSHIP
+}
+
+enum JobMode {
+  ONSITE
+  REMOTE
+  HYBRID
+}
+
+enum Currency {
+  USD
+  INR
+  EUR
+}
+
+enum UserRole {
+  JOB_SEEKER
+  EMPLOYER
+}
+
+enum Category {
+  DEVELOPMENT
+  UI_UX_DESIGN
+  AI_SERVICES
+  HUMAN_RESEARCH
+  BUSINESS_ANALYSIS
+  DIGITAL_MARKETING
+  VIDEO_AND_ANIMATION
+  MUSIC_AND_AUDIO
+  CONSULTING
+  CUSTOMER_SUPPORT
+}
+
+model User {
+  id               String            @id @default(uuid())
+  name             String?
+  email            String            @unique
+  emailVerified    DateTime?
+  image            String?
+  imagePublicId    String?
+  role             UserRole?
+  accounts         Account[]
+  sessions         Session[]
+  bookmarks        Bookmark[]
+  applications     JobApplication[]
+  resume           Resume?
+  jobs             Job[]
+  employerProfile  EmployerProfile?
+  jobSeekerProfile JobSeekerProfile?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Job {
+  id           String           @id @default(uuid())
+  employerId   String?
+  employer     User?            @relation(fields: [employerId], references: [id], onDelete: SetNull)
+  companyLogo  String?
+  companyName  String
+  role         String
+  jobType      JobType          @default(FULL_TIME)
+  jobMode      JobMode          @default(ONSITE)
+  location     String
+  salary       Int
+  currency     Currency         @default(INR)
+  experience   String
+  openings     Int
+  skills       String[]
+  description  String
+  jobStatus    JobStatus        @default(OPEN)
+  bookmarks    Bookmark[]
+  applications JobApplication[]
+
+  category   Category
+  isFeatured Boolean  @default(false)
+
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // CRITICAL PERFORMANCE INDEXES
+  @@index([jobStatus, isDeleted, isFeatured, createdAt(sort: Desc)])
+  @@index([role])
+  @@index([companyName])
+  @@index([location])
+  @@index([category])
+  @@index([jobType])
+  @@index([jobMode])
+}
+
+model Bookmark {
+  id     String @id @default(uuid())
+  userId String
+  jobId  String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job    Job    @relation(fields: [jobId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, jobId])
+  @@index([userId])
+  @@index([jobId])
+}
+
+model Resume {
+  id       String @id @default(uuid())
+  url      String
+  publicId String
+  userId   String @unique
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fileName String
+  fileSize Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model JobApplication {
+  id                String            @id @default(uuid())
+  userId            String
+  jobId             String
+  applicationStatus ApplicationStatus @default(PENDING)
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job               Job               @relation(fields: [jobId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, jobId])
+  @@index([userId])
+  @@index([jobId])
+  @@index([userId, jobId])
+}
+
+model EmployerProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  companyName         String?
+  companyLogo         String?
+  companyLogoPublicId String?
+  industry            String?
+  location            String?
+  about               String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model JobSeekerProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  experience String?
+  skills     String[]     @default([])
+  projects   Project[]
+  socials    SocialLink[]
+
+  location String?
+  about    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id                 String           @id @default(uuid())
+  jobSeekerProfileId String
+  jobSeekerProfile   JobSeekerProfile @relation(fields: [jobSeekerProfileId], references: [id], onDelete: Cascade)
+
+  name String
+  link String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SocialLink {
+  id                 String           @id @default(uuid())
+  jobSeekerProfileId String
+  jobSeekerProfile   JobSeekerProfile @relation(fields: [jobSeekerProfileId], references: [id], onDelete: Cascade)
+
+  platform String
+  url      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  id         String   @id @default(uuid())
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([identifier, token])
+}

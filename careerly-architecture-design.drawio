@@ -1,0 +1,58 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.0 Chrome/140.0.7339.249 Electron/38.7.2 Safari/537.36" version="29.3.0">
+  <diagram name="Job Platform Architecture" id="4ZHV6D_FuKyzJlP5D4cI">
+    <mxGraphModel dx="1042" dy="634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#000000;fontColor=#000000;" value="&lt;b&gt;User Browser&lt;/b&gt;&lt;div&gt;(Job Seeker / Employer)&lt;/div&gt;&lt;div&gt;React UI&lt;/div&gt;&lt;div&gt;ShadCn / Tailwind&lt;/div&gt;" vertex="1">
+          <mxGeometry height="110" width="130" x="40" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="nextjs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;fontColor=#000000;" value="&lt;b&gt;Next.js App Router&lt;/b&gt;&lt;div&gt;Server Components&lt;/div&gt;&lt;div&gt;Client Components&lt;/div&gt;&lt;div&gt;Server Actions&lt;/div&gt;&lt;div&gt;Route Handlers&lt;/div&gt;" vertex="1">
+          <mxGeometry height="130" width="150" x="220" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="authjs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;fontColor=#000000;" value="&lt;b&gt;Auth.js (NextAuth)&lt;/b&gt;&lt;div&gt;Google/GitHub OAuth&lt;/div&gt;&lt;div&gt;Magic Link Email&lt;/div&gt;&lt;div&gt;Role Management&lt;/div&gt;" vertex="1">
+          <mxGeometry height="110" width="140" x="420" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="prisma" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E8;fontColor=#000000;" value="&lt;b&gt;Prisma ORM&lt;/b&gt;&lt;div&gt;Type-safe Queries&lt;/div&gt;&lt;div&gt;Database Client&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="140" x="620" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="postgresql" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F7FA;fontColor=#000000;" value="&lt;b&gt;PostgreSQL&lt;/b&gt;&lt;div&gt;Database&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;font-size: 12px;&quot;&gt;• Users (roles)&lt;/div&gt;&lt;div style=&quot;font-size: 12px;&quot;&gt;• Jobs&lt;/div&gt;&lt;div style=&quot;font-size: 12px;&quot;&gt;• Applications&lt;/div&gt;&lt;div style=&quot;font-size: 12px;&quot;&gt;• Companies&lt;/div&gt;" vertex="1">
+          <mxGeometry height="150" width="140" x="620" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="cloudinary" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;fontColor=#000000;" value="&lt;b&gt;Cloudinary&lt;/b&gt;&lt;div&gt;CDN &amp;amp; Storage&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;font-size: 12px;&quot;&gt;• Resumes (PDF)&lt;/div&gt;&lt;div style=&quot;font-size: 12px;&quot;&gt;• Profile Images&lt;/div&gt;&lt;div style=&quot;font-size: 12px;&quot;&gt;• Company Logos&lt;/div&gt;" vertex="1">
+          <mxGeometry height="130" width="140" x="420" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1" edge="1" parent="1" source="user" style="endArrow=classic;html=1;rounded=0;" target="nextjs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" edge="1" parent="1" source="nextjs" style="endArrow=classic;html=1;rounded=0;" target="authjs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" edge="1" parent="1" source="nextjs" style="endArrow=classic;html=1;rounded=0;dashed=1;" target="cloudinary">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="295" y="245" as="sourcePoint" />
+            <mxPoint x="420" y="385" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow4" edge="1" parent="1" source="authjs" style="endArrow=classic;html=1;rounded=0;" target="prisma">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" edge="1" parent="1" source="prisma" style="endArrow=classic;html=1;rounded=0;" target="postgresql">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="690" y="260" as="sourcePoint" />
+            <mxPoint x="690" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow6" edge="1" parent="1" source="cloudinary" style="endArrow=classic;html=1;rounded=0;dashed=1;" target="prisma">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="490" y="385" as="sourcePoint" />
+            <mxPoint x="620" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingTop=4;fontSize=12;" value="&lt;b&gt;Architecture Flow:&lt;/b&gt;&lt;div&gt;1. User accesses Next.js app&lt;/div&gt;&lt;div&gt;2. Auth.js handles authentication&lt;/div&gt;&lt;div&gt;3. Prisma manages database operations&lt;/div&gt;&lt;div&gt;4. PostgreSQL stores all data&lt;/div&gt;&lt;div&gt;5. Cloudinary handles file storage&lt;/div&gt;" vertex="1">
+          <mxGeometry height="110" width="160" x="40" y="320" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
