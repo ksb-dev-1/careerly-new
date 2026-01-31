@@ -417,13 +417,13 @@ export function EditJobSeekerProfileForm({
                     {/* Image preview with edit icon */}
                     <div className="relative inline-block">
                       {imagePreview || details.profileImage ? (
-                        <div className="relative h-32 w-32">
+                        <div className="relative h-24 w-24">
                           <Image
                             src={imagePreview || details.profileImage || ""}
                             alt="Profile preview"
                             className="rounded-full object-cover border-2"
                             fill
-                            sizes="128px"
+                            sizes="96px"
                             priority
                           />
 
@@ -451,13 +451,13 @@ export function EditJobSeekerProfileForm({
                         </div>
                       ) : (
                         /* Empty state */
-                        <div className="relative w-32 h-32 rounded-full border-2 border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-center">
+                        <div className="relative w-24 h-24 rounded-full border-2 border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-center">
                           <label
                             htmlFor="profileImage"
                             className="cursor-pointer flex flex-col items-center gap-2 p-4"
                           >
-                            <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center">
-                              <ImageIcon className="text-brand" size={24} />
+                            <div className="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center">
+                              <ImageIcon className="text-brand" size={20} />
                             </div>
                             <span className="text-xs text-muted-foreground">
                               Add photo

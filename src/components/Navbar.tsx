@@ -103,7 +103,7 @@ function NavbarLoading() {
         {Array.from({ length: 3 }, (_, i) => (
           <Skeleton
             key={`skeleton-${i}`}
-            className="skeleton flex items-center gap-2 w-18 h-8"
+            className="skeleton flex items-center gap-2 w-18 h-8 rounded-full"
           />
         ))}
 
@@ -128,7 +128,7 @@ function NavbarWithoutAuth() {
         size="sm"
         asChild
         variant="ghost"
-        className={`${isActive ? "text-brand hover:text-brand" : ""}`}
+        className={`${isActive ? "text-brand hover:text-brand" : ""} rounded-full`}
       >
         <Link href="/job-seeker/jobs?page=1" prefetch={true}>
           Jobs
@@ -137,7 +137,7 @@ function NavbarWithoutAuth() {
 
       <span className="inline-block h-5 border-r-2" />
 
-      <Button asChild size="sm" variant="outline" className="ml-2">
+      <Button asChild size="sm" variant="outline" className="ml-2 rounded-full">
         <Link href="/sign-in">Sign in</Link>
       </Button>
     </NavbarWrapper>
@@ -179,7 +179,7 @@ function JobSeekerNavbar() {
               size="sm"
               asChild
               variant="ghost"
-              className={`${isActive ? "text-brand hover:text-brand" : ""}`}
+              className={`${isActive ? "text-brand hover:text-brand" : ""} rounded-full`}
             >
               <Link href={href} prefetch={true}>
                 {label}
@@ -217,7 +217,7 @@ function EmployerNavbar() {
               size="sm"
               asChild
               variant="ghost"
-              className={`${isActive ? "text-brand hover:text-brand" : ""}`}
+              className={`${isActive ? "text-brand hover:text-brand" : ""} rounded-full`}
             >
               <Link href={href} prefetch={true}>
                 {label}

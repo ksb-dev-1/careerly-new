@@ -94,7 +94,7 @@ function JobCard({ job }: JobCardProps) {
   return (
     <div key={id} className="relative">
       <Card
-        className={`${isFeatured ? "bg-brand/5 border-brand/20" : ""} h-full outline-brand/50 hover:outline-3 transition-all duration-100`}
+        className={`${isFeatured ? "bg-brand/5 border-brand/20" : ""} h-full`}
       >
         {/* Job card header */}
         <JobCardHeader
