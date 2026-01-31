@@ -112,7 +112,7 @@ export function Bookmarks({
   bookmarks: BookmarksWithIsApplied[];
 }) {
   return (
-    <div className="min-h-screen max-w-custom w-full pt-32 pb-16 mx-auto px-4">
+    <div className="min-h-screen max-w-4xl w-full pt-32 pb-16 mx-auto px-4">
       <div className="mb-6 flex items-center gap-2">
         <span className="text-lg font-bold">Bookmarks</span>
         <span className="h-6 w-6 rounded-full bg-brand text-white dark:text-background flex items-center justify-center text-xs font-semibold">
@@ -120,7 +120,7 @@ export function Bookmarks({
         </span>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid gap-6">
         {bookmarks.map((job) => (
           <JobCard key={job.id} job={job} />
         ))}

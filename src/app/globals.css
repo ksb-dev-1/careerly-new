@@ -50,7 +50,7 @@
 }
 
 :root {
-  --width: 72rem;
+  --width: 64rem;
   --brand: #0a66c2;
   --brand-hover: #0d59a5;
   --radius: 0.625rem;
@@ -88,7 +88,7 @@
 }
 
 .dark {
-  --width: 72rem;
+  --width: 64rem;
   --brand: #f4b400;
   --brand-hover: #d9a001;
   --background: oklch(0.145 0 0);
