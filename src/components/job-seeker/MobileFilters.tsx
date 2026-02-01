@@ -246,7 +246,7 @@ function FilterGroup({
 
   return (
     <div className="space-y-2">
-      <div className="text-sm font-bold flex items-center gap-2 text-brand">
+      <div className="font-bold flex items-center gap-2 text-brand">
         <span>{icon}</span>
         <span>{label}</span>
       </div>
