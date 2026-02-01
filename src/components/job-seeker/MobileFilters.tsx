@@ -134,7 +134,7 @@ export function MobileFilters() {
           <span>Filters</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="p-0! gap-0! max-w-75!">
+      <SheetContent className="p-0! gap-0! max-w-75!">
         <SheetHeader className="h-16">
           <SheetTitle className="flex items-center gap-2">
             <p className="flex items-center gap-2">
