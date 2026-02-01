@@ -31,7 +31,7 @@ import { ThemeSwitchMobile } from "@/components/ThemeSwitchMobile";
 import { signOut, useSession } from "next-auth/react";
 import {
   Bookmark,
-  BriefcaseIcon,
+  BriefcaseBusiness,
   FileText,
   LogOut,
   Menu,
@@ -52,7 +52,7 @@ const JOB_SEEKER_NAV_ITEMS: NavItem[] = [
   {
     href: "/job-seeker/jobs?page=1",
     label: "Jobs",
-    icon: <BriefcaseIcon size={16} />,
+    icon: <BriefcaseBusiness size={16} />,
   },
   {
     href: "/job-seeker/bookmarks",
@@ -70,7 +70,7 @@ const EMPLOYER_NAV_ITEMS: NavItem[] = [
   {
     href: "/employer/jobs?page=1",
     label: "Posted Jobs",
-    icon: <BriefcaseIcon size={16} />,
+    icon: <BriefcaseBusiness size={16} />,
   },
 ];
 

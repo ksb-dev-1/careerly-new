@@ -13,7 +13,7 @@ import { Faq } from "@/components/home/faq";
 export default function HomePage() {
   return (
     <>
-      <section className="relative min-h-screen mt-16 overflow-hidden border-b">
+      <section className="mt-16 border-b">
         <HeroSection />
       </section>
       <section className="py-16 border-b">

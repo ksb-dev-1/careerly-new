@@ -10,7 +10,7 @@ import { StartExploringButton } from "@/components/home/start-exploring-button";
 // ----------------------------------------
 export function HeroSection() {
   return (
-    <div className="absolute z-20 inset-0 flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen w-full max-w-custom mx-auto px-6 flex flex-col items-center justify-center">
       {/* Main Headline */}
       <h1 className="font-extrabold text-4xl sm:text-5xl md:text-7xl tracking-tight text-center">
         Unlock Your <span className="text-brand">Career</span> Potential

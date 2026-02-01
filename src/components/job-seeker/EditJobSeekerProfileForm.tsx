@@ -421,7 +421,7 @@ export function EditJobSeekerProfileForm({
                           <Image
                             src={imagePreview || details.profileImage || ""}
                             alt="Profile preview"
-                            className="rounded-full object-cover border-2"
+                            className="rounded-full object-cover border"
                             fill
                             sizes="96px"
                             priority
@@ -430,7 +430,7 @@ export function EditJobSeekerProfileForm({
                           {/* Small edit icon button */}
                           <label
                             htmlFor="profileImage"
-                            className="absolute top-0 right-0 cursor-pointer bg-brand text-white dark:text-background p-1.5 rounded-full shadow-md hover:bg-brand-hover transition-colors border-4 border-background"
+                            className="absolute -top-1.5 -right-1.5 cursor-pointer bg-brand text-white dark:text-background p-1.5 rounded-full shadow-md hover:bg-brand-hover transition-colors border-4 border-background"
                             title="Change image"
                           >
                             <SquarePen size={14} />
@@ -441,7 +441,7 @@ export function EditJobSeekerProfileForm({
                             <button
                               type="button"
                               onClick={handleRemoveImage}
-                              className="absolute border-4 border-background bottom-0 right-0 bg-red-500 text-white p-1.5 rounded-full hover:bg-red-600 transition-colors"
+                              className="absolute border-4 border-background -bottom-1.5 -right-1.5 bg-red-500 text-white p-1.5 rounded-full hover:bg-red-600 transition-colors"
                               aria-label="Remove image"
                               title="Remove image"
                             >
@@ -451,7 +451,7 @@ export function EditJobSeekerProfileForm({
                         </div>
                       ) : (
                         /* Empty state */
-                        <div className="relative w-24 h-24 rounded-full border-2 border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-center">
+                        <div className="relative w-24 h-24 rounded-full border border-dashed border-brand flex items-center justify-center">
                           <label
                             htmlFor="profileImage"
                             className="cursor-pointer flex flex-col items-center gap-2 p-4"
