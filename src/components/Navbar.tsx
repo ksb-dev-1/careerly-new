@@ -3,12 +3,15 @@
 // ----------------------------------------
 // Imports
 // ----------------------------------------
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 // generated
 import { UserRole } from "@/generated/prisma/browser";
+
+// hooks
+import { useAutoCloseOnGreaterThanOrEqualToBreakpoint } from "@/hooks/useAutoCloseModalOnBreakpoint";
 
 // components
 import { ThemeSwitch } from "@/components/ThemeSwitch";
@@ -22,10 +25,19 @@ import {
 } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { ThemeSwitchMobile } from "@/components/ThemeSwitchMobile";
 
 // 3rd party
-import { useSession } from "next-auth/react";
-import { Menu } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import {
+  Bookmark,
+  BriefcaseIcon,
+  FileText,
+  LogOut,
+  Menu,
+  User,
+} from "lucide-react";
+import { toast } from "sonner";
 
 // ----------------------------------------
 // Navigation items
@@ -33,20 +45,24 @@ import { Menu } from "lucide-react";
 type NavItem = {
   href: string;
   label: string;
+  icon: React.ReactNode;
 };
 
 const JOB_SEEKER_NAV_ITEMS: NavItem[] = [
   {
     href: "/job-seeker/jobs?page=1",
     label: "Jobs",
+    icon: <BriefcaseIcon size={16} />,
   },
   {
     href: "/job-seeker/bookmarks",
     label: "Bookmarks",
+    icon: <Bookmark size={16} />,
   },
   {
     href: "/job-seeker/applications",
     label: "Applications",
+    icon: <FileText size={16} />,
   },
 ];
 
@@ -54,6 +70,7 @@ const EMPLOYER_NAV_ITEMS: NavItem[] = [
   {
     href: "/employer/jobs?page=1",
     label: "Posted Jobs",
+    icon: <BriefcaseIcon size={16} />,
   },
 ];
 
@@ -61,21 +78,14 @@ const EMPLOYER_NAV_ITEMS: NavItem[] = [
 // Navbar wrapper component
 // ----------------------------------------
 function NavbarWrapper({ children }: { children: React.ReactNode }) {
-  const { data: session, status } = useSession();
-
   return (
-    <header className="fixed z-30 top-0 left-0 right-0 w-full border-b h-16 flex items-center justify-center bg-background">
+    <header className="fixed z-30 top-0 left-0 right-0 w-full border-b h-16 bg-background flex items-center justify-center">
       <nav className="w-full flex items-center justify-between px-4">
         <div className="flex items-center">
-          {session?.user.role && (
-            <SideMenu
-              links={
-                session?.user.role === UserRole.JOB_SEEKER
-                  ? JOB_SEEKER_NAV_ITEMS
-                  : EMPLOYER_NAV_ITEMS
-              }
-            />
-          )}
+          <Suspense>
+            <SideMenu />
+          </Suspense>
+
           <Link
             href="/"
             className="font-extrabold text-2xl text-brand hover:text-brand-hover transition-colors"
@@ -84,7 +94,7 @@ function NavbarWrapper({ children }: { children: React.ReactNode }) {
           </Link>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-2">
           {children}
           <ThemeSwitch />
         </div>
@@ -106,7 +116,6 @@ function NavbarLoading() {
             className="skeleton flex items-center gap-2 w-18 h-8 rounded-full"
           />
         ))}
-
         <span className="inline-block h-5 border-r-2 mx-2" />
 
         <Skeleton className="skeleton h-8 w-8 rounded-full" />
@@ -169,19 +178,20 @@ function JobSeekerNavbar() {
 
   return (
     <NavbarWrapper>
-      <div className="hidden md:flex items-center gap-2">
-        {JOB_SEEKER_NAV_ITEMS.map(({ href, label }) => {
+      <div className="flex items-center gap-2">
+        {JOB_SEEKER_NAV_ITEMS.map(({ href, label, icon }) => {
           const isActive = path === href.split("?")[0];
 
           return (
             <Button
               key={href}
-              size="sm"
               asChild
+              size="sm"
               variant="ghost"
               className={`${isActive ? "text-brand hover:text-brand" : ""} rounded-full`}
             >
               <Link href={href} prefetch={true}>
+                {icon}
                 {label}
               </Link>
             </Button>
@@ -207,19 +217,20 @@ function EmployerNavbar() {
 
   return (
     <NavbarWrapper>
-      <div className="hidden md:flex items-center gap-2">
-        {EMPLOYER_NAV_ITEMS.map(({ href, label }) => {
+      <div className="flex items-center gap-2">
+        {EMPLOYER_NAV_ITEMS.map(({ href, label, icon }) => {
           const isActive = path === href.split("?")[0];
 
           return (
             <Button
               key={href}
-              size="sm"
               asChild
+              size="sm"
               variant="ghost"
               className={`${isActive ? "text-brand hover:text-brand" : ""} rounded-full`}
             >
               <Link href={href} prefetch={true}>
+                {icon}
                 {label}
               </Link>
             </Button>
@@ -236,21 +247,44 @@ function EmployerNavbar() {
   );
 }
 
-export function SideMenu({ links }: { links: NavItem[] }) {
+export function SideMenu() {
+  const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
+  const path = usePathname();
+
+  useAutoCloseOnGreaterThanOrEqualToBreakpoint(isOpen, setIsOpen);
+
+  const handleSignOut = async () => {
+    setIsOpen(false);
+
+    try {
+      await signOut({ callbackUrl: "/" });
+      toast.success("Signed out successfully");
+    } catch (error) {
+      console.error("Sign out error:", error);
+      toast.error("Failed to sign out. Please try again.");
+    }
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          className="mr-3 md:hidden rounded-full"
-          aria-label="Open navigation menu"
-        >
-          <Menu />
-        </Button>
-      </SheetTrigger>
+      {status === "loading" ? (
+        <Skeleton
+          className="mr-3 md:hidden rounded-full h-9 w-9"
+          aria-label="Open navigation loading"
+        />
+      ) : (
+        <SheetTrigger asChild>
+          <Button
+            variant="outline"
+            size="icon"
+            className="mr-3 md:hidden rounded-full"
+            aria-label="Open navigation menu"
+          >
+            <Menu />
+          </Button>
+        </SheetTrigger>
+      )}
 
       <SheetContent side="left" className="w-48 gap-0 p-0!">
         <SheetHeader className="p-0!">
@@ -259,21 +293,113 @@ export function SideMenu({ links }: { links: NavItem[] }) {
           </SheetTitle>
         </SheetHeader>
 
-        <nav className="flex flex-col gap-1 mx-4 mt-4">
-          {links.map(({ href, label }) => (
+        <div className="flex flex-col">
+          {!session?.user.id && (
+            <nav className="flex flex-col gap-1 mt-4">
+              <Button
+                asChild
+                variant="link"
+                size="sm"
+                className="justify-start w-fit"
+                onClick={() => setIsOpen(false)}
+              >
+                <Link href="/sign-in">Sign In</Link>
+              </Button>
+            </nav>
+          )}
+
+          {session?.user.role === UserRole.JOB_SEEKER && (
+            <nav className="flex flex-col gap-2 mt-4">
+              {JOB_SEEKER_NAV_ITEMS.map(({ href, label, icon }) => {
+                const isActive = path === href.split("?")[0];
+
+                return (
+                  <Button
+                    key={href}
+                    asChild
+                    size="sm"
+                    variant="link"
+                    onClick={() => setIsOpen(false)}
+                    className={`${isActive ? "text-brand hover:text-brand" : ""} justify-start w-fit`}
+                  >
+                    <Link href={href} prefetch={true}>
+                      {icon}
+                      {label}
+                    </Link>
+                  </Button>
+                );
+              })}
+            </nav>
+          )}
+
+          {session?.user.role === UserRole.EMPLOYER && (
+            <nav className="flex flex-col gap-2 mt-4">
+              {EMPLOYER_NAV_ITEMS.map(({ href, label, icon }) => {
+                const isActive = path === href.split("?")[0];
+
+                return (
+                  <Button
+                    key={href}
+                    asChild
+                    size="sm"
+                    variant="link"
+                    onClick={() => setIsOpen(false)}
+                    className={`${isActive ? "text-brand hover:text-brand" : ""} justify-start w-fit`}
+                  >
+                    <Link href={href} prefetch={true}>
+                      {icon}
+                      {label}
+                    </Link>
+                  </Button>
+                );
+              })}
+            </nav>
+          )}
+
+          {session?.user.role === UserRole.JOB_SEEKER && (
             <Button
-              key={href}
               asChild
-              variant="ghost"
-              className="justify-start"
+              variant="link"
               onClick={() => setIsOpen(false)}
+              className={`${path === "/job-seeker/profile" ? "text-brand hover:text-brand" : ""} justify-start w-fit mt-2`}
             >
-              <Link href={href} prefetch={true}>
-                {label}
+              <Link href="/job-seeker/profile" prefetch={true}>
+                <User className="h-4 w-4" aria-hidden="true" />
+                Profile
               </Link>
             </Button>
-          ))}
-        </nav>
+          )}
+
+          {session?.user.role === UserRole.EMPLOYER && (
+            <Button
+              asChild
+              variant="link"
+              onClick={() => setIsOpen(false)}
+              className={`${path === "/employer/profile" ? "text-brand hover:text-brand" : ""} justify-start w-fit mt-2`}
+            >
+              <Link href="/employer/profile" prefetch={true}>
+                <User className="h-4 w-4" aria-hidden="true" />
+                Profile
+              </Link>
+            </Button>
+          )}
+
+          {session?.user.id && (
+            <Button
+              asChild
+              variant="link"
+              onClick={handleSignOut}
+              className="justify-start w-fit mt-1"
+            >
+              <Link href="/employer/profile" prefetch={true}>
+                <LogOut className="h-4 w-4" aria-hidden="true" />
+                Sign out
+              </Link>
+            </Button>
+          )}
+
+          <ThemeSwitchMobile />
+        </div>
       </SheetContent>
     </Sheet>
   );

@@ -181,11 +181,7 @@ function ProfileProgress({ completion, missingFields }: ProfileProgressProps) {
 
               <div className="flex items-center flex-wrap gap-2 mt-4">
                 {missingFields.map((field) => (
-                  <Badge
-                    key={field}
-                    variant="outline"
-                    className="text-muted-foreground"
-                  >
+                  <Badge key={field} variant="secondary" className="">
                     {field}
                   </Badge>
                 ))}

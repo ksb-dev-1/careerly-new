@@ -57,7 +57,7 @@ function JobDetailRow({
     isLocation && typeof value === "string" ? value.split(",")[0] : value;
 
   return (
-    <div className="text-sm flex items-center gap-2 font-medium">
+    <div className="flex items-center gap-2 font-medium">
       <span className="">{icon}</span>
       <span className="flex items-center text-muted-foreground">
         {currency && <CurrencyIcon currency={currency} />}
@@ -93,33 +93,33 @@ export function JobCardMetadata({
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Experience */}
         <JobDetailRow
-          icon={<BriefcaseBusiness size={16} />}
+          icon={<BriefcaseBusiness size={20} />}
           value={experience}
           isExperience={true}
         />
 
         {/* Salary */}
         <JobDetailRow
-          icon={<Wallet size={16} />}
+          icon={<Wallet size={20} />}
           value={salary}
           currency={currency}
         />
 
         {/* Job type */}
         <JobDetailRow
-          icon={<Timer size={16} />}
+          icon={<Timer size={20} />}
           value={formatJobTypeOrMode(jobType)}
         />
 
         {/* Job mode */}
         <JobDetailRow
-          icon={<Building size={16} />}
+          icon={<Building size={20} />}
           value={formatJobTypeOrMode(jobMode)}
         />
 
         {/* Location */}
         <JobDetailRow
-          icon={<MapPin size={16} />}
+          icon={<MapPin size={20} />}
           value={location || "Not specified"}
           isLocation
         />

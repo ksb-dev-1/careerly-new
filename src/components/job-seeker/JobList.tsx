@@ -1,9 +1,6 @@
-"use client";
-
 // ----------------------------------------
 // Imports
 // ----------------------------------------
-import { useState, useEffect } from "react";
 import Link from "next/link";
 
 // lib
@@ -11,7 +8,6 @@ import { JobWithRelationships } from "@/lib/job-seeker/fetch-jobs";
 
 // components
 import { ActiveFilters } from "@/components/job-seeker/ActiveFilters";
-// import { LayoutSwitch } from "@/components/job-seeker/LayoutSwitch";
 import { Filters } from "@/components/job-seeker/Filters";
 import { MobileFilters } from "@/components/job-seeker/MobileFilters";
 import { BookmarkButton } from "@/components/job-seeker/BookmarkButton";
@@ -22,8 +18,7 @@ import { JobPagination } from "@/components/Pagination";
 import { Card } from "@/components/ui/card";
 
 // 3rd Party
-import { FolderOpen, ListFilter } from "lucide-react";
-import { Button } from "../ui/button";
+import { FolderOpen } from "lucide-react";
 
 // ----------------------------------------
 // Job Card Component
@@ -113,35 +108,12 @@ interface JobListProps {
   };
 }
 
-function capitalizeCategory(category: string) {
-  return category
-    .toLowerCase()
-    .split("_")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-}
-
-type Layout = "list" | "grid";
-
 export function JobList({
   jobs,
   totalJobs,
   totalPages,
   filters,
 }: JobListProps) {
-  const [layout, setLayout] = useState<Layout>(() => {
-    if (typeof window === "undefined") return "list"; // SSR safe
-
-    const storedLayout = localStorage.getItem("careerly-layout");
-    return storedLayout === "grid" || storedLayout === "list"
-      ? storedLayout
-      : "list";
-  });
-
-  useEffect(() => {
-    localStorage.setItem("careerly-layout", layout);
-  }, [layout]);
-
   const { page, jobType, jobMode, experience, search } = filters;
   const isFilterApplied =
     search !== "" || jobType?.length || jobMode?.length || experience !== "";

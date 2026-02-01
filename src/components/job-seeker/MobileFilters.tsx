@@ -116,23 +116,6 @@ export function MobileFilters() {
     router.push(`/job-seeker/jobs?${params.toString()}`);
   };
 
-  // ----------------------------------------
-  // Clear all
-  // ----------------------------------------
-  // const handleClearAll = () => {
-  //   setTempJobType([]);
-  //   setTempJobMode([]);
-  //   setTempExperience(DEFAULT_EXPERIENCE);
-
-  //   const params = new URLSearchParams(searchParams.toString());
-  //   params.set("page", "1");
-  //   params.delete("jobType");
-  //   params.delete("jobMode");
-  //   params.delete("experience");
-
-  //   router.push(`/job-seeker/jobs?${params.toString()}`);
-  // };
-
   const totalSelections =
     tempJobType.length +
     tempJobMode.length +
@@ -155,7 +138,7 @@ export function MobileFilters() {
         <SheetHeader className="h-16">
           <SheetTitle className="flex items-center gap-2">
             <p className="flex items-center gap-2">
-              <ListFilter size={16} />
+              <ListFilter size={20} />
               <span className="font-bold">Filters</span>
             </p>
             {totalSelections > 0 ? (
@@ -176,7 +159,7 @@ export function MobileFilters() {
             values={tempJobType}
             onChange={setTempJobType}
             options={Object.values(JobType)}
-            icon={<Timer size={16} />}
+            icon={<Timer size={20} />}
           />
 
           <FilterGroup
@@ -184,14 +167,14 @@ export function MobileFilters() {
             values={tempJobMode}
             onChange={setTempJobMode}
             options={Object.values(JobMode)}
-            icon={<Building size={16} />}
+            icon={<Building size={20} />}
           />
 
           {/* Experience */}
           <div className="space-y-4">
-            <div className="text-sm font-bold flex items-center gap-2 text-brand">
+            <div className="font-bold flex items-center gap-2 text-brand">
               <span>
-                <BriefcaseBusiness size={16} />
+                <BriefcaseBusiness size={20} />
               </span>
               <span>Experience</span>
             </div>
@@ -211,18 +194,6 @@ export function MobileFilters() {
               <span>{tempExperience[1]} yrs</span>
             </div>
           </div>
-
-          {/* {totalSelections > 0 && (
-            <div className="flex justify-end">
-              <Badge
-                variant="outline"
-                onClick={handleClearAll}
-                className="border bg-red-100 text-red-600 hover:bg-red-200 border-red-300 dark:bg-red-950/40 dark:text-red-500 dark:hover:bg-red-950 dark:border-red-800"
-              >
-                Clear All
-              </Badge>
-            </div>
-          )} */}
         </div>
 
         <SheetFooter className="border-t">
@@ -276,9 +247,6 @@ function FilterGroup({
   return (
     <div className="space-y-2">
       <div className="text-sm font-bold flex items-center gap-2 text-brand">
-        {/* <div className="h-8 w-8 rounded-full bg-brand/20 text-brand flex items-center justify-center">
-          {icon}
-        </div> */}
         <span>{icon}</span>
         <span>{label}</span>
       </div>
@@ -298,7 +266,7 @@ function FilterGroup({
               )}
               <button
                 onClick={() => toggle(option)}
-                className={`text-sm transition ${
+                className={`transition ${
                   isActive
                     ? "text-brand"
                     : "hover:text-muted-foreground dark:hover:text-white/80"

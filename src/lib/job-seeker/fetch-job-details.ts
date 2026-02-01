@@ -21,6 +21,8 @@ import {
 // ----------------------------------------
 // Types
 // ----------------------------------------
+type ApiErrorStatus = 400 | 401 | 403 | 404 | 500;
+
 export type FetchPublicJobDetailsSuccess = {
   success: true;
   job: Job;
@@ -74,7 +76,7 @@ type FetchJobDetailsSuccess = {
 type FetchJobDetailsError = {
   success: false;
   message: string;
-  status: 400 | 404 | 500;
+  status: 400 | 401 | 403 | 404 | 500;
 };
 
 export type FetchJobResponse = FetchJobDetailsSuccess | FetchJobDetailsError;

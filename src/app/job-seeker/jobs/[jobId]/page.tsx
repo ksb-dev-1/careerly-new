@@ -47,18 +47,26 @@ async function JobDetailsContent({ jobId }: { jobId: string }) {
 
   // Handle errors
   if (!response.success) {
-    if (response.status === 404) {
-      return (
-        <EmptyState
-          message={response.message}
-          href="/job-seeker/jobs"
-          btnIcon={<ArrowLeft />}
-          btnLabel="Back to Jobs"
-        />
-      );
-    }
+    switch (response.status) {
+      case 401:
+        redirect("/sign-in");
 
-    return <ServerError message={response.message} />;
+      case 403:
+        return <UnauthorizedError message={response.message} />;
+
+      case 404:
+        return (
+          <EmptyState
+            message={response.message}
+            href="/job-seeker/jobs"
+            btnIcon={<ArrowLeft />}
+            btnLabel="Back to Jobs"
+          />
+        );
+
+      default:
+        return <ServerError message={response.message} />;
+    }
   }
 
   return <JobDetails job={response.job} />;
@@ -71,14 +79,6 @@ async function AuthContentLoader(props: PageProps) {
   const session = await auth();
   const params = await props.params;
   const { jobId } = params;
-
-  if (!session?.user.id) redirect("/sign-in");
-
-  if (session.user.role !== UserRole.JOB_SEEKER) {
-    return (
-      <UnauthorizedError message="Fetching job seeker profile is restricted to users with the Job Seeker role." />
-    );
-  }
 
   return <JobDetailsContent jobId={jobId} />;
 }

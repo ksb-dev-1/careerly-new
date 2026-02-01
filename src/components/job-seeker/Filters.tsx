@@ -141,7 +141,7 @@ export function Filters() {
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2">
           <p className="flex items-center gap-2">
-            <ListFilter size={16} />
+            <ListFilter size={20} />
             <span className="font-bold">Filters</span>
           </p>
 
@@ -161,7 +161,7 @@ export function Filters() {
           values={tempJobType}
           onChange={setTempJobType}
           options={Object.values(JobType)}
-          icon={<Timer size={16} />}
+          icon={<Timer size={20} />}
         />
 
         <FilterGroup
@@ -169,14 +169,14 @@ export function Filters() {
           values={tempJobMode}
           onChange={setTempJobMode}
           options={Object.values(JobMode)}
-          icon={<Building size={16} />}
+          icon={<Building size={20} />}
         />
 
         {/* Experience */}
         <div className="space-y-4">
           <div className="font-bold flex items-center gap-2 text-brand">
             <span>
-              <BriefcaseBusiness size={16} />
+              <BriefcaseBusiness size={20} />
             </span>
             <span>Experience</span>
           </div>
@@ -282,7 +282,7 @@ function FilterGroup({
               )}
               <button
                 onClick={() => toggle(option)}
-                className={`text-sm transition ${
+                className={`transition ${
                   isActive
                     ? "text-brand"
                     : "hover:text-muted-foreground dark:hover:text-white/80"
