@@ -39,7 +39,7 @@ export function JobCardHeader({
             <img
               src={`https://api.dicebear.com/7.x/initials/svg?seed=${companyName}`}
               alt={companyName}
-              className="h-12 w-12 rounded-full"
+              className="h-12 w-12 rounded-xl"
             />
 
             {/* Application Status */}

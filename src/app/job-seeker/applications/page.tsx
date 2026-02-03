@@ -53,7 +53,7 @@ async function ApplicationsContent({ jobSeekerId }: { jobSeekerId: string }) {
       <EmptyState
         message="You haven’t applied to any jobs yet."
         href="/job-seeker/jobs"
-        btnIcon={<ArrowLeft />}
+        btnIcon={<ArrowLeft size={16} />}
         btnLabel="Back to jobs"
       />
     );

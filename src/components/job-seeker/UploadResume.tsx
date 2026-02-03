@@ -277,7 +277,7 @@ export function UploadResume({ resume }: UploadResumeProps) {
         <Button
           onClick={handleUpload}
           disabled={!file || isPending}
-          className="w-full bg-brand hover:bg-brand-hover rounded-full"
+          className="w-full bg-brand hover:bg-brand-hover"
           aria-label={isPending ? "uploading" : "upload resume"}
         >
           {isPending ? (

@@ -45,7 +45,7 @@ async function BookmarksContent({ jobseekerId }: { jobseekerId: string }) {
       <EmptyState
         message="You haven't saved any jobs yet."
         href="/job-seeker/jobs"
-        btnIcon={<ArrowLeft />}
+        btnIcon={<ArrowLeft size={16} />}
         btnLabel="Back to jobs"
       />
     );

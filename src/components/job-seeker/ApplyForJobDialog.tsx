@@ -65,7 +65,7 @@ export function ApplyForJobDialog({ resume, jobId }: ApplyForJobDialogProps) {
           <DialogTrigger asChild>
             <Button
               type="button"
-              className="bg-brand hover:bg-brand-hover mr-11 rounded-full"
+              className="bg-brand hover:bg-brand-hover mr-11"
             >
               Apply
             </Button>
@@ -73,14 +73,14 @@ export function ApplyForJobDialog({ resume, jobId }: ApplyForJobDialogProps) {
         ) : (
           <Button
             type="button"
-            className="bg-brand hover:bg-brand-hover mr-11 rounded-full"
+            className="bg-brand hover:bg-brand-hover mr-11"
             onClick={() => toast.error("Authentication Required!")}
           >
             Apply
           </Button>
         )}
 
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="p-6!">
           <DialogHeader>
             <DialogTitle className="font-bold">Apply for this Job</DialogTitle>
             <DialogDescription>
@@ -88,90 +88,101 @@ export function ApplyForJobDialog({ resume, jobId }: ApplyForJobDialogProps) {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="grid gap-4 mt-4">
+          <div className="mt-4">
             {/* Resume Section */}
-            <div>
-              {/* <h3 className="text-sm font-bold mb-2">Resume</h3> */}
-
-              {resume ? (
-                <div>
-                  <div className="flex items-center justify-between rounded-xl border p-4 shadow-sm">
-                    <div>
-                      <p className="font-medium text-brand">
-                        {resume.fileName}
+            {resume ? (
+              <div>
+                <div className="flex items-center justify-between rounded-xl border p-4 shadow-sm">
+                  <div>
+                    <p className="font-medium text-brand">{resume.fileName}</p>
+                    {resume.fileSize && (
+                      <p className="text-xs text-slate-600 dark:text-muted-foreground">
+                        {formatFileSize(resume.fileSize)}
                       </p>
-                      {resume.fileSize && (
-                        <p className="text-xs text-slate-600 dark:text-muted-foreground">
-                          {formatFileSize(resume.fileSize)}
-                        </p>
-                      )}
-                    </div>
-
-                    <Button
-                      type="button"
-                      size="icon"
-                      onClick={() => window.open(resume.url, "_blank")}
-                      className="bg-brand/10 text-brand hover:bg-brand/20 border border-brand/20 rounded-full"
-                      aria-label="download resume"
-                    >
-                      <Download />
-                    </Button>
+                    )}
                   </div>
 
-                  <div className="rounded-xl border p-4 space-y-2 mt-6">
-                    <p className="text-sm">
-                      Do you want to update your resume before applying?
-                    </p>
-
-                    <Link
-                      className="text-sm font-medium text-brand underline"
-                      href={`/job-seeker/profile?callbackUrl=${encodeURIComponent(
-                        pathname,
-                      )}`}
-                      prefetch={true}
-                    >
-                      Upload new resume
-                    </Link>
-
-                    <p className="text-xs text-slate-600 dark:text-muted-foreground mt-1">
-                      You will be redirected back to this page after uploading
-                      your resume.
-                    </p>
-                  </div>
-
-                  <ApplyForJobButton jobId={jobId} setOpen={setOpen} />
+                  <Button
+                    type="button"
+                    size="icon"
+                    onClick={() => window.open(resume.url, "_blank")}
+                    className="bg-brand/10 text-brand hover:bg-brand/20 border border-brand/20 rounded-full"
+                    aria-label="download resume"
+                  >
+                    <Download />
+                  </Button>
                 </div>
-              ) : (
-                <div className="rounded-xl border p-4 shadow-sm space-y-2">
-                  <p className="font-semibold text-red-600 dark:text-red-400">
-                    A resume is required to apply for a job.
+
+                <div className="rounded-xl border p-4 space-y-2 mt-6">
+                  <p className="text-sm">
+                    Do you want to update your resume before applying?
                   </p>
 
                   <Link
-                    className="text-sm font-medium text-brand hover:underline flex items-center gap-2"
+                    className="text-sm font-medium text-brand underline"
                     href={`/job-seeker/profile?callbackUrl=${encodeURIComponent(
                       pathname,
                     )}`}
                     prefetch={true}
                   >
-                    Upload resume <MoveRight size={12} className="mt-0.5" />
+                    Upload new resume
                   </Link>
 
-                  <p className="text-sm text-slate-700 dark:text-muted-foreground mt-1">
-                    You will be redirected back to this job after uploading your
-                    resume.
+                  <p className="text-xs text-slate-600 dark:text-muted-foreground mt-1">
+                    You will be redirected back to this page after uploading
+                    your resume.
                   </p>
                 </div>
-              )}
-            </div>
+
+                <ApplyForJobButton jobId={jobId} setOpen={setOpen} />
+              </div>
+            ) : (
+              <div className="rounded-xl border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/40 p-5 space-y-4">
+                {/* Header */}
+                <div className="flex items-start gap-3">
+                  <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-red-300 dark:border-red-800 bg-white dark:bg-red-900 text-red-600 dark:text-red-400 font-semibold">
+                    !
+                  </span>
+
+                  <div>
+                    <p className="text-base font-semibold text-red-700 dark:text-red-400">
+                      Resume required
+                    </p>
+                    <p className="mt-1 text-sm text-slate-700 dark:text-muted-foreground">
+                      You must upload a resume before applying for this
+                      position.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Action */}
+                <div className="flex items-center justify-between gap-4 flex-wrap">
+                  <p className="text-sm text-red-600 dark:text-red-400">
+                    You’ll be redirected back after uploading.
+                  </p>
+
+                  <Button
+                    asChild
+                    className="bg-red-600 text-white hover:bg-red-600/90 dark:bg-red-500 dark:text-background dark:hover:bg-red-500/90"
+                  >
+                    <Link
+                      href={`/job-seeker/profile?callbackUrl=${encodeURIComponent(pathname)}`}
+                      prefetch
+                      className="flex items-center gap-2"
+                    >
+                      Got to upload resume
+                      <MoveRight className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
 
           {!resume && (
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline" className="rounded-full">
-                  Cancel
-                </Button>
+                <Button variant="outline">Cancel</Button>
               </DialogClose>
             </DialogFooter>
           )}

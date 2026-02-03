@@ -132,7 +132,7 @@ function Toggle({
         {/* Job Seeker */}
         <button
           onClick={() => setMode("jobseeker")}
-          className={`relative z-10 w-1/2 py-2 font-medium transition-colors
+          className={`relative z-10 w-1/2 py-2 font-semibold transition-colors
         ${
           mode === "jobseeker"
             ? "text-white dark:text-background"
@@ -145,7 +145,7 @@ function Toggle({
         {/* Employer */}
         <button
           onClick={() => setMode("employer")}
-          className={`relative z-10 w-1/2 py-2 font-medium transition-colors
+          className={`relative z-10 w-1/2 py-2 font-semibold transition-colors
         ${
           mode === "employer"
             ? "text-white dark:text-background"
@@ -186,7 +186,7 @@ function FeaturesSection({
         >
           <div className="h-full border p-4 md:p-6 rounded-xl shadow-sm bg-card">
             <div className="flex flex-col gap-4">
-              <div className="h-10 w-10 rounded-full bg-brand/20 text-brand border border-brand/30 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-md bg-brand/20 text-brand border border-brand/30 flex items-center justify-center">
                 <feature.icon size={16} />
               </div>
 

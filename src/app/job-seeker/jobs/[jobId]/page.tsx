@@ -59,7 +59,7 @@ async function JobDetailsContent({ jobId }: { jobId: string }) {
           <EmptyState
             message={response.message}
             href="/job-seeker/jobs"
-            btnIcon={<ArrowLeft />}
+            btnIcon={<ArrowLeft size={16} />}
             btnLabel="Back to Jobs"
           />
         );

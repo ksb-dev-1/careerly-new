@@ -129,7 +129,7 @@ export function MobileFilters() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" className="md:hidden rounded-full">
+        <Button variant="outline" className="md:hidden">
           <ListFilter />
           <span>Filters</span>
         </Button>
@@ -200,7 +200,7 @@ export function MobileFilters() {
           <Button
             onClick={handleApply}
             disabled={!hasChanges}
-            className="bg-brand text-white dark:text-background hover:bg-brand-hover rounded-full"
+            className="bg-brand text-white dark:text-background hover:bg-brand-hover"
           >
             Apply Filters
           </Button>
@@ -269,8 +269,9 @@ function FilterGroup({
                 className={`transition text-sm ${
                   isActive
                     ? "text-brand"
-                    : "text-slate-700 dark:text-muted-foreground hover:text-brand"
+                    : "text-slate-700 dark:text-muted-foreground hover:text-brand dark:hover:text-brand"
                 }`}
+                aria-label={capitalize(option)}
               >
                 {capitalize(option)}
               </button>

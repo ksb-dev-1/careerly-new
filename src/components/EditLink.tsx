@@ -24,7 +24,7 @@ export function EditLink({
       asChild
       size="icon"
       className={cn(
-        "bg-brand/20 hover:bg-brand/30 border border-brand/30 text-brand rounded-full",
+        "bg-brand/20 hover:bg-brand/30 border border-brand/30 text-brand",
         className,
       )}
       aria-label="edit-link"

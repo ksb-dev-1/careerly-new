@@ -44,7 +44,7 @@ export function SkillsInput() {
 
   return (
     <Field data-invalid={fieldState.invalid}>
-      <FieldLabel>Skills</FieldLabel>
+      <FieldLabel className="font-bold">Skills</FieldLabel>
 
       <div className="flex gap-2">
         <Input
@@ -63,7 +63,8 @@ export function SkillsInput() {
         <Button
           type="button"
           onClick={addSkill}
-          disabled={skills.length >= MAX_SKILLS}
+          disabled={skills.length >= MAX_SKILLS || !input}
+          className="bg-brand hover:bg-brand-hover"
         >
           Add
         </Button>
@@ -91,13 +92,12 @@ export function SkillsInput() {
         </span>
 
         {skills.length > 0 && (
-          <button
-            type="button"
+          <Badge
             onClick={clearAll}
-            className="underline hover:text-foreground"
+            className="cursor-pointer border bg-red-100 text-red-600 hover:bg-red-200 border-red-300 dark:bg-red-950/40 dark:text-red-500 dark:hover:bg-red-950 dark:border-red-800"
           >
             Clear all
-          </button>
+          </Badge>
         )}
       </div>
 

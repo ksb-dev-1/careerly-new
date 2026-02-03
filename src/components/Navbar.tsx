@@ -113,12 +113,12 @@ function NavbarLoading() {
         {Array.from({ length: 3 }, (_, i) => (
           <Skeleton
             key={`skeleton-${i}`}
-            className="skeleton flex items-center gap-2 w-18 h-8 rounded-full"
+            className="skeleton flex items-center gap-2 w-18 h-8"
           />
         ))}
         <span className="inline-block h-5 border-r-2 mx-2" />
 
-        <Skeleton className="skeleton h-8 w-8 rounded-full" />
+        <Skeleton className="skeleton h-8 w-8" />
       </div>
     </NavbarWrapper>
   );
@@ -137,7 +137,7 @@ function NavbarWithoutAuth() {
         size="sm"
         asChild
         variant="ghost"
-        className={`${isActive ? "text-brand hover:text-brand" : ""} rounded-full`}
+        className={`${isActive ? "text-brand hover:text-brand" : ""}`}
       >
         <Link href="/job-seeker/jobs?page=1" prefetch={true}>
           Jobs
@@ -146,7 +146,7 @@ function NavbarWithoutAuth() {
 
       <span className="inline-block h-5 border-r-2" />
 
-      <Button asChild size="sm" variant="outline" className="ml-2 rounded-full">
+      <Button asChild size="sm" variant="outline" className="ml-2">
         <Link href="/sign-in">Sign in</Link>
       </Button>
     </NavbarWrapper>
@@ -188,7 +188,7 @@ function JobSeekerNavbar() {
               asChild
               size="sm"
               variant="ghost"
-              className={`${isActive ? "text-brand hover:text-brand" : ""} rounded-full`}
+              className={`${isActive ? "text-brand hover:text-brand" : ""}`}
             >
               <Link href={href} prefetch={true}>
                 {icon}
@@ -227,7 +227,7 @@ function EmployerNavbar() {
               asChild
               size="sm"
               variant="ghost"
-              className={`${isActive ? "text-brand hover:text-brand" : ""} rounded-full`}
+              className={`${isActive ? "text-brand hover:text-brand" : ""}`}
             >
               <Link href={href} prefetch={true}>
                 {icon}
@@ -278,7 +278,7 @@ export function SideMenu() {
           <Button
             variant="outline"
             size="icon"
-            className="mr-3 md:hidden rounded-full"
+            className="mr-3 md:hidden"
             aria-label="Open navigation menu"
           >
             <Menu />

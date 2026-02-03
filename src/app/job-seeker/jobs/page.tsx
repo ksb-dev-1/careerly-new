@@ -14,7 +14,6 @@ import { ServerError } from "@/components/errors/ServerError";
 import { EmptyState } from "@/components/errors/EmptyState";
 import { LoadingFallback } from "@/components/LoadingFallback";
 import { JobList } from "@/components/job-seeker/JobList";
-import { UnauthenticatedError } from "@/components/errors/UnauthenticatedError";
 
 // ----------------------------------------
 // Metadata

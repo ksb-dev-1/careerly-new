@@ -79,7 +79,7 @@ export function HowItWorks() {
           <div className="p-4 sm:p-6">
             {/* Card Header */}
             <div className="flex items-center gap-4 mb-10">
-              <div className="relative bg-brand/20 border border-brand/30 h-12 w-12 rounded-full">
+              <div className="relative bg-brand/20 border border-brand/30 h-12 w-12 rounded-xl">
                 <User className="text-brand absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
               <div>
@@ -120,7 +120,7 @@ export function HowItWorks() {
           <div className="p-4 sm:p-6">
             {/* Card Header */}
             <div className="flex items-center gap-4 mb-10">
-              <div className="relative bg-brand/20 h-12 w-12 border border-brand/30 rounded-full">
+              <div className="relative bg-brand/20 h-12 w-12 border border-brand/30 rounded-xl">
                 <BriefcaseBusiness className="text-brand absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
               <div>

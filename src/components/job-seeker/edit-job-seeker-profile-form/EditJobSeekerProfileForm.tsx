@@ -107,7 +107,9 @@ export function EditJobSeekerProfileForm({
                     control={control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+                        <FieldLabel htmlFor={field.name} className="font-bold">
+                          Name
+                        </FieldLabel>
                         <Input
                           {...field}
                           id={field.name}
@@ -128,7 +130,9 @@ export function EditJobSeekerProfileForm({
                     control={control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>Experience</FieldLabel>
+                        <FieldLabel htmlFor={field.name} className="font-bold">
+                          Experience
+                        </FieldLabel>
                         <Input
                           {...field}
                           id={field.name}
@@ -152,10 +156,9 @@ export function EditJobSeekerProfileForm({
           <CardFooter className="grid grid-cols-2 gap-2 sm:gap-4 border-t pt-6">
             <Button
               type="button"
-              variant="secondary"
+              variant="outline"
               onClick={handleFormReset}
               disabled={!isDirty}
-              className="rounded-full"
             >
               Reset
             </Button>
@@ -164,7 +167,7 @@ export function EditJobSeekerProfileForm({
               type="submit"
               form="job-seeker-profile-form"
               disabled={!isDirty}
-              className="bg-brand hover:bg-brand-hover rounded-full"
+              className="bg-brand hover:bg-brand-hover"
             >
               Update
             </Button>

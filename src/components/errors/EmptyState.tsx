@@ -4,7 +4,6 @@
 import Link from "next/link";
 
 // 3rd party
-import { Button } from "../ui/button";
 import { FolderOpen } from "lucide-react";
 
 // ----------------------------------------
@@ -36,15 +35,14 @@ export function EmptyState({
         {message}
       </p>
       {href && (
-        <Button
-          asChild
-          className="bg-brand hover:bg-brand-hover! mt-6 rounded-full"
+        <Link
+          href={href}
+          className="flex items-center gap-2 text-brand mt-4 hover:text-brand-hover"
+          prefetch={true}
         >
-          <Link href={href} prefetch={true}>
-            {btnIcon}
-            <span>{btnLabel}</span>
-          </Link>
-        </Button>
+          {btnIcon}
+          <span>{btnLabel}</span>
+        </Link>
       )}
     </div>
   );
