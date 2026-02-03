@@ -221,7 +221,7 @@ model JobSeekerProfile {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  experience String?
+  experience Int?
   skills     String[]     @default([])
   projects   Project[]
   socials    SocialLink[]

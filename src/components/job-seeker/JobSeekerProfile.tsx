@@ -6,7 +6,7 @@ import Image from "next/image";
 
 // lib
 import { Project, SocialLink } from "@/lib/validation";
-import { JobSeekerProfileData } from "@/lib/job-seeker/fetch-job-seeker-profile-details";
+import { JobSeekerProfileCompleteData } from "@/lib/job-seeker/fetch-job-seeker-profile-details";
 
 // components
 import { UploadResume } from "@/components/job-seeker/UploadResume";
@@ -38,40 +38,47 @@ import {
   Link as LinkIcon,
   Info,
 } from "lucide-react";
+import { Button } from "../ui/button";
 
 // ----------------------------------------
 // Helper Functions
 // ----------------------------------------
-function calculateProfileCompletion(details: JobSeekerProfileData) {
+function calculateProfileCompletion(details: JobSeekerProfileCompleteData) {
+  const { formData, email, resume } = details;
+
   const fields = [
-    { key: "name", label: "Name", value: details.name },
-    { key: "email", label: "Email", value: details.email },
+    { key: "name", label: "Name", value: formData.name },
+    { key: "email", label: "Email", value: email },
     {
       key: "profileImage",
       label: "Profile Image",
-      value: details.profileImage,
+      value: formData.profileImageUrl, // ← Use profileImageUrl
     },
-    { key: "experience", label: "Experience", value: details.experience },
-    { key: "skills", label: "Skills", value: details.skills },
-    { key: "projects", label: "Projects", value: details.projects },
-    { key: "socials", label: "Social Links", value: details.socials },
-    { key: "resume", label: "Resume", value: details.resume },
-    { key: "location", label: "Location", value: details.location },
-    { key: "about", label: "About", value: details.about },
+    { key: "experience", label: "Experience", value: formData.experience },
+    { key: "skills", label: "Skills", value: formData.skills },
+    { key: "projects", label: "Projects", value: formData.projects },
+    { key: "socials", label: "Social Links", value: formData.socials },
+    { key: "resume", label: "Resume", value: resume }, // ← Use resume from details
+    { key: "location", label: "Location", value: formData.location },
+    { key: "about", label: "About", value: formData.about },
   ];
 
   const filledFields = fields.filter(
     (field) =>
       field.value !== undefined &&
       field.value !== null &&
-      field.value.toString().trim() !== "",
+      (Array.isArray(field.value)
+        ? field.value.length > 0
+        : field.value.toString().trim() !== ""),
   );
 
   const missingFields = fields.filter(
     (field) =>
       field.value === undefined ||
       field.value === null ||
-      field.value.toString().trim() === "",
+      (Array.isArray(field.value)
+        ? field.value.length === 0
+        : field.value.toString().trim() === ""),
   );
 
   const completion = Math.round((filledFields.length / fields.length) * 100);
@@ -112,11 +119,11 @@ function UserDetails({ name, email, profileImage }: UserDetailsProps) {
       )}
 
       <div>
-        <CardTitle className="text-center md:text-start capitalize font-bold">
+        <CardTitle className="text-center md:text-start capitalize text-lg font-bold">
           {name || "Anonymous User"}
         </CardTitle>
-        <p className="flex items-center gap-2 mt-2 text-muted-foreground text-center md:text-start">
-          <Mail className="w-4 h-4" />
+        <p className="flex items-center gap-2 mt-2 text-slate-600 dark:text-muted-foreground text-center md:text-start">
+          <Mail size={16} />
           <span className="text-sm">{email}</span>
         </p>
       </div>
@@ -141,7 +148,7 @@ function ProfileProgress({ completion, missingFields }: ProfileProgressProps) {
   return (
     <Card className="relative w-full space-y-0 gap-0">
       <CardHeader>
-        <CardTitle className="font-bold">Profile Progress</CardTitle>
+        <CardTitle className="text-lg font-bold">Profile Progress</CardTitle>
         <CardDescription>
           A stronger profile increases your chances of getting hired.
         </CardDescription>
@@ -175,15 +182,18 @@ function ProfileProgress({ completion, missingFields }: ProfileProgressProps) {
             </p>
           ) : (
             <div>
-              <p className="text-sm font-semibold">
+              <p className="text-sm text-slate-600 dark:text-muted-foreground ">
                 Provide follwing fields to complete your profile
               </p>
 
               <div className="flex items-center flex-wrap gap-2 mt-4">
                 {missingFields.map((field) => (
-                  <Badge key={field} variant="secondary" className="">
+                  <span
+                    key={field}
+                    className="border rounded-full px-3 py-1 text-xs bg-muted"
+                  >
                     {field}
-                  </Badge>
+                  </span>
                 ))}
               </div>
             </div>
@@ -217,7 +227,7 @@ function MoreAboutJobSeeker({
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="font-bold">Details</CardTitle>
+        <CardTitle className="text-lg font-bold">Details</CardTitle>
         <CardDescription>
           More details about employer or company
         </CardDescription>
@@ -231,9 +241,9 @@ function MoreAboutJobSeeker({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Skills */}
             <div className="space-y-4">
-              <div className="flex items-center gap-2 text-sm font-semibold">
+              <div className="flex items-center gap-2 text-sm font-medium">
                 <Layers className="w-4 h-4 text-brand" />
-                <span>Skills</span>
+                <span className="font-bold">Skills</span>
               </div>
 
               {skills.length > 0 ? (
@@ -245,102 +255,110 @@ function MoreAboutJobSeeker({
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">Not provided</p>
+                <p className="text-slate-600 dark:text-muted-foreground text-sm">
+                  Not provided
+                </p>
               )}
             </div>
 
             {/* Experience */}
             <div className="space-y-4">
-              <div className="flex items-center gap-2 text-sm font-semibold">
+              <div className="flex items-center gap-2 text-sm font-medium">
                 <BriefcaseBusinessIcon className="w-4 h-4 text-brand" />
-                <span>Experience</span>
+                <span className="font-bold">Experience</span>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-slate-600 dark:text-muted-foreground text-sm">
                 {experience ? `${experience} years` : "Not provided"}
               </p>
             </div>
 
             {/* Location */}
             <div className="space-y-4">
-              <div className="flex items-center gap-2 text-sm font-semibold">
+              <div className="flex items-center gap-2 text-sm font-medium">
                 <MapPin className="w-4 h-4 text-brand" />
-                <span>Location</span>
+                <span className="font-bold">Location</span>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-slate-600 dark:text-muted-foreground text-sm">
                 {location || "Not specified"}
               </p>
             </div>
           </div>
 
-          <Separator />
+          <div className="flex flex-col md:grid md:grid-cols-2 gap-8 border-t pt-6">
+            {/* Projects */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-sm font-medium">
+                <ClipboardList className="w-4 h-4 text-brand" />
+                <span className="font-bold">Projects</span>
+              </div>
 
-          {/* Projects */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm font-semibold">
-              <ClipboardList className="w-4 h-4 text-brand" />
-              <span>Projects</span>
+              {projects.length > 0 ? (
+                <ul className="space-y-1 text-sm">
+                  {projects.map((project) => (
+                    <li key={project.link}>
+                      <a
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-brand hover:underline"
+                      >
+                        {project.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-slate-600 dark:text-muted-foreground text-sm">
+                  Not provided
+                </p>
+              )}
             </div>
 
-            {projects.length > 0 ? (
-              <ul className="space-y-1 text-sm">
-                {projects.map((project) => (
-                  <li key={project.link}>
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-brand hover:underline"
-                    >
-                      {project.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-muted-foreground">Not provided</p>
-            )}
-          </div>
+            {/* Social links */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-sm font-medium">
+                <LinkIcon className="w-4 h-4 text-brand" />
+                <span className="font-bold">Social Profiles</span>
+              </div>
 
-          {/* Social links */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm font-semibold">
-              <LinkIcon className="w-4 h-4 text-brand" />
-              <span>Social Profiles</span>
+              {socials.length > 0 ? (
+                <ul className="space-y-1 text-sm">
+                  {socials.map((social) => (
+                    <li key={social.url}>
+                      <a
+                        href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-brand hover:underline"
+                      >
+                        {social.platform}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-slate-600 dark:text-muted-foreground text-sm">
+                  Not provided
+                </p>
+              )}
             </div>
-
-            {socials.length > 0 ? (
-              <ul className="space-y-1 text-sm">
-                {socials.map((social) => (
-                  <li key={social.url}>
-                    <a
-                      href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-brand hover:underline"
-                    >
-                      {social.platform}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-muted-foreground">Not provided</p>
-            )}
           </div>
 
           <Separator />
 
           {/* About */}
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm font-semibold">
+            <div className="flex items-center gap-2 text-sm font-medium">
               <Info className="w-4 h-4 text-brand" />
-              <span>About</span>
+              <span className="font-bold">About</span>
             </div>
 
             {about ? (
               <Markdown>{about}</Markdown>
             ) : (
-              <p className="text-sm text-muted-foreground">Not provided</p>
+              <p className="text-slate-600 dark:text-muted-foreground text-sm">
+                Not provided
+              </p>
             )}
           </div>
         </div>
@@ -356,45 +374,65 @@ function QuickLinks() {
   return (
     <Card className="w-full gap-0!">
       <CardHeader>
-        <CardTitle className="font-bold">Quick Links</CardTitle>
+        <CardTitle className="text-lg font-bold">Quick Links</CardTitle>
       </CardHeader>
 
-      <CardContent className="space-y-3 mt-4">
-        <Link
-          href="/job-seeker/jobs"
-          className="flex items-center text-brand gap-2 text-sm rounded-md font-medium hover:underline w-fit transition-all"
-          prefetch={true}
+      <CardContent className="flex flex-col mt-2">
+        <Button
+          asChild
+          variant="link"
+          className="justify-start text-brand  px-0! w-fit"
         >
-          <BriefcaseBusiness className="w-4 h-4" />
-          Jobs
-        </Link>
+          <Link href="/job-seeker/jobs" className="text-brand" prefetch={true}>
+            <BriefcaseBusiness />
+            Jobs
+          </Link>
+        </Button>
 
-        <Link
-          href="/job-seeker/bookmarks"
-          className="flex items-center text-brand gap-2 text-sm rounded-md font-medium hover:underline w-fit transition-all"
-          prefetch={true}
+        <Button
+          asChild
+          variant="link"
+          className="justify-start text-brand  px-0! w-fit"
         >
-          <Bookmark className="w-4 h-4" />
-          Bookmarks
-        </Link>
+          <Link
+            href="/job-seeker/bookmarks"
+            className="text-brand"
+            prefetch={true}
+          >
+            <Bookmark />
+            Bookmarks
+          </Link>
+        </Button>
 
-        <Link
-          href="/job-seeker/applications"
-          className="flex items-center text-brand gap-2 text-sm rounded-md font-medium hover:underline w-fit transition-all"
-          prefetch={true}
+        <Button
+          asChild
+          variant="link"
+          className="justify-start text-brand  px-0! w-fit"
         >
-          <FileText className="w-4 h-4" />
-          Applications
-        </Link>
+          <Link
+            href="/job-seeker/applications"
+            className="text-brand"
+            prefetch={true}
+          >
+            <FileText className="w-4 h-4" />
+            Applications
+          </Link>
+        </Button>
 
-        <Link
-          href="/job-seeker/profile/edit"
-          className="flex items-center text-brand gap-2 text-sm rounded-md font-medium hover:underline w-fit transition-all"
-          prefetch={true}
+        <Button
+          asChild
+          variant="link"
+          className="justify-start text-brand  px-0! w-fit"
         >
-          <Edit className="w-4 h-4" />
-          Edit Profile
-        </Link>
+          <Link
+            href="/job-seeker/profile/edit"
+            className="text-brand"
+            prefetch={true}
+          >
+            <Edit />
+            Edit Profile
+          </Link>
+        </Button>
       </CardContent>
     </Card>
   );
@@ -404,23 +442,24 @@ function QuickLinks() {
 // Main Component
 // ----------------------------------------
 interface JobSeekerProfileProps {
-  details: JobSeekerProfileData;
+  details: JobSeekerProfileCompleteData;
 }
 
 export function JobSeekerProfile({ details }: JobSeekerProfileProps) {
   const turndown = new TurndownService();
 
+  const { formData, email, resume } = details;
+
   const {
     name,
-    email,
-    profileImage,
+    profileImageUrl,
     experience,
-    skills,
-    projects,
-    socials,
+    skills = [],
+    projects = [],
+    socials = [],
     location,
-    about,
-  } = details;
+    about = "",
+  } = formData;
 
   const markdown = turndown.turndown(about ? about : "");
   const { completion, missingFields } = calculateProfileCompletion(details);
@@ -429,8 +468,12 @@ export function JobSeekerProfile({ details }: JobSeekerProfileProps) {
     <div className="min-h-screen max-w-custom w-full pt-32 pb-16 mx-auto px-4">
       <div className="flex flex-col md:flex-row items-start gap-6">
         <div className="w-full md:w-120 space-y-6">
-          {/* User Details */}
-          <UserDetails name={name} email={email} profileImage={profileImage} />
+          {/* User Details  */}
+          <UserDetails
+            name={name}
+            email={email}
+            profileImage={profileImageUrl}
+          />
 
           {/* Quick Links */}
           <div className="hidden md:flex">
@@ -454,11 +497,12 @@ export function JobSeekerProfile({ details }: JobSeekerProfileProps) {
             />
           </div>
 
-          <UploadResume resume={details.resume} />
+          {/* Pass resume from details, not formData */}
+          <UploadResume resume={resume} />
 
-          {/* Employer or Company Details */}
+          {/* Pass formData fields */}
           <MoreAboutJobSeeker
-            experience={experience}
+            experience={experience || ""}
             skills={skills}
             projects={projects}
             socials={socials}

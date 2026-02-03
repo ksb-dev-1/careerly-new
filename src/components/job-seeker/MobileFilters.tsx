@@ -172,7 +172,7 @@ export function MobileFilters() {
 
           {/* Experience */}
           <div className="space-y-4">
-            <div className="font-bold flex items-center gap-2 text-brand">
+            <div className="font-bold flex items-center gap-2">
               <span>
                 <BriefcaseBusiness size={20} />
               </span>
@@ -189,7 +189,7 @@ export function MobileFilters() {
               }
             />
 
-            <div className="flex justify-between text-xs text-muted-foreground">
+            <div className="flex justify-between text-xs text-slate-700 dark:text-muted-foreground">
               <span>{tempExperience[0]} yrs</span>
               <span>{tempExperience[1]} yrs</span>
             </div>
@@ -246,7 +246,7 @@ function FilterGroup({
 
   return (
     <div className="space-y-2">
-      <div className="font-bold flex items-center gap-2 text-brand">
+      <div className="font-semibold flex items-center gap-2">
         <span>{icon}</span>
         <span>{label}</span>
       </div>
@@ -266,10 +266,10 @@ function FilterGroup({
               )}
               <button
                 onClick={() => toggle(option)}
-                className={`transition ${
+                className={`transition text-sm ${
                   isActive
                     ? "text-brand"
-                    : "hover:text-muted-foreground dark:hover:text-white/80"
+                    : "text-slate-700 dark:text-muted-foreground hover:text-brand"
                 }`}
               >
                 {capitalize(option)}

@@ -17,19 +17,19 @@ export function ThemeSwitchMobile() {
   return (
     <div className="border-y mt-4 w-full flex items-center justify-between">
       <button
-        className={`${theme === "system" ? "bg-brand/10 text-brand" : ""} w-full flex items-center justify-center py-2`}
+        className={`${theme === "system" ? "bg-brand/10 text-brand" : ""} w-full flex items-center justify-center py-4`}
         onClick={() => setTheme("system")}
       >
         <Computer size={16} onClick={() => setTheme("system")} />
       </button>
       <button
-        className={`${theme === "light" ? "bg-brand/10 text-brand" : ""} w-full flex items-center justify-center py-2 border-x`}
+        className={`${theme === "light" ? "bg-brand/10 text-brand" : ""} w-full flex items-center justify-center py-4 border-x`}
         onClick={() => setTheme("light")}
       >
         <Sun size={16} />
       </button>
       <button
-        className={`${theme === "dark" ? "bg-brand/10 text-brand" : ""} w-full flex items-center justify-center py-2`}
+        className={`${theme === "dark" ? "bg-brand/10 text-brand" : ""} w-full flex items-center justify-center py-4`}
         onClick={() => setTheme("dark")}
       >
         <Moon size={16} onClick={() => setTheme("dark")} />

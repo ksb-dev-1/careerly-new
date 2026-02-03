@@ -39,7 +39,8 @@ const employerSteps = [
   {
     number: "2",
     title: "Post Job Openings",
-    description: "Create detailed listings that attract quality candidates",
+    description:
+      "Create detailed listings that attract quality candidates to apply for jobs",
   },
   {
     number: "3",
@@ -59,7 +60,7 @@ export function HowItWorks() {
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
           How It <span className="text-brand">Works</span>
         </h2>
-        <p className="md:text-lg text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-lg font-medium text-slate-700 dark:text-muted-foreground max-w-2xl mx-auto">
           Whether you're seeking opportunities or talent, our platform makes the
           process seamless, efficient, and effective.
         </p>
@@ -77,28 +78,28 @@ export function HowItWorks() {
         >
           <div className="p-4 sm:p-6">
             {/* Card Header */}
-            <div className="flex items-center gap-4 mb-8">
-              <div className="relative bg-brand/20 h-12 w-12 rounded-full">
+            <div className="flex items-center gap-4 mb-10">
+              <div className="relative bg-brand/20 border border-brand/30 h-12 w-12 rounded-full">
                 <User className="text-brand absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
               <div>
-                <h3 className="text-lg font-bold">Job Seekers</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-lg font-bold text-brand">Job Seekers</h3>
+                <p className="font-medium text-slate-700 dark:text-muted-foreground">
                   Find your dream role in 3 simple steps
                 </p>
               </div>
             </div>
 
             {/* Steps */}
-            <div className="space-y-6 ml-4">
+            <div className="space-y-8 ml-2">
               {jobSeekerSteps.map((step, index) => (
                 <div key={index} className="flex gap-4">
-                  <div className="shrink-0">
-                    <span className="text-brand font-bold">{step.number}</span>
+                  <div className="shrink-0 h-8 w-8 rounded-full bg-brand/20 border border-brand/30 text-brand flex items-center justify-center">
+                    <span className="text-sm font-bold">{step.number}</span>
                   </div>
                   <div>
-                    <p className="font-semibold mb-1">{step.title}</p>
-                    <p className="text-muted-foreground text-sm">
+                    <p className="font-bold mb-1">{step.title}</p>
+                    <p className="font-medium text-slate-700 dark:text-muted-foreground">
                       {step.description}
                     </p>
                   </div>
@@ -118,31 +119,28 @@ export function HowItWorks() {
         >
           <div className="p-4 sm:p-6">
             {/* Card Header */}
-            <div className="flex items-center gap-4 mb-8">
-              <div className="relative bg-brand/20 h-12 w-12 rounded-full">
+            <div className="flex items-center gap-4 mb-10">
+              <div className="relative bg-brand/20 h-12 w-12 border border-brand/30 rounded-full">
                 <BriefcaseBusiness className="text-brand absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
               <div>
-                <h3 className="text-lg font-bold">Employers</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-lg font-bold text-brand">Employers</h3>
+                <p className="font-medium text-slate-700 dark:text-muted-foreground">
                   Find perfect candidates effortlessly
                 </p>
               </div>
             </div>
 
             {/* Steps */}
-            <div className="space-y-6 ml-4">
+            <div className="space-y-8 ml-2">
               {employerSteps.map((step, index) => (
-                <div
-                  key={index}
-                  className="flex gap-4 rounded-full transition-all duration-200"
-                >
-                  <div className="shrink-0">
-                    <span className="text-brand font-bold">{step.number}</span>
+                <div key={index} className="flex gap-4">
+                  <div className="shrink-0 h-8 w-8 rounded-full bg-brand/20 text-brand border border-brand/30 flex items-center justify-center">
+                    <span className="text-sm font-bold">{step.number}</span>
                   </div>
                   <div>
-                    <p className="font-semibold mb-1">{step.title}</p>
-                    <p className="text-muted-foreground text-sm">
+                    <p className="font-bold mb-1">{step.title}</p>
+                    <p className="font-medium text-slate-700 dark:text-muted-foreground">
                       {step.description}
                     </p>
                   </div>

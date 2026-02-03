@@ -102,7 +102,7 @@ function Header() {
       <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
         Powerful <span className="text-brand">Features</span>
       </h2>
-      <p className="md:text-lg text-muted-foreground max-w-2xl mx-auto">
+      <p className="text-lg text-slate-700 dark:text-muted-foreground max-w-2xl mx-auto">
         Features designed to make hiring and job searching simple and effective.
       </p>
     </div>
@@ -186,15 +186,17 @@ function FeaturesSection({
         >
           <div className="h-full border p-4 md:p-6 rounded-xl shadow-sm bg-card">
             <div className="flex flex-col gap-4">
-              <div className="h-10 w-10 rounded-full bg-brand/20 text-brand flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-brand/20 text-brand border border-brand/30 flex items-center justify-center">
                 <feature.icon size={16} />
               </div>
 
               <div className="text-lg font-bold">{feature.title}</div>
             </div>
 
-            <div className="mt-4">
-              <p className="text-muted-foreground">{feature.desc}</p>
+            <div className="mt-2">
+              <p className="font-medium text-slate-700 dark:text-muted-foreground">
+                {feature.desc}
+              </p>
             </div>
           </div>
         </motion.div>

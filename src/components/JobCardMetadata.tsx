@@ -57,9 +57,9 @@ function JobDetailRow({
     isLocation && typeof value === "string" ? value.split(",")[0] : value;
 
   return (
-    <div className="text-sm flex items-center gap-2 font-medium">
-      <span className="">{icon}</span>
-      <span className="flex items-center text-muted-foreground">
+    <div className="flex items-center gap-2">
+      <span>{icon}</span>
+      <span className="text-sm flex items-center text-slate-700 dark:text-muted-foreground">
         {currency && <CurrencyIcon currency={currency} />}
         {displayValue}
         {isExperience && " years"}

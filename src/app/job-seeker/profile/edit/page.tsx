@@ -19,7 +19,7 @@ import { UnauthorizedError } from "@/components/errors/UnauthorizedError";
 import { EmptyState } from "@/components/errors/EmptyState";
 import { ServerError } from "@/components/errors/ServerError";
 import { LoadingFallback } from "@/components/LoadingFallback";
-import { EditJobSeekerProfileForm } from "@/components/job-seeker/EditJobSeekerProfileForm";
+import { EditJobSeekerProfileForm } from "@/components/job-seeker/edit-job-seeker-profile-form/EditJobSeekerProfileForm";
 
 // ----------------------------------------
 // Metadata
@@ -47,12 +47,7 @@ async function EditJobSeekerProfileContent({
     return <ServerError message={response.message} />;
   }
 
-  return (
-    <EditJobSeekerProfileForm
-      jobSeekerId={jobSeekerId}
-      details={response.data}
-    />
-  );
+  return <EditJobSeekerProfileForm details={response.data.formData} />;
 }
 
 // ----------------------------------------

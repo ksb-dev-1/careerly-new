@@ -141,8 +141,8 @@ export function Filters() {
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2">
           <p className="flex items-center gap-2">
-            <ListFilter size={20} />
-            <span className="font-bold">Filters</span>
+            <ListFilter size={16} />
+            <span className="text-lg font-bold">Filters</span>
           </p>
 
           {totalSelections > 0 ? (
@@ -161,7 +161,7 @@ export function Filters() {
           values={tempJobType}
           onChange={setTempJobType}
           options={Object.values(JobType)}
-          icon={<Timer size={20} />}
+          icon={<Timer size={16} />}
         />
 
         <FilterGroup
@@ -169,14 +169,14 @@ export function Filters() {
           values={tempJobMode}
           onChange={setTempJobMode}
           options={Object.values(JobMode)}
-          icon={<Building size={20} />}
+          icon={<Building size={16} />}
         />
 
         {/* Experience */}
         <div className="space-y-4">
-          <div className="font-bold flex items-center gap-2 text-brand">
+          <div className="font-bold flex items-center gap-2">
             <span>
-              <BriefcaseBusiness size={20} />
+              <BriefcaseBusiness size={16} />
             </span>
             <span>Experience</span>
           </div>
@@ -191,7 +191,7 @@ export function Filters() {
             }
           />
 
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <div className="flex justify-between text-xs text-slate-600 dark:text-muted-foreground">
             <span>{tempExperience[0]} yrs</span>
             <span>{tempExperience[1]} yrs</span>
           </div>
@@ -259,12 +259,9 @@ function FilterGroup({
 
   return (
     <div className="space-y-2">
-      <div className="font-bold flex items-center gap-2 text-brand">
-        {/* <div className="h-8 w-8 rounded-full bg-brand/20 text-brand flex items-center justify-center">
-          {icon}
-        </div> */}
+      <div className="font-semibold flex items-center gap-2">
         <span>{icon}</span>
-        <span>{label}</span>
+        <span className="font-bold">{label}</span>
       </div>
 
       <div className="flex flex-col gap-2 mt-4">
@@ -278,14 +275,14 @@ function FilterGroup({
                   <Check size={12} />
                 </span>
               ) : (
-                <span className="inline-block h-4 w-4 rounded border border-slate-300 dark:border-[#444]" />
+                <span className="inline-block h-4 w-4 rounded border border-slate-400 dark:border-[#444]" />
               )}
               <button
                 onClick={() => toggle(option)}
-                className={`transition ${
+                className={`transition text-sm ${
                   isActive
                     ? "text-brand"
-                    : "hover:text-muted-foreground dark:hover:text-white/80"
+                    : "text-slate-700 dark:text-muted-foreground hover:text-brand"
                 }`}
               >
                 {capitalize(option)}

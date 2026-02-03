@@ -29,7 +29,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 // 3rd party
 
-import { Download } from "lucide-react";
+import { Download, MoveRight } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 
@@ -101,7 +101,7 @@ export function ApplyForJobDialog({ resume, jobId }: ApplyForJobDialogProps) {
                         {resume.fileName}
                       </p>
                       {resume.fileSize && (
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-slate-600 dark:text-muted-foreground">
                           {formatFileSize(resume.fileSize)}
                         </p>
                       )}
@@ -133,7 +133,7 @@ export function ApplyForJobDialog({ resume, jobId }: ApplyForJobDialogProps) {
                       Upload new resume
                     </Link>
 
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-xs text-slate-600 dark:text-muted-foreground mt-1">
                       You will be redirected back to this page after uploading
                       your resume.
                     </p>
@@ -143,21 +143,21 @@ export function ApplyForJobDialog({ resume, jobId }: ApplyForJobDialogProps) {
                 </div>
               ) : (
                 <div className="rounded-xl border p-4 shadow-sm space-y-2">
-                  <p className="font-bold text-red-600 dark:text-red-500">
+                  <p className="font-semibold text-red-600 dark:text-red-400">
                     A resume is required to apply for a job.
                   </p>
 
                   <Link
-                    className="text-sm font-medium text-brand underline"
+                    className="text-sm font-medium text-brand hover:underline flex items-center gap-2"
                     href={`/job-seeker/profile?callbackUrl=${encodeURIComponent(
                       pathname,
                     )}`}
                     prefetch={true}
                   >
-                    Upload resume
+                    Upload resume <MoveRight size={12} className="mt-0.5" />
                   </Link>
 
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-sm text-slate-700 dark:text-muted-foreground mt-1">
                     You will be redirected back to this job after uploading your
                     resume.
                   </p>

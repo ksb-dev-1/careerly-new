@@ -63,7 +63,7 @@ function Header() {
       <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
         Frequently Asked <span className="text-brand">Questions</span>
       </h2>
-      <p className="md:text-lg text-muted-foreground max-w-2xl mx-auto">
+      <p className="text-lg font-medium text-slate-700 dark:text-muted-foreground max-w-2xl mx-auto">
         Find answers to common questions about using our platform for job
         searching and hiring.
       </p>
@@ -76,10 +76,10 @@ function AccordionSection() {
     <Accordion type="single" collapsible defaultValue="item-1">
       {faqs.map((faq, index) => (
         <AccordionItem key={index} value={`item-${index}`}>
-          <AccordionTrigger className="text-base">
+          <AccordionTrigger className="text-lg font-bold">
             {faq.question}
           </AccordionTrigger>
-          <AccordionContent className="text-base text-muted-foreground">
+          <AccordionContent className="text-lg font-medium text-slate-700 dark:text-muted-foreground">
             {faq.answer}
           </AccordionContent>
         </AccordionItem>

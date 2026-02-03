@@ -95,7 +95,7 @@ export function ActiveFilters({ jobs }: ActiveFiltersProps) {
       {activeFilters.length > 1 && (
         <Badge
           onClick={clearAllFilters}
-          className="cursor-pointer border border-red-300 bg-red-100 text-red-600 hover:bg-red-200 dark:border-red-800 dark:bg-red-950/40 dark:text-red-500 dark:hover:bg-red-950"
+          className="cursor-default border border-red-300 bg-red-100 text-red-600 hover:bg-red-200 dark:border-red-800 dark:bg-red-950/40 dark:text-red-500 dark:hover:bg-red-950"
         >
           Clear all
         </Badge>
@@ -141,14 +141,14 @@ function FilterTag({
 
   return (
     <Badge
-      variant="outline"
+      variant="secondary"
       onClick={removeFilter}
-      className={`flex cursor-pointer items-center gap-2 ${
+      className={`cursor-pointer flex items-center gap-2 ${
         isMatched ? "" : "opacity-40 line-through"
       }`}
     >
       {formatLabel(type, value)}
-      <X className="h-3 w-3 text-red-600 transition hover:text-red-500" />
+      <X className="text-red-600" />
     </Badge>
   );
 }

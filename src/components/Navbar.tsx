@@ -270,7 +270,7 @@ export function SideMenu() {
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       {status === "loading" ? (
         <Skeleton
-          className="mr-3 md:hidden rounded-full h-9 w-9"
+          className="mr-3 md:hidden rounded-md h-9 w-9"
           aria-label="Open navigation loading"
         />
       ) : (
@@ -293,110 +293,112 @@ export function SideMenu() {
           </SheetTitle>
         </SheetHeader>
 
-        <div className="flex flex-col">
-          {!session?.user.id && (
-            <nav className="flex flex-col gap-1 mt-4">
+        <div className="h-full flex flex-col justify-between">
+          <div className="flex flex-col">
+            {!session?.user.id && (
+              <nav className="flex flex-col gap-1 mt-4">
+                <Button
+                  asChild
+                  variant="link"
+                  size="sm"
+                  className="justify-start w-fit"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Link href="/sign-in">Sign In</Link>
+                </Button>
+              </nav>
+            )}
+
+            {session?.user.role === UserRole.JOB_SEEKER && (
+              <nav className="flex flex-col gap-2 mt-4">
+                {JOB_SEEKER_NAV_ITEMS.map(({ href, label, icon }) => {
+                  const isActive = path === href.split("?")[0];
+
+                  return (
+                    <Button
+                      key={href}
+                      asChild
+                      size="sm"
+                      variant="link"
+                      onClick={() => setIsOpen(false)}
+                      className={`${isActive ? "text-brand hover:text-brand" : ""} justify-start w-fit`}
+                    >
+                      <Link href={href} prefetch={true}>
+                        {icon}
+                        {label}
+                      </Link>
+                    </Button>
+                  );
+                })}
+              </nav>
+            )}
+
+            {session?.user.role === UserRole.EMPLOYER && (
+              <nav className="flex flex-col gap-2 mt-4">
+                {EMPLOYER_NAV_ITEMS.map(({ href, label, icon }) => {
+                  const isActive = path === href.split("?")[0];
+
+                  return (
+                    <Button
+                      key={href}
+                      asChild
+                      size="sm"
+                      variant="link"
+                      onClick={() => setIsOpen(false)}
+                      className={`${isActive ? "text-brand hover:text-brand" : ""} justify-start w-fit`}
+                    >
+                      <Link href={href} prefetch={true}>
+                        {icon}
+                        {label}
+                      </Link>
+                    </Button>
+                  );
+                })}
+              </nav>
+            )}
+
+            {session?.user.role === UserRole.JOB_SEEKER && (
               <Button
                 asChild
                 variant="link"
-                size="sm"
-                className="justify-start w-fit"
                 onClick={() => setIsOpen(false)}
+                className={`${path === "/job-seeker/profile" ? "text-brand hover:text-brand" : ""} justify-start w-fit mt-2`}
               >
-                <Link href="/sign-in">Sign In</Link>
+                <Link href="/job-seeker/profile" prefetch={true}>
+                  <User className="h-4 w-4" aria-hidden="true" />
+                  Profile
+                </Link>
               </Button>
-            </nav>
-          )}
+            )}
 
-          {session?.user.role === UserRole.JOB_SEEKER && (
-            <nav className="flex flex-col gap-2 mt-4">
-              {JOB_SEEKER_NAV_ITEMS.map(({ href, label, icon }) => {
-                const isActive = path === href.split("?")[0];
+            {session?.user.role === UserRole.EMPLOYER && (
+              <Button
+                asChild
+                variant="link"
+                onClick={() => setIsOpen(false)}
+                className={`${path === "/employer/profile" ? "text-brand hover:text-brand" : ""} justify-start w-fit mt-2`}
+              >
+                <Link href="/employer/profile" prefetch={true}>
+                  <User className="h-4 w-4" aria-hidden="true" />
+                  Profile
+                </Link>
+              </Button>
+            )}
 
-                return (
-                  <Button
-                    key={href}
-                    asChild
-                    size="sm"
-                    variant="link"
-                    onClick={() => setIsOpen(false)}
-                    className={`${isActive ? "text-brand hover:text-brand" : ""} justify-start w-fit`}
-                  >
-                    <Link href={href} prefetch={true}>
-                      {icon}
-                      {label}
-                    </Link>
-                  </Button>
-                );
-              })}
-            </nav>
-          )}
-
-          {session?.user.role === UserRole.EMPLOYER && (
-            <nav className="flex flex-col gap-2 mt-4">
-              {EMPLOYER_NAV_ITEMS.map(({ href, label, icon }) => {
-                const isActive = path === href.split("?")[0];
-
-                return (
-                  <Button
-                    key={href}
-                    asChild
-                    size="sm"
-                    variant="link"
-                    onClick={() => setIsOpen(false)}
-                    className={`${isActive ? "text-brand hover:text-brand" : ""} justify-start w-fit`}
-                  >
-                    <Link href={href} prefetch={true}>
-                      {icon}
-                      {label}
-                    </Link>
-                  </Button>
-                );
-              })}
-            </nav>
-          )}
-
-          {session?.user.role === UserRole.JOB_SEEKER && (
-            <Button
-              asChild
-              variant="link"
-              onClick={() => setIsOpen(false)}
-              className={`${path === "/job-seeker/profile" ? "text-brand hover:text-brand" : ""} justify-start w-fit mt-2`}
-            >
-              <Link href="/job-seeker/profile" prefetch={true}>
-                <User className="h-4 w-4" aria-hidden="true" />
-                Profile
-              </Link>
-            </Button>
-          )}
-
-          {session?.user.role === UserRole.EMPLOYER && (
-            <Button
-              asChild
-              variant="link"
-              onClick={() => setIsOpen(false)}
-              className={`${path === "/employer/profile" ? "text-brand hover:text-brand" : ""} justify-start w-fit mt-2`}
-            >
-              <Link href="/employer/profile" prefetch={true}>
-                <User className="h-4 w-4" aria-hidden="true" />
-                Profile
-              </Link>
-            </Button>
-          )}
-
-          {session?.user.id && (
-            <Button
-              asChild
-              variant="link"
-              onClick={handleSignOut}
-              className="justify-start w-fit mt-1"
-            >
-              <Link href="/employer/profile" prefetch={true}>
-                <LogOut className="h-4 w-4" aria-hidden="true" />
-                Sign out
-              </Link>
-            </Button>
-          )}
+            {session?.user.id && (
+              <Button
+                asChild
+                variant="link"
+                onClick={handleSignOut}
+                className="justify-start w-fit mt-1"
+              >
+                <Link href="/employer/profile" prefetch={true}>
+                  <LogOut className="h-4 w-4" aria-hidden="true" />
+                  Sign out
+                </Link>
+              </Button>
+            )}
+          </div>
 
           <ThemeSwitchMobile />
         </div>

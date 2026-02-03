@@ -14,7 +14,7 @@ import {
 
 // 3rd party
 import { useTheme } from "next-themes";
-import { Moon, Sun } from "lucide-react";
+import { Computer, Moon, Sun } from "lucide-react";
 
 // ----------------------------------------
 // Theme switch component
@@ -33,13 +33,13 @@ export function ThemeSwitch() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+          <Sun className="mr-2 h-4 w-4" aria-hidden="true" /> Light
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+          <Moon className="mr-2 h-4 w-4" aria-hidden="true" /> Dark
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
+          <Computer className="mr-2 h-4 w-4" aria-hidden="true" /> System
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -37,7 +37,7 @@ export function JobCardFooter(props: JobFooterProps) {
   return (
     <CardFooter className="flex items-center justify-between gap-2">
       {/* Posted on */}
-      <span className="text-xs text-muted-foreground font-semibold">
+      <span className="text-xs text-muted-foreground">
         {relativeDate(props.postedOn)}
       </span>
 

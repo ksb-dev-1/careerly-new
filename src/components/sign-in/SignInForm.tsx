@@ -109,7 +109,7 @@ export function SigninForm() {
 
             <div className="relative my-2">
               <Separator />
-              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-3 text-xs text-muted-foreground">
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-3 text-xs text-slate-600 dark:text-muted-foreground">
                 Or continue with
               </span>
             </div>

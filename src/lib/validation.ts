@@ -133,57 +133,120 @@ export const employerProfileSchema = z.object({
 export type EmployerProfileFormData = z.infer<typeof employerProfileSchema>;
 
 // ----------------------------------------------------------------
+// const urlSchema = z.string().refine(
+//   (val) => {
+//     try {
+//       new URL(val);
+//       return true;
+//     } catch {
+//       return false;
+//     }
+//   },
+//   { message: "Invalid URL" },
+// );
+
+// export const projectSchema = z.object({
+//   name: z.string().min(1, "Project name is required"),
+//   link: urlSchema,
+// });
+
+// export const socialLinkSchema = z.object({
+//   platform: z.enum([
+//     "github",
+//     "linkedin",
+//     "twitter",
+//     "portfolio",
+//     "leetcode",
+//     "hackerrank",
+//   ]),
+//   url: urlSchema,
+// });
+
+// export const jobSeekerProfileSchema = z.object({
+//   name: z.string().optional(),
+//   profileImage: optionalImageSchema.optional(),
+//   experience: z
+//     .string()
+//     .trim()
+//     .optional()
+//     .refine(
+//       (val) => {
+//         if (!val) return true; // allow empty / undefined
+//         return /^[0-9]+$/.test(val);
+//       },
+//       { message: "Experience must be a number" },
+//     )
+//     .refine(
+//       (val) => {
+//         if (!val) return true;
+//         const years = Number(val);
+//         return years >= 0 && years <= 50;
+//       },
+//       { message: "Experience must be between 0 and 50 years" },
+//     ),
+//   skills: z.array(z.string().min(1)).optional(),
+//   projects: z.array(projectSchema).optional(),
+//   socials: z.array(socialLinkSchema).optional(),
+//   location: z.string().optional(),
+//   about: z.string().optional(),
+// });
+
+// export type Project = z.infer<typeof projectSchema>;
+// export type SocialLink = z.infer<typeof socialLinkSchema>;
+// export type JobSeekerProfileFormData = z.infer<typeof jobSeekerProfileSchema>;
+
+// Stricter URL schema
 const urlSchema = z.string().refine(
   (val) => {
     try {
-      new URL(val);
-      return true;
+      const url = new URL(val);
+      return url.protocol === "https:";
     } catch {
       return false;
     }
   },
-  { message: "Invalid URL" },
+  { message: "Invalid URL. Must start with http:// or https://" },
 );
 
+// Experience schema (optional, numeric, 0-50, transforms to number)
+export const experienceSchema = z
+  .string()
+  .trim()
+  .optional()
+  .refine((val) => !val || /^[0-9]+$/.test(val), {
+    message: "Experience must be a number",
+  })
+  .refine((val) => !val || (+val >= 0 && +val <= 50), {
+    message: "Experience must be between 0 and 50 years",
+  })
+  .transform((val) => (val ? Number(val) : undefined));
+
+// Project schema
 export const projectSchema = z.object({
-  name: z.string().min(1, "Project name is required"),
-  link: urlSchema,
+  name: z.string().min(1, "Project name is required").optional(),
+  link: urlSchema.optional(),
 });
 
+// Social link schema
 export const socialLinkSchema = z.object({
-  platform: z.enum([
-    "github",
-    "linkedin",
-    "twitter",
-    "portfolio",
-    "leetcode",
-    "hackerrank",
-  ]),
-  url: urlSchema,
+  platform: z
+    .enum([
+      "github",
+      "linkedin",
+      "twitter",
+      "portfolio",
+      "leetcode",
+      "hackerrank",
+    ])
+    .optional(),
+  url: urlSchema.optional(),
 });
 
+// Job seeker profile schema
 export const jobSeekerProfileSchema = z.object({
   name: z.string().optional(),
   profileImage: optionalImageSchema.optional(),
-  experience: z
-    .string()
-    .trim()
-    .optional()
-    .refine(
-      (val) => {
-        if (!val) return true; // allow empty / undefined
-        return /^[0-9]+$/.test(val);
-      },
-      { message: "Experience must be a number" },
-    )
-    .refine(
-      (val) => {
-        if (!val) return true;
-        const years = Number(val);
-        return years >= 0 && years <= 50;
-      },
-      { message: "Experience must be between 0 and 50 years" },
-    ),
+  experience: experienceSchema,
   skills: z.array(z.string().min(1)).optional(),
   projects: z.array(projectSchema).optional(),
   socials: z.array(socialLinkSchema).optional(),
@@ -191,24 +254,8 @@ export const jobSeekerProfileSchema = z.object({
   about: z.string().optional(),
 });
 
+// Types
 export type Project = z.infer<typeof projectSchema>;
 export type SocialLink = z.infer<typeof socialLinkSchema>;
 export type JobSeekerProfileFormData = z.infer<typeof jobSeekerProfileSchema>;
-
-// ----------------------------------------------------------------
-export const changeEmailSchema = z
-  .object({
-    oldEmail: z.email({
-      message: "Please enter a valid old email address",
-    }),
-    newEmail: z.email({
-      message: "Please enter a valid new email address",
-    }),
-  })
-  // Add this refinement to ensure emails are different
-  .refine((data) => data.newEmail !== data.oldEmail, {
-    message: "New email must be different from old email",
-    path: ["newEmail"], // Attach error to newEmail field
-  });
-
-export type ChangeEmailData = z.infer<typeof changeEmailSchema>;
+export type Experience = z.infer<typeof experienceSchema>;

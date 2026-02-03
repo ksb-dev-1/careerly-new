@@ -48,7 +48,7 @@ export function StartExploringButton() {
     <div className="flex items-center">
       <Link
         href={href}
-        className="bg-brand rounded-full px-6 py-4 hover:bg-brand-hover transition text-white dark:text-background font-semibold"
+        className="bg-brand rounded-full px-6 py-4 hover:bg-brand-hover transition text-white dark:text-background font-medium"
       >
         Start Exploring
       </Link>

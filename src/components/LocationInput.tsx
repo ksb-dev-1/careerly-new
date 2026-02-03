@@ -4,18 +4,16 @@
 // Imports
 // ----------------------------------------
 import { Dispatch, SetStateAction, useState, useRef, useEffect } from "react";
-
-// components
-import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-
-// 3rd party
 import {
   UseFormRegister,
   UseFormSetValue,
   FieldErrors,
   Path,
 } from "react-hook-form";
+
+// components
+import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 // ----------------------------------------
 // Types

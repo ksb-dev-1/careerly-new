@@ -18,7 +18,7 @@ import { JobPagination } from "@/components/Pagination";
 import { Card } from "@/components/ui/card";
 
 // 3rd Party
-import { FolderOpen } from "lucide-react";
+import { BriefcaseBusiness, FolderOpen } from "lucide-react";
 
 // ----------------------------------------
 // Job Card Component
@@ -46,7 +46,7 @@ function JobCard({ job }: { job: JobWithRelationships }) {
     <div key={id} className="relative">
       <Link href={`/job-seeker/jobs/${id}`} prefetch={true}>
         <Card
-          className={`${isFeatured ? "bg-brand/5 border-brand/20" : ""} h-full outline-brand/50 hover:outline-3 transition-all duration-100`}
+          className={`${isFeatured ? "bg-brand/5 border-brand/20" : ""} h-full outline-brand/50 hover:outline-1 transition-all duration-100`}
         >
           {/* Job card header */}
           <JobCardHeader
@@ -81,7 +81,7 @@ function JobCard({ job }: { job: JobWithRelationships }) {
 
       {/* Feature tag */}
       {isFeatured ? (
-        <span className="font-semibold text-xs absolute top-0 right-0 bg-brand text-white dark:text-background rounded-tr-xl rounded-bl-xl px-3 py-1 ">
+        <span className="text-xs font-medium absolute top-0 right-0 bg-brand text-white dark:text-background rounded-tr-xl rounded-bl-xl px-3 py-1 ">
           Featured
         </span>
       ) : (
@@ -128,9 +128,17 @@ export function JobList({
       <div className="max-w-custom w-full mx-auto px-4 min-h-screen pt-32 pb-16 gap-6">
         <div>
           <div className="mb-6 flex items-end justify-between">
-            <div>
-              <p className="text-lg font-bold">All Jobs</p>
-              <p className="text-muted-foreground text-sm">
+            <div className="w-full flex flex-col md:flex-row md:items-end md:justify-between gap4 md:gap-2">
+              <div className="flex items-center gap-2 dark:text-background">
+                <div className="w-fit bg-brand/10 border border-brand/20 text-brand p-2 rounded-tr-full rounded-br-full flex items-center gap-2">
+                  <BriefcaseBusiness size={20} />
+                  <span className="font-bold">All Jobs</span>
+                  <span className="h-7 w-7 rounded-full bg-brand text-white dark:text-background flex items-center justify-center text-sm font-medium">
+                    {totalJobs}
+                  </span>
+                </div>
+              </div>
+              <p className="text-slate-600 dark:text-muted-foreground text-sm">
                 Showing {jobs.length} of {totalJobs} jobs
               </p>
             </div>
@@ -149,10 +157,10 @@ export function JobList({
               <FolderOpen className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
             </div>
             <p className="font-bold text-xl mt-4">No results found 😕</p>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-slate-600 dark:text-muted-foreground mt-2">
               Try clearing some filters or adjusting your search.
             </p>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-slate-600 dark:text-muted-foreground mt-1">
               For better results, use the exact search term. For example:{" "}
               <code>react.js</code> instead of <code>react</code>.
             </p>
@@ -166,9 +174,17 @@ export function JobList({
     <div className="max-w-custom w-full mx-auto px-4 min-h-screen pt-32 pb-16 gap-6">
       <div>
         <div className="mb-6 flex items-end justify-between">
-          <div>
-            <p className="text-lg font-bold">All Jobs</p>
-            <p className="text-muted-foreground text-sm">
+          <div className="w-full flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-2">
+            <div className="flex items-center gap-2 dark:text-background">
+              <div className="w-fit bg-brand/10 border border-brand/20 text-brand p-2 rounded-tr-full rounded-br-full flex items-center gap-2">
+                <BriefcaseBusiness size={20} />
+                <span className="font-bold">All Jobs</span>
+                <span className="h-7 w-7 rounded-full bg-brand text-white dark:text-background flex items-center justify-center text-sm font-medium">
+                  {totalJobs}
+                </span>
+              </div>
+            </div>
+            <p className="text-slate-600 dark:text-muted-foreground text-sm">
               Showing {jobs.length} of {totalJobs} jobs
             </p>
           </div>

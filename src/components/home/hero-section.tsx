@@ -17,12 +17,12 @@ export function HeroSection() {
       </h1>
 
       {/* Subheadline */}
-      <p className="text-xl sm:text-2xl md:text-3xl font-extrabold text-center max-w-3xl mx-auto mt-6">
+      <p className="text-xl sm:text-2xl md:text-4xl font-extrabold text-center max-w-3xl mx-auto mt-8">
         Discover <span className="text-brand">Dream Jobs</span> That Inspire You
       </p>
 
       {/* Description */}
-      <p className="text-lg text-center max-w-2xl mx-auto mt-8 text-muted-foreground">
+      <p className="text-lg font-medium text-center max-w-2xl mx-auto mt-8 text-slate-700 dark:text-muted-foreground">
         Discover jobs effortlessly with intelligent filtering, instant search
         results, and an elegant, modern UI designed for your success.
       </p>

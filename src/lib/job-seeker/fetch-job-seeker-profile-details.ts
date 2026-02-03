@@ -3,38 +3,28 @@
 // ----------------------------------------
 import { cacheLife, cacheTag } from "next/cache";
 
-// lib
-import { prisma } from "@/lib/prisma";
-import { Project, SocialLink } from "@/lib/validation";
-
-// 3rd party
+// generated
 import { Resume } from "@/generated/prisma/client";
+
+// lib
+import { JobSeekerProfileFormData } from "@/lib/validation/job-seeker-profile-validation-schema";
+import { Project, SocialLink } from "@/lib/validation";
+import { prisma } from "@/lib/prisma";
 
 // ----------------------------------------
 // Types
 // ----------------------------------------
-export type JobSeekerProfileData = {
-  name?: string | null;
+export type JobSeekerProfileCompleteData = {
+  formData: JobSeekerProfileFormData;
   email: string;
-  profileImage?: string | null;
-
-  experience: string;
-  skills: string[];
-
-  projects: Project[];
-  socials: SocialLink[];
-
-  location?: string | null;
-  about?: string | null;
-
-  resume: Resume | null;
+  resume?: Resume;
   hasProfile: boolean;
 };
 
 export type FetchJobseekerProfileDetailsSuccess = {
   success: true;
   status: 200;
-  data: JobSeekerProfileData;
+  data: JobSeekerProfileCompleteData;
 };
 
 export type FetchJobseekerProfileDetailsError = {
@@ -48,7 +38,7 @@ export type FetchJobseekerProfileDetailsResponse =
   | FetchJobseekerProfileDetailsError;
 
 // ----------------------------------------
-// Data fetching function
+// Fetch job seeker profile details
 // ----------------------------------------
 export async function fetchJobSeekerProfileDetails(
   jobSeekerId?: string,
@@ -76,32 +66,49 @@ export async function fetchJobSeekerProfileDetails(
       return { success: false, status: 404, message: "User not found." };
     }
 
-    const hasProfile = !!user.jobSeekerProfile;
+    const profile = user.jobSeekerProfile;
+    const hasProfile = !!profile;
 
-    // Map relational data to frontend types
-    const projects: Project[] =
-      user.jobSeekerProfile?.projects.map((p) => ({
-        name: p.name,
-        link: p.link,
-      })) ?? [];
+    const projects: Project[] = profile?.projects?.length
+      ? profile.projects.map((p) => ({
+          name: p.name ?? undefined,
+          link: p.link ?? undefined,
+        }))
+      : [];
 
-    const socials: SocialLink[] =
-      user.jobSeekerProfile?.socials.map((s) => ({
-        platform: s.platform as SocialLink["platform"],
-        url: s.url,
-      })) ?? [];
+    const socials: SocialLink[] = profile?.socials?.length
+      ? profile.socials.map((s) => ({
+          platform: s.platform as SocialLink["platform"],
+          url: s.url ?? undefined,
+        }))
+      : [];
 
-    const data: JobSeekerProfileData = {
-      name: user.name,
+    // Prepare data in the exact shape your Zod form expects
+    const data: JobSeekerProfileCompleteData = {
+      formData: {
+        // Form fields only
+        // name: user.name ?? undefined,
+        // profileImageUrl: user.image ?? undefined,
+        // profileImageFile: undefined,
+        // experience: String(profile?.experience) ?? undefined,
+        // skills: profile?.skills?.length ? profile.skills : undefined,
+        // projects,
+        // socials,
+        // location: profile?.location ?? undefined,
+        // about: profile?.about ?? undefined,
+        name: user.name ?? "",
+        profileImageUrl: user.image ?? "",
+        profileImageFile: undefined,
+        experience:
+          profile?.experience === undefined ? "" : String(profile.experience),
+        skills: profile?.skills?.length ? profile.skills : [],
+        projects,
+        socials,
+        location: profile?.location ?? "",
+        about: profile?.about ?? "",
+      },
       email: user.email,
-      profileImage: user.image,
-      experience: user.jobSeekerProfile?.experience ?? "",
-      skills: user.jobSeekerProfile?.skills ?? [],
-      projects,
-      socials,
-      location: user.jobSeekerProfile?.location ?? null,
-      about: user.jobSeekerProfile?.about ?? null,
-      resume: user.resume ?? null,
+      resume: user.resume ?? undefined,
       hasProfile,
     };
 

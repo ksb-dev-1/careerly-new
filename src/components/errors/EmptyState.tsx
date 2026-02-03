@@ -28,19 +28,19 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4">
-      <div className="relative h-14 w-14 rounded-full bg-muted border">
+      <div className="relative h-14 w-14 rounded-full bg-brand/20 text-brand border border-brand/30">
         <FolderOpen className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       </div>
-      <p className="font-bold text-xl mt-4">Nothing to show 😞</p>
-      <p className="text-muted-foreground max-w-sm text-center mt-1">
+      <p className="font-bold text-xl mt-4">Nothing to show</p>
+      <p className="text-slate-700 dark:text-muted-foreground max-w-sm text-center mt-1">
         {message}
       </p>
       {href && (
         <Button
           asChild
-          className="bg-brand hover:bg-brand-hover! mt-6 font-semibold! rounded-full"
+          className="bg-brand hover:bg-brand-hover! mt-6 rounded-full"
         >
-          <Link href={href}>
+          <Link href={href} prefetch={true}>
             {btnIcon}
             <span>{btnLabel}</span>
           </Link>

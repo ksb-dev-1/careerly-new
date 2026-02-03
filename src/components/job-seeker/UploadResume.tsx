@@ -40,7 +40,7 @@ import { toast } from "sonner";
 // Types
 // ----------------------------------------
 interface UploadResumeProps {
-  resume: Resume | null;
+  resume: Resume | undefined;
 }
 
 // ----------------------------------------
@@ -166,7 +166,7 @@ export function UploadResume({ resume }: UploadResumeProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-bold">Upload Resume</CardTitle>
+        <CardTitle className="text-lg font-bold">Upload Resume</CardTitle>
         <CardDescription>
           Upload your resume to apply for jobs (PDF, DOC, DOCX – Max 5MB)
         </CardDescription>
@@ -181,7 +181,7 @@ export function UploadResume({ resume }: UploadResumeProps) {
                 <div>
                   <p className="font-medium text-brand">{resume.fileName}</p>
                   {resume.fileSize && (
-                    <p className="text-xs">{formatFileSize(resume.fileSize)}</p>
+                    <p className="text-sm">{formatFileSize(resume.fileSize)}</p>
                   )}
                 </div>
                 <Button
@@ -239,11 +239,11 @@ export function UploadResume({ resume }: UploadResumeProps) {
               disabled={isPending}
             />
             <label htmlFor="resume-input" className="cursor-pointer">
-              <Upload className="mx-auto mb-3 h-5 w-5 text-muted-foreground" />
-              <p className="text-sm font-medium">
+              <Upload className="mx-auto mb-3 h-5 w-5 text-slate-600 dark:text-muted-foreground" />
+              <p className="font-semibold text-sm">
                 Drag & drop or click to upload
               </p>
-              <p className="text-xs text-muted-foreground mt-2">
+              <p className="text-xs text-slate-600 dark:text-muted-foreground mt-2">
                 PDF, DOC, DOCX up to 5MB
               </p>
             </label>
@@ -258,7 +258,7 @@ export function UploadResume({ resume }: UploadResumeProps) {
             </div>
             <div className="flex-1">
               <p className="text-sm font-medium">{file.name}</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-slate-600 dark:text-muted-foreground">
                 {formatFileSize(file.size)}
               </p>
             </div>

@@ -11,9 +11,9 @@ import { auth } from "@/auth";
 // lib
 import { prisma } from "@/lib/prisma";
 import {
-  jobSeekerProfileSchema,
+  jobSeekerProfileFormSchema,
   JobSeekerProfileFormData,
-} from "@/lib/validation";
+} from "@/lib/validation/job-seeker-profile-validation-schema";
 import cloudinary from "@/lib/cloudinary";
 
 // ----------------------------------------
@@ -23,7 +23,6 @@ export type UpdateJobSeekerProfileActionSuccess = {
   success: true;
   status: 200;
   message: string;
-  imageUrl?: string;
 };
 
 export type UpdateJobSeekerProfileActionError = {
@@ -39,7 +38,7 @@ export type UpdateJobSeekerProfileActionResponse =
 // ----------------------------------------
 // Update Job Seeker Profile Server Action
 // ----------------------------------------
-export async function UpdateJobSeekerProfile(
+export async function updateJobSeekerProfile(
   formData: JobSeekerProfileFormData,
   imageFile?: File,
 ): Promise<UpdateJobSeekerProfileActionResponse> {
@@ -54,7 +53,7 @@ export async function UpdateJobSeekerProfile(
     };
   }
 
-  const parsed = jobSeekerProfileSchema.safeParse(formData);
+  const parsed = jobSeekerProfileFormSchema.safeParse(formData);
 
   if (!parsed.success) {
     return {
@@ -83,6 +82,7 @@ export async function UpdateJobSeekerProfile(
 
   try {
     const updateUserData: Record<string, any> = {};
+    let imageUrl: string | undefined;
 
     if (imageFile instanceof File) {
       const buffer = Buffer.from(await imageFile.arrayBuffer());
@@ -104,6 +104,7 @@ export async function UpdateJobSeekerProfile(
       });
 
       updateUserData.image = uploadResult.secure_url;
+      imageUrl = uploadResult.secure_url;
     }
 
     if (!user.name && formData.name) {
@@ -117,70 +118,62 @@ export async function UpdateJobSeekerProfile(
       });
     }
 
-    // await prisma.jobSeekerProfile.upsert({
-    //   where: { userId: jobSeekerId },
-    //   create: {
-    //     userId: jobSeekerId,
-    //     experience: formData.experience ?? null,
-    //     skills: formData.skills ?? [],
-    //     projects: formData.projects ?? [],
-    //     socials: formData.socials ?? [],
-    //     location: formData.location ?? null,
-    //     about: formData.about ?? null,
-    //   },
-    //   update: {
-    //     experience: formData.experience ?? null,
-    //     skills: formData.skills ?? [],
-    //     projects: formData.projects ?? [],
-    //     socials: formData.socials ?? [],
-    //     location: formData.location ?? null,
-    //     about: formData.about ?? null,
-    //   },
-    // });
+    // Prepare experience data - handle undefined/null
+    let experienceValue: number | null = null;
+    if (formData.experience !== undefined && formData.experience !== null) {
+      experienceValue = Number(formData.experience);
+    }
+
+    // Since Prisma requires non-nullable strings, we need to ensure:
+    // 1. Projects have both name and link as non-empty strings
+    // 2. Socials have both platform and url as non-empty strings
+    // Solution: Only create records where ALL required fields are present
+
+    // Prepare projects - only create if BOTH name and link are provided
+    const projectsToCreate =
+      formData.projects
+        ?.filter((p) => p.name?.trim() && p.link?.trim()) // Both must be non-empty
+        .map((p) => ({
+          name: p.name!.trim(), // Non-null assertion since we filtered
+          link: p.link!.trim(),
+        })) || [];
+
+    // Prepare socials - only create if BOTH platform and url are provided
+    const socialsToCreate =
+      formData.socials
+        ?.filter((s) => s.platform?.trim() && s.url?.trim()) // Both must be non-empty
+        .map((s) => ({
+          platform: s.platform!.trim(), // Non-null assertion since we filtered
+          url: s.url!.trim(),
+        })) || [];
 
     await prisma.jobSeekerProfile.upsert({
       where: { userId: jobSeekerId },
       create: {
         userId: jobSeekerId,
-        experience: formData.experience ?? null,
+        experience: experienceValue,
         skills: formData.skills ?? [],
         location: formData.location ?? null,
         about: formData.about ?? null,
         projects: {
-          create:
-            formData.projects?.map((p) => ({
-              name: p.name,
-              link: p.link,
-            })) ?? [],
+          create: projectsToCreate,
         },
         socials: {
-          create:
-            formData.socials?.map((s) => ({
-              platform: s.platform,
-              url: s.url,
-            })) ?? [],
+          create: socialsToCreate,
         },
       },
       update: {
-        experience: formData.experience ?? null,
+        experience: experienceValue,
         skills: formData.skills ?? [],
         location: formData.location ?? null,
         about: formData.about ?? null,
         projects: {
           deleteMany: {}, // remove old projects
-          create:
-            formData.projects?.map((p) => ({
-              name: p.name,
-              link: p.link,
-            })) ?? [],
+          create: projectsToCreate,
         },
         socials: {
           deleteMany: {}, // remove old socials
-          create:
-            formData.socials?.map((s) => ({
-              platform: s.platform,
-              url: s.url,
-            })) ?? [],
+          create: socialsToCreate,
         },
       },
     });
@@ -209,7 +202,6 @@ export async function UpdateJobSeekerProfile(
       success: true,
       status: 200,
       message: "Profile updated successfully.",
-      imageUrl: updateUserData.image ?? user.image,
     };
   } catch (error) {
     console.error("❌ Profile update error:", error);

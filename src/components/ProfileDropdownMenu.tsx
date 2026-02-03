@@ -89,9 +89,7 @@ export function ProfileDropdownMenu({ image, role }: ProfileDropdownProps) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuLabel className="font-semibold">
-          My Account
-        </DropdownMenuLabel>
+        <DropdownMenuLabel className="font-bold">My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
         {profileRoute && (
