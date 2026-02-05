@@ -10,7 +10,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
 // 3rd party
-// import { SpeedInsights } from "@vercel/speed-insights/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const fontFamily = Mulish({
   subsets: ["latin"],
@@ -34,7 +34,7 @@ export default function RootLayout({
           <Navbar />
           <main>{children}</main>
           <Footer />
-          {/* <SpeedInsights /> */}
+          <SpeedInsights />
         </Providers>
       </body>
     </html>
