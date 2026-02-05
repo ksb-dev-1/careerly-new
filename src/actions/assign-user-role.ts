@@ -3,7 +3,6 @@
 // ----------------------------------------
 // Imports
 // ----------------------------------------
-import { revalidatePath } from "next/cache";
 
 // auth
 import { auth } from "@/auth";
@@ -62,8 +61,6 @@ export async function assignUserRole(
         message: "Role update failed",
       };
     }
-
-    revalidatePath("/");
 
     return {
       success: true,

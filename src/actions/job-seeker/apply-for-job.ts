@@ -126,6 +126,7 @@ export async function applyForJob(
     updateTag(`jobs-${jobSeekerId}`);
     updateTag(`bookmarks-${jobSeekerId}`);
     updateTag(`applications-${jobSeekerId}`);
+    updateTag(`job-details-${jobSeekerId}`);
     updateTag(`job-details-${jobId}-${jobSeekerId}`);
 
     updateTag(`posted-jobs-${result.employerId}`);

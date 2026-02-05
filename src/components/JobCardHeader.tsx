@@ -71,7 +71,7 @@ export function JobCardHeader({
             </CardTitle>
 
             {/* Company name */}
-            <CardDescription className="font-medium">
+            <CardDescription className="text-slate-600 dark:text-muted-foreground font-medium">
               {companyName}
             </CardDescription>
           </div>

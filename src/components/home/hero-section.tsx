@@ -12,7 +12,7 @@ export function HeroSection() {
   return (
     <div className="min-h-screen w-full max-w-custom mx-auto px-6 flex flex-col items-center justify-center">
       {/* Main Headline */}
-      <h1 className="font-extrabold text-4xl sm:text-5xl md:text-7xl tracking-tight text-center">
+      <h1 className="font-extrabold text-4xl sm:text-5xl md:text-6xl tracking-tight text-center">
         Unlock Your <span className="text-brand">Career</span> Potential
       </h1>
 
@@ -22,7 +22,7 @@ export function HeroSection() {
       </p>
 
       {/* Description */}
-      <p className="text-lg font-medium text-center max-w-2xl mx-auto mt-8 text-slate-700 dark:text-muted-foreground">
+      <p className="text-lg font-medium text-center max-w-2xl mx-auto mt-8 text-slate-600 dark:text-muted-foreground">
         Discover jobs effortlessly with intelligent filtering, instant search
         results, and an elegant, modern UI designed for your success.
       </p>

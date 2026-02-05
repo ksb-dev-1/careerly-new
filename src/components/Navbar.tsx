@@ -128,24 +128,8 @@ function NavbarLoading() {
 // Navbar without auth component
 // ----------------------------------------
 function NavbarWithoutAuth() {
-  const path = usePathname();
-  const isActive = path === "/job-seeker/jobs";
-
   return (
     <NavbarWrapper>
-      <Button
-        size="sm"
-        asChild
-        variant="ghost"
-        className={`${isActive ? "text-brand hover:text-brand" : ""}`}
-      >
-        <Link href="/job-seeker/jobs?page=1" prefetch={true}>
-          Jobs
-        </Link>
-      </Button>
-
-      <span className="inline-block h-5 border-r-2" />
-
       <Button asChild size="sm" variant="outline" className="ml-2">
         <Link href="/sign-in">Sign in</Link>
       </Button>
@@ -190,7 +174,7 @@ function JobSeekerNavbar() {
               variant="ghost"
               className={`${isActive ? "text-brand hover:text-brand" : ""}`}
             >
-              <Link href={href} prefetch={true}>
+              <Link href={href} prefetch={false}>
                 {icon}
                 {label}
               </Link>
@@ -229,7 +213,7 @@ function EmployerNavbar() {
               variant="ghost"
               className={`${isActive ? "text-brand hover:text-brand" : ""}`}
             >
-              <Link href={href} prefetch={true}>
+              <Link href={href} prefetch={false}>
                 {icon}
                 {label}
               </Link>
@@ -323,7 +307,7 @@ export function SideMenu() {
                       onClick={() => setIsOpen(false)}
                       className={`${isActive ? "text-brand hover:text-brand" : ""} justify-start w-fit`}
                     >
-                      <Link href={href} prefetch={true}>
+                      <Link href={href} prefetch={false}>
                         {icon}
                         {label}
                       </Link>
@@ -347,7 +331,7 @@ export function SideMenu() {
                       onClick={() => setIsOpen(false)}
                       className={`${isActive ? "text-brand hover:text-brand" : ""} justify-start w-fit`}
                     >
-                      <Link href={href} prefetch={true}>
+                      <Link href={href} prefetch={false}>
                         {icon}
                         {label}
                       </Link>
@@ -364,7 +348,7 @@ export function SideMenu() {
                 onClick={() => setIsOpen(false)}
                 className={`${path === "/job-seeker/profile" ? "text-brand hover:text-brand" : ""} justify-start w-fit mt-2`}
               >
-                <Link href="/job-seeker/profile" prefetch={true}>
+                <Link href="/job-seeker/profile" prefetch={false}>
                   <User className="h-4 w-4" aria-hidden="true" />
                   Profile
                 </Link>
@@ -378,7 +362,7 @@ export function SideMenu() {
                 onClick={() => setIsOpen(false)}
                 className={`${path === "/employer/profile" ? "text-brand hover:text-brand" : ""} justify-start w-fit mt-2`}
               >
-                <Link href="/employer/profile" prefetch={true}>
+                <Link href="/employer/profile" prefetch={false}>
                   <User className="h-4 w-4" aria-hidden="true" />
                   Profile
                 </Link>
@@ -392,7 +376,7 @@ export function SideMenu() {
                 onClick={handleSignOut}
                 className="justify-start w-fit mt-1"
               >
-                <Link href="/employer/profile" prefetch={true}>
+                <Link href="/employer/profile" prefetch={false}>
                   <LogOut className="h-4 w-4" aria-hidden="true" />
                   Sign out
                 </Link>

@@ -80,7 +80,7 @@ function JobCard({ job }: { job: JobApplicationsWithBookmarkStatus }) {
   return (
     <div className="relative">
       {canNavigate ? (
-        <Link href={`/job-seeker/jobs/${id}`} prefetch={true}>
+        <Link href={`/job-seeker/jobs/${id}`} prefetch={false}>
           {CardContent}
         </Link>
       ) : (

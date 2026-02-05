@@ -44,7 +44,7 @@ function JobCard({ job }: { job: JobWithRelationships }) {
 
   return (
     <div key={id} className="relative">
-      <Link href={`/job-seeker/jobs/${id}`} prefetch={true}>
+      <Link href={`/job-seeker/jobs/${id}`} prefetch={false}>
         <Card
           className={`${isFeatured ? "bg-brand/5 border-brand/20" : ""} h-full outline-brand/50 hover:outline-1 transition-all duration-100`}
         >

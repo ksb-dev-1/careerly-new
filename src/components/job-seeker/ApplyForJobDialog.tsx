@@ -106,75 +106,67 @@ export function ApplyForJobDialog({ resume, jobId }: ApplyForJobDialogProps) {
                     type="button"
                     size="icon"
                     onClick={() => window.open(resume.url, "_blank")}
-                    className="bg-brand/10 text-brand hover:bg-brand/20 border border-brand/20 rounded-full"
+                    className="bg-brand/10 text-brand hover:bg-brand/20 border border-brand/20 rounded-md"
                     aria-label="download resume"
                   >
                     <Download />
                   </Button>
                 </div>
 
-                <div className="rounded-xl border p-4 space-y-2 mt-6">
-                  <p className="text-sm">
+                <div className="rounded-xl border p-4 space-y-4 mt-6 flex flex-col items-center justify-center">
+                  <p className="text-center font-bold">
                     Do you want to update your resume before applying?
                   </p>
 
-                  <Link
-                    className="text-sm font-medium text-brand underline"
-                    href={`/job-seeker/profile?callbackUrl=${encodeURIComponent(
-                      pathname,
-                    )}`}
-                    prefetch={true}
+                  <Button
+                    asChild
+                    className="w-full bg-brand/10 text-brand hover:bg-brand/20 border border-brand/20 font-medium flex items-center gap-2"
                   >
-                    Upload new resume
-                  </Link>
+                    <Link
+                      href={`/job-seeker/profile?callbackUrl=${encodeURIComponent(
+                        pathname,
+                      )}`}
+                      prefetch={true}
+                    >
+                      Upload New Resume <MoveRight className="h-4 w-4 mt-1" />
+                    </Link>
+                  </Button>
 
-                  <p className="text-xs text-slate-600 dark:text-muted-foreground mt-1">
-                    You will be redirected back to this page after uploading
-                    your resume.
+                  <p className="text-center text-sm text-slate-600 dark:text-muted-foreground">
+                    You’ll be redirected back after uploading.
                   </p>
                 </div>
 
                 <ApplyForJobButton jobId={jobId} setOpen={setOpen} />
               </div>
             ) : (
-              <div className="rounded-xl border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/40 p-5 space-y-4">
-                {/* Header */}
-                <div className="flex items-start gap-3">
-                  <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-red-300 dark:border-red-800 bg-white dark:bg-red-900 text-red-600 dark:text-red-400 font-semibold">
-                    !
-                  </span>
-
-                  <div>
-                    <p className="text-base font-semibold text-red-700 dark:text-red-400">
-                      Resume required
-                    </p>
-                    <p className="mt-1 text-sm text-slate-700 dark:text-muted-foreground">
-                      You must upload a resume before applying for this
-                      position.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Action */}
-                <div className="flex items-center justify-between gap-4 flex-wrap">
-                  <p className="text-sm text-red-600 dark:text-red-400">
-                    You’ll be redirected back after uploading.
+              <div className="flex flex-col items-center justify-center rounded-xl border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30 p-5 space-y-4">
+                <div className="text-red-600 dark:text-red-400">
+                  <p className="text-center text-xl font-bold">
+                    Resume Required!
                   </p>
-
-                  <Button
-                    asChild
-                    className="bg-red-600 text-white hover:bg-red-600/90 dark:bg-red-500 dark:text-background dark:hover:bg-red-500/90"
-                  >
-                    <Link
-                      href={`/job-seeker/profile?callbackUrl=${encodeURIComponent(pathname)}`}
-                      prefetch
-                      className="flex items-center gap-2"
-                    >
-                      Got to upload resume
-                      <MoveRight className="h-4 w-4" />
-                    </Link>
-                  </Button>
+                  <p className="text-center mt-2">
+                    You must upload a resume before applying for this position.
+                  </p>
                 </div>
+
+                <Button
+                  asChild
+                  className="w-full text-red-600 dark:text-red-400 border border-red-600 dark:border-red-400 font-medium flex items-center gap-2 bg-red-200 dark:bg-red-950/50 hover:bg-red-200/70 dark:hover:bg-red-950/80"
+                >
+                  <Link
+                    href={`/job-seeker/profile?callbackUrl=${encodeURIComponent(
+                      pathname,
+                    )}`}
+                    prefetch={true}
+                  >
+                    Upload Resume <MoveRight className="h-4 w-4 mt-1" />
+                  </Link>
+                </Button>
+
+                <p className="text-center text-sm text-slate-600 dark:text-muted-foreground">
+                  You’ll be redirected back after uploading.
+                </p>
               </div>
             )}
           </div>

@@ -8,7 +8,7 @@ export function UnauthenticatedError({ message }: { message?: string }) {
         <Ban className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       </div>
       <p className="font-bold text-xl mt-4">Unauthenticated - 401</p>
-      <p className="text-lg text-slate-700 dark:text-muted-foreground mt-1 text-center">
+      <p className="text-lg text-slate-600 dark:text-muted-foreground mt-1 text-center">
         {message}
       </p>
     </div>

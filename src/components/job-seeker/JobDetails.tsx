@@ -7,7 +7,7 @@ import { ApplicationStatus } from "@/generated/prisma/client";
 
 // lib
 import { getJobApplicationStatusColor } from "@/lib/utils";
-import { JobDetailsWithBookmarkStatusAndApplicationStatus } from "@/lib/job-seeker/fetch-job-details";
+import { JobDetailsWithUserSpecificData } from "@/lib/job-seeker/fetch-job-details";
 
 // components
 import { BookmarkButton } from "@/components/job-seeker/BookmarkButton";
@@ -68,7 +68,7 @@ function ApplicationStatusInfo({
 // Job Card Component
 // ----------------------------------------
 interface JobCardProps {
-  job: JobDetailsWithBookmarkStatusAndApplicationStatus;
+  job: JobDetailsWithUserSpecificData;
 }
 
 function JobCard({ job }: JobCardProps) {
@@ -148,7 +148,7 @@ function JobCard({ job }: JobCardProps) {
 // Main Component
 // ----------------------------------------
 interface JobDetailsProps {
-  job: JobDetailsWithBookmarkStatusAndApplicationStatus;
+  job: JobDetailsWithUserSpecificData;
 }
 
 export function JobDetails({ job }: JobDetailsProps) {

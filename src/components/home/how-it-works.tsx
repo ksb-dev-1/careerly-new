@@ -60,7 +60,7 @@ export function HowItWorks() {
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
           How It <span className="text-brand">Works</span>
         </h2>
-        <p className="text-lg font-medium text-slate-700 dark:text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-lg font-medium text-slate-600 dark:text-muted-foreground max-w-2xl mx-auto">
           Whether you're seeking opportunities or talent, our platform makes the
           process seamless, efficient, and effective.
         </p>
@@ -84,7 +84,7 @@ export function HowItWorks() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-brand">Job Seekers</h3>
-                <p className="font-medium text-slate-700 dark:text-muted-foreground">
+                <p className="font-medium text-slate-600 dark:text-muted-foreground">
                   Find your dream role in 3 simple steps
                 </p>
               </div>
@@ -99,7 +99,7 @@ export function HowItWorks() {
                   </div>
                   <div>
                     <p className="font-bold mb-1">{step.title}</p>
-                    <p className="font-medium text-slate-700 dark:text-muted-foreground">
+                    <p className="font-medium text-slate-600 dark:text-muted-foreground">
                       {step.description}
                     </p>
                   </div>
@@ -125,7 +125,7 @@ export function HowItWorks() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-brand">Employers</h3>
-                <p className="font-medium text-slate-700 dark:text-muted-foreground">
+                <p className="font-medium text-slate-600 dark:text-muted-foreground">
                   Find perfect candidates effortlessly
                 </p>
               </div>
@@ -140,7 +140,7 @@ export function HowItWorks() {
                   </div>
                   <div>
                     <p className="font-bold mb-1">{step.title}</p>
-                    <p className="font-medium text-slate-700 dark:text-muted-foreground">
+                    <p className="font-medium text-slate-600 dark:text-muted-foreground">
                       {step.description}
                     </p>
                   </div>

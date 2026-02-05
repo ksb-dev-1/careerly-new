@@ -234,3 +234,24 @@ Deployment Scaling         | Cache lost on restart          | Survives server re
 Real-time Updates          | Manual invalidation needed     | Easy with mutations
 Developer Experience       | Simple (React patterns)        | Excellent (DevTools, hooks)
 Learning Curve             | Low (built-in)                 | Medium (library to learn)
+
+
+1️⃣ Server (RSC / App Router)
+
+Runs on every navigation
+
+Uses Next cache + 304 revalidation
+
+Guarantees auth correctness + security
+
+Cannot rely on browser memory
+
+2️⃣ Client (TanStack Query)
+
+Lives in the browser
+
+Cache survives route changes
+
+Can return data without any network request
+
+Loses cache on refresh / hard reload

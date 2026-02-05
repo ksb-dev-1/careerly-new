@@ -9,7 +9,7 @@ import {
 // 3rd party
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { formatDistanceToNow, format, differenceInSeconds } from "date-fns";
+import { format, differenceInSeconds } from "date-fns";
 
 export function formatMoney(
   amount: number,

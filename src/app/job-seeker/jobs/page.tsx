@@ -3,7 +3,14 @@
 // ----------------------------------------
 import { Suspense } from "react";
 import { Metadata } from "next";
+import { cacheLife, cacheTag } from "next/cache";
 import { redirect } from "next/navigation";
+
+// auth
+import { auth } from "@/auth";
+
+// generated
+import { UserRole } from "@/generated/prisma/enums";
 
 // lib
 import { fetchJobs } from "@/lib/job-seeker/fetch-jobs";
@@ -31,6 +38,7 @@ interface PageProps {
 }
 
 interface JobDetailsContent {
+  jobSeekerId: string;
   filters: {
     page: number;
     jobType?: string[];
@@ -44,18 +52,15 @@ interface JobDetailsContent {
 // ----------------------------------------
 // Job List Content (Server Component)
 // ----------------------------------------
-async function JobListContent({ filters }: JobDetailsContent) {
-  const response = await fetchJobs(filters);
+async function JobListContent({ filters, jobSeekerId }: JobDetailsContent) {
+  "use cache";
+  cacheLife("max");
+  cacheTag(`jobs-${jobSeekerId}`);
+  console.log("🔵 DB HIT: fetching jobs");
+
+  const response = await fetchJobs(jobSeekerId, filters);
 
   if (!response.success) {
-    if (response.status === 401) {
-      redirect("/sign-in");
-    }
-
-    if (response.status === 403) {
-      return <UnauthorizedError message={response.message} />;
-    }
-
     return <ServerError message={response.message} />;
   }
 
@@ -84,7 +89,9 @@ async function JobListContent({ filters }: JobDetailsContent) {
 // ----------------------------------------
 // Search Params Parser
 // ----------------------------------------
-async function JobListContentLoader(props: PageProps) {
+async function JobListContentLoader(
+  props: PageProps & { jobSeekerId: string },
+) {
   const searchParams = await props.searchParams;
 
   const page =
@@ -110,9 +117,27 @@ async function JobListContentLoader(props: PageProps) {
 
   const filters = { page, jobType, jobMode, experience, search, limit };
 
-  return <JobListContent filters={filters} />;
+  return <JobListContent jobSeekerId={props.jobSeekerId} filters={filters} />;
 }
-`  `;
+
+// ----------------------------------------
+//  Auth Content Loader
+// ----------------------------------------
+async function AuthContentLoader(props: PageProps) {
+  const session = await auth();
+
+  if (!session?.user.id) {
+    redirect("/sign-in");
+  }
+
+  if (session.user.role !== UserRole.JOB_SEEKER) {
+    return (
+      <UnauthorizedError message="Only user with job seeker role can view jobs." />
+    );
+  }
+
+  return <JobListContentLoader {...props} jobSeekerId={session.user.id} />;
+}
 
 // ----------------------------------------
 // Page Component with Streaming
@@ -120,7 +145,7 @@ async function JobListContentLoader(props: PageProps) {
 export default async function JobListPage(props: PageProps) {
   return (
     <Suspense fallback={<LoadingFallback color="text-brand" />}>
-      <JobListContentLoader {...props} />
+      <AuthContentLoader {...props} />
     </Suspense>
   );
 }

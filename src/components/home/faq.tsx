@@ -63,7 +63,7 @@ function Header() {
       <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
         Frequently Asked <span className="text-brand">Questions</span>
       </h2>
-      <p className="text-lg font-medium text-slate-700 dark:text-muted-foreground max-w-2xl mx-auto">
+      <p className="text-lg font-medium text-slate-600 dark:text-muted-foreground max-w-2xl mx-auto">
         Find answers to common questions about using our platform for job
         searching and hiring.
       </p>
@@ -79,7 +79,7 @@ function AccordionSection() {
           <AccordionTrigger className="text-[1rem] font-semibold">
             {faq.question}
           </AccordionTrigger>
-          <AccordionContent className="text-[1rem] font-medium text-slate-700 dark:text-muted-foreground">
+          <AccordionContent className="text-[1rem] font-medium text-slate-600 dark:text-muted-foreground">
             {faq.answer}
           </AccordionContent>
         </AccordionItem>

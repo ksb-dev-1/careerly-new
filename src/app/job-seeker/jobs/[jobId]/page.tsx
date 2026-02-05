@@ -3,6 +3,7 @@
 // ----------------------------------------
 import { Suspense } from "react";
 import { Metadata } from "next";
+import { cacheLife, cacheTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 // auth
@@ -42,16 +43,35 @@ export const metadata: Metadata = {
 // ----------------------------------------
 // Posted job details content
 // ----------------------------------------
-async function JobDetailsContent({ jobId }: { jobId: string }) {
-  const response = await fetchJobDetails(jobId);
+async function JobDetailsContent({
+  jobSeekerId,
+  jobId,
+}: {
+  jobSeekerId: string;
+  jobId: string;
+}) {
+  "use cache";
+  cacheLife("max");
+  cacheTag(`job-details-${jobSeekerId}`);
+  cacheTag(`job-details-${jobId}-${jobSeekerId}`);
+  console.log(`🔵 DB HIT: fetching PUBLIC job details - ${jobId}`);
+
+  const response = await fetchJobDetails(jobSeekerId, jobId);
 
   // Handle errors
   if (!response.success) {
     switch (response.status) {
-      case 401:
-        redirect("/sign-in");
+      case 400:
+        return (
+          <EmptyState
+            message={response.message}
+            href="/job-seeker/jobs"
+            btnIcon={<ArrowLeft size={16} />}
+            btnLabel="Back to Jobs"
+          />
+        );
 
-      case 403:
+      case 404:
         return <UnauthorizedError message={response.message} />;
 
       case 404:
@@ -80,7 +100,17 @@ async function AuthContentLoader(props: PageProps) {
   const params = await props.params;
   const { jobId } = params;
 
-  return <JobDetailsContent jobId={jobId} />;
+  if (!session?.user.id) {
+    redirect("/sign-in");
+  }
+
+  if (session.user.role !== UserRole.JOB_SEEKER) {
+    return (
+      <UnauthorizedError message="Only user with job seeker role can view jobs." />
+    );
+  }
+
+  return <JobDetailsContent jobSeekerId={session.user.id} jobId={jobId} />;
 }
 
 // ----------------------------------------

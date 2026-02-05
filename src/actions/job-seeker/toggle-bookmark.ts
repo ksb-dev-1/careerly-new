@@ -74,7 +74,6 @@ export async function ToggleBookmark(
         },
       });
 
-      updateTag(`jobs-public`);
       updateTag(`jobs-${jobSeekerId}`);
       updateTag(`applications-${jobSeekerId}`);
       updateTag(`bookmarks-${jobSeekerId}`);
@@ -94,10 +93,10 @@ export async function ToggleBookmark(
       },
     });
 
-    updateTag(`jobs-public`);
     updateTag(`jobs-${jobSeekerId}`);
     updateTag(`applications-${jobSeekerId}`);
     updateTag(`bookmarks-${jobSeekerId}`);
+    updateTag(`job-details-${jobSeekerId}`);
     updateTag(`job-details-${jobId}-${jobSeekerId}`);
 
     return {

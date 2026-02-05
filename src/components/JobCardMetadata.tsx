@@ -59,7 +59,7 @@ function JobDetailRow({
   return (
     <div className="flex items-center gap-2">
       <span>{icon}</span>
-      <span className="text-sm flex items-center text-slate-700 dark:text-muted-foreground">
+      <span className="text-sm flex items-center text-slate-600 dark:text-muted-foreground">
         {currency && <CurrencyIcon currency={currency} />}
         {displayValue}
         {isExperience && " years"}

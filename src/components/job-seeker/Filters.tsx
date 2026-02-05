@@ -282,7 +282,7 @@ function FilterGroup({
                 className={`transition text-sm ${
                   isActive
                     ? "text-brand"
-                    : "text-slate-700 dark:text-muted-foreground hover:text-brand dark:hover:text-brand"
+                    : "text-slate-600 dark:text-muted-foreground hover:text-brand dark:hover:text-brand"
                 }`}
               >
                 {capitalize(option)}

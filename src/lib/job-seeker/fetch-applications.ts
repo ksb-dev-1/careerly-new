@@ -46,8 +46,6 @@ export type JobApplicationWithJob = {
 export async function fetchApplications(
   jobSeekerId?: string,
 ): Promise<FetchApplicationsResponse> {
-  console.log("🔵 DB HIT: fetching applications");
-
   try {
     const applications = await prisma.jobApplication.findMany({
       where: { userId: jobSeekerId },

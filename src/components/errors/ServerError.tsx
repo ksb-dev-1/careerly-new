@@ -12,7 +12,7 @@ export function ServerError({
         <ServerOff className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       </div>
       <p className="font-bold text-xl mt-4">Internal Server Error - 500</p>
-      <p className="text-slate-700 dark:text-muted-foreground mt-1 text-center">
+      <p className="text-slate-600 dark:text-muted-foreground mt-1 text-center">
         {message}
       </p>
     </div>

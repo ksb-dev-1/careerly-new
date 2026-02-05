@@ -31,55 +31,56 @@ import { Button } from "@/components/ui/button";
 
 // 3rd party
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Controller,
-  FormProvider,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import ProfileImageEdit from "./ProfileImageEdit";
+import { useRef } from "react";
 
 export function EditJobSeekerProfileForm({
   details,
 }: {
   details: JobSeekerProfileFormData;
 }) {
+  // Transform the details to match form structure and store in ref
+  const originalDetails = useRef<JobSeekerProfileFormData>({
+    name: details.name ?? "",
+    experience: details.experience?.toString() ?? "",
+    skills: details.skills ?? [],
+    projects: details.projects ?? [],
+    socials: details.socials ?? [],
+    location: details.location ?? "",
+    about: details.about ?? "",
+    profileImageFile: undefined,
+    profileImageUrl: details.profileImageUrl ?? "",
+  });
+
   const methods = useForm<JobSeekerProfileFormData>({
     resolver: zodResolver(jobSeekerProfileFormSchema),
-    defaultValues: {
-      name: details.name ?? "",
-      experience: details.experience ?? "",
-      skills: details.skills ?? [],
-      projects: details.projects ?? [],
-      socials: details.socials ?? [],
-      location: details.location ?? "",
-      about: details.about ?? "",
-      profileImageFile: undefined,
-      profileImageUrl: details.profileImageUrl ?? "",
-    },
-    mode: "onSubmit",
+    defaultValues: originalDetails.current,
+    mode: "onChange",
     reValidateMode: "onChange",
   });
 
   const {
-    control,
-    formState: { isDirty },
+    register,
+    formState: { errors, isDirty },
     handleSubmit,
     reset,
   } = methods;
 
+  // Handle form reset
+  function handleFormReset() {
+    reset(originalDetails.current, {
+      keepDefaultValues: true,
+    });
+  }
+
   const onSubmit: SubmitHandler<JobSeekerProfileFormData> = (data) => {
-    // convert experience here if needed
     const payload = {
       ...data,
       experience: data.experience === "" ? undefined : Number(data.experience),
     };
-
     console.log(payload);
   };
-
-  function handleFormReset() {
-    reset();
-  }
 
   return (
     <div className="min-h-screen max-w-custom w-full pt-32 pb-16 mx-auto px-4">
@@ -101,50 +102,44 @@ export function EditJobSeekerProfileForm({
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <FieldGroup>
+                  {/* Profile image */}
+                  <ProfileImageEdit />
+
                   {/* Name */}
-                  <Controller
-                    name="name"
-                    control={control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name} className="font-bold">
-                          Name
-                        </FieldLabel>
-                        <Input
-                          {...field}
-                          id={field.name}
-                          aria-invalid={fieldState.invalid}
-                          placeholder="Enter your name"
-                          autoComplete="off"
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
+                  <Field>
+                    <FieldLabel htmlFor="name" className="font-bold">
+                      Name
+                    </FieldLabel>
+
+                    <Input
+                      id="name"
+                      placeholder="Enter your name"
+                      autoComplete="off"
+                      aria-invalid={!!errors.name}
+                      {...register("name")}
+                    />
+
+                    {errors.name && <FieldError errors={[errors.name]} />}
+                  </Field>
 
                   {/* Experience */}
-                  <Controller
-                    name="experience"
-                    control={control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name} className="font-bold">
-                          Experience
-                        </FieldLabel>
-                        <Input
-                          {...field}
-                          id={field.name}
-                          placeholder="Enter years of experience (eg: 2)"
-                          autoComplete="off"
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
+                  <Field>
+                    <FieldLabel htmlFor="experience" className="font-bold">
+                      Experience
+                    </FieldLabel>
+
+                    <Input
+                      id="experience"
+                      placeholder="Enter your experience"
+                      autoComplete="off"
+                      aria-invalid={!!errors.experience}
+                      {...register("experience")}
+                    />
+
+                    {errors.experience && (
+                      <FieldError errors={[errors.experience]} />
                     )}
-                  />
+                  </Field>
 
                   {/* Skills */}
                   <SkillsInput />

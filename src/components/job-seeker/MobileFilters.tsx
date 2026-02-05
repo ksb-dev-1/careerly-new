@@ -189,7 +189,7 @@ export function MobileFilters() {
               }
             />
 
-            <div className="flex justify-between text-xs text-slate-700 dark:text-muted-foreground">
+            <div className="flex justify-between text-xs text-slate-600 dark:text-muted-foreground">
               <span>{tempExperience[0]} yrs</span>
               <span>{tempExperience[1]} yrs</span>
             </div>
@@ -269,7 +269,7 @@ function FilterGroup({
                 className={`transition text-sm ${
                   isActive
                     ? "text-brand"
-                    : "text-slate-700 dark:text-muted-foreground hover:text-brand dark:hover:text-brand"
+                    : "text-slate-600 dark:text-muted-foreground hover:text-brand dark:hover:text-brand"
                 }`}
                 aria-label={capitalize(option)}
               >

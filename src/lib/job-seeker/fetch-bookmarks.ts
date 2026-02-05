@@ -1,13 +1,8 @@
+"use server";
+
 // ----------------------------------------
 // Imports
 // ----------------------------------------
-import { cacheLife, cacheTag } from "next/cache";
-
-// auth
-import { auth } from "@/auth";
-
-// generated
-import { UserRole } from "@/generated/prisma/client";
 
 // lib
 import { prisma } from "@/lib/prisma";
@@ -50,10 +45,10 @@ export type BookmarkWithJob = {
 export async function fetchBookmarks(
   jobSeekerId?: string,
 ): Promise<FetchBookmarksResponse> {
-  "use cache";
-  cacheLife("max");
-  cacheTag(`bookmarks-${jobSeekerId}`);
-  console.log("🔵 DB HIT: fetching bookmarks");
+  // "use cache";
+  // cacheLife("max");
+  // cacheTag(`bookmarks-${jobSeekerId}`);
+  // console.log("🔵 DB HIT: fetching bookmarks");
 
   try {
     const bookmarks = await prisma.bookmark.findMany({
@@ -101,24 +96,3 @@ export async function fetchBookmarks(
     };
   }
 }
-
-// export async function fetchBookmarks(): Promise<FetchBookmarksResponse> {
-//   const session = await auth();
-//   if (!session?.user.id) {
-//     return {
-//       success: false,
-//       status: 401,
-//       message: "Unauthenticated",
-//     };
-//   }
-
-//   if (session?.user.role !== UserRole.JOB_SEEKER) {
-//     return {
-//       success: false,
-//       status: 403,
-//       message: "Only user with job seeker role can access bookmarks.",
-//     };
-//   }
-
-//   return fetchBookmarksHelper(session.user.id);
-// }

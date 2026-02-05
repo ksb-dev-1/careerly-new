@@ -55,7 +55,7 @@ export function ApplyForJobButton({ jobId, setOpen }: ApplyForJobButtonProps) {
     <Button
       disabled={isPending}
       aria-label={isPending ? "applying" : "apply with current resume"}
-      className="w-full mt-4 bg-brand hover:bg-brand-hover rounded-full"
+      className="w-full mt-4 bg-brand hover:bg-brand-hover"
       onClick={handleJobApply}
     >
       {isPending ? (

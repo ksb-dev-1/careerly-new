@@ -102,7 +102,7 @@ function Header() {
       <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
         Powerful <span className="text-brand">Features</span>
       </h2>
-      <p className="text-lg text-slate-700 dark:text-muted-foreground max-w-2xl mx-auto">
+      <p className="text-lg text-slate-600 dark:text-muted-foreground max-w-2xl mx-auto">
         Features designed to make hiring and job searching simple and effective.
       </p>
     </div>
@@ -194,7 +194,7 @@ function FeaturesSection({
             </div>
 
             <div className="mt-2">
-              <p className="font-medium text-slate-700 dark:text-muted-foreground">
+              <p className="font-medium text-slate-600 dark:text-muted-foreground">
                 {feature.desc}
               </p>
             </div>

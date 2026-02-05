@@ -15,6 +15,8 @@ import { JobCardMetadata } from "@/components/JobCardMetadata";
 import { JobCardFooter } from "@/components/JobCardFooter";
 import { BookmarkButton } from "@/components/job-seeker/BookmarkButton";
 import { Card } from "@/components/ui/card";
+
+// 3rd party
 import { Bookmark } from "lucide-react";
 
 // ----------------------------------------
@@ -78,7 +80,7 @@ function JobCard({ job }: { job: BookmarksWithIsApplied }) {
   return (
     <div className="relative">
       {canNavigate ? (
-        <Link href={`/job-seeker/jobs/${id}`} prefetch={true}>
+        <Link href={`/job-seeker/jobs/${id}`} prefetch={false}>
           {CardContent}
         </Link>
       ) : (

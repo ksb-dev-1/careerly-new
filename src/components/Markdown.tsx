@@ -11,7 +11,7 @@ export function Markdown({ children }: MarkdownProps) {
         h4: ({ ...props }) => <h4 className="font-bold mb-2" {...props} />,
         p: ({ ...props }) => (
           <p
-            className="leading-relaxed text-muted-foreground mb-8 [li>&]:mb-0 [ol>&]:mb-0 [ul>&]:mb-0"
+            className="leading-relaxed text-slate-600 dark:text-muted-foreground mb-8 [li>&]:mb-0 [ol>&]:mb-0 [ul>&]:mb-0"
             {...props}
           />
         ),
@@ -22,7 +22,10 @@ export function Markdown({ children }: MarkdownProps) {
           <ol className="list-decimal list-outside ml-4" {...props} />
         ),
         li: ({ ...props }) => (
-          <li className="text-muted-foreground mb-1" {...props} />
+          <li
+            className="text-slate-600 dark:text-muted-foreground mb-1"
+            {...props}
+          />
         ),
         a: ({ ...props }) => (
           <a className="text-primary underline" target="_blank" {...props} />

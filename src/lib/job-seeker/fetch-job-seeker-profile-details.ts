@@ -86,16 +86,6 @@ export async function fetchJobSeekerProfileDetails(
     // Prepare data in the exact shape your Zod form expects
     const data: JobSeekerProfileCompleteData = {
       formData: {
-        // Form fields only
-        // name: user.name ?? undefined,
-        // profileImageUrl: user.image ?? undefined,
-        // profileImageFile: undefined,
-        // experience: String(profile?.experience) ?? undefined,
-        // skills: profile?.skills?.length ? profile.skills : undefined,
-        // projects,
-        // socials,
-        // location: profile?.location ?? undefined,
-        // about: profile?.about ?? undefined,
         name: user.name ?? "",
         profileImageUrl: user.image ?? "",
         profileImageFile: undefined,

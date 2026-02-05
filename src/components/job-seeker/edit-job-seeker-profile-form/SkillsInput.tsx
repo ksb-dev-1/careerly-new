@@ -43,7 +43,7 @@ export function SkillsInput() {
   }
 
   return (
-    <Field data-invalid={fieldState.invalid}>
+    <Field>
       <FieldLabel className="font-bold">Skills</FieldLabel>
 
       <div className="flex gap-2">

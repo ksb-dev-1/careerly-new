@@ -187,7 +187,7 @@ export function UploadResume({ resume }: UploadResumeProps) {
                 <Button
                   size="icon"
                   onClick={() => window.open(resume.url, "_blank")}
-                  className="bg-brand/10 hover:bg-brand/20 border border-brand/20 text-brand rounded-full"
+                  className="bg-brand/10 hover:bg-brand/20 border border-brand/20 text-brand rounded-md"
                   aria-label="download resume"
                 >
                   <Download className="h-4 w-4" />
@@ -253,7 +253,7 @@ export function UploadResume({ resume }: UploadResumeProps) {
         {/* Selected File */}
         {file && !isPending && (
           <div className="border rounded-xl shadow-sm p-4 flex items-center gap-3">
-            <div className="h-9 w-9 rounded-full flex items-center justify-center bg-brand/10 border border-brand/20 text-brand">
+            <div className="h-9 w-9 rounded-md flex items-center justify-center bg-brand/10 border border-brand/20 text-brand">
               <FileText className="h-4 w-4" />
             </div>
             <div className="flex-1">
@@ -265,7 +265,7 @@ export function UploadResume({ resume }: UploadResumeProps) {
             <Button
               size="icon"
               onClick={() => setFile(null)}
-              className="border bg-red-100 text-red-600 hover:bg-red-200 border-red-300 dark:bg-red-950/40 dark:text-red-500 dark:hover:bg-red-950 dark:border-red-800 rounded-full"
+              className="border bg-red-100 text-red-600 hover:bg-red-200 border-red-300 dark:bg-red-950/40 dark:text-red-500 dark:hover:bg-red-950 dark:border-red-800 rounded-md"
               aria-label="remove selected file"
             >
               <Trash2 />
@@ -282,7 +282,7 @@ export function UploadResume({ resume }: UploadResumeProps) {
         >
           {isPending ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin" />
               Uploading...
             </>
           ) : (

@@ -40,6 +40,7 @@ async function ApplicationsContent({ jobSeekerId }: { jobSeekerId: string }) {
   "use cache";
   cacheLife("max");
   cacheTag(`applications-${jobSeekerId}`);
+  console.log("🔵 DB HIT: fetching applications");
 
   const response = await fetchApplications(jobSeekerId);
 
