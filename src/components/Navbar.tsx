@@ -118,7 +118,7 @@ function NavbarLoading() {
         ))}
         <span className="inline-block h-5 border-r-2 mx-2" />
 
-        <Skeleton className="skeleton h-8 w-8" />
+        <Skeleton className="skeleton h-8 w-8 rounded-xl" />
       </div>
     </NavbarWrapper>
   );
@@ -174,7 +174,7 @@ function JobSeekerNavbar() {
               variant="ghost"
               className={`${isActive ? "text-brand hover:text-brand" : ""}`}
             >
-              <Link href={href} prefetch={false}>
+              <Link href={href} prefetch={true}>
                 {icon}
                 {label}
               </Link>
@@ -213,7 +213,7 @@ function EmployerNavbar() {
               variant="ghost"
               className={`${isActive ? "text-brand hover:text-brand" : ""}`}
             >
-              <Link href={href} prefetch={false}>
+              <Link href={href} prefetch={true}>
                 {icon}
                 {label}
               </Link>
@@ -307,7 +307,7 @@ export function SideMenu() {
                       onClick={() => setIsOpen(false)}
                       className={`${isActive ? "text-brand hover:text-brand" : ""} justify-start w-fit`}
                     >
-                      <Link href={href} prefetch={false}>
+                      <Link href={href} prefetch={true}>
                         {icon}
                         {label}
                       </Link>
@@ -331,7 +331,7 @@ export function SideMenu() {
                       onClick={() => setIsOpen(false)}
                       className={`${isActive ? "text-brand hover:text-brand" : ""} justify-start w-fit`}
                     >
-                      <Link href={href} prefetch={false}>
+                      <Link href={href} prefetch={true}>
                         {icon}
                         {label}
                       </Link>
@@ -348,7 +348,7 @@ export function SideMenu() {
                 onClick={() => setIsOpen(false)}
                 className={`${path === "/job-seeker/profile" ? "text-brand hover:text-brand" : ""} justify-start w-fit mt-2`}
               >
-                <Link href="/job-seeker/profile" prefetch={false}>
+                <Link href="/job-seeker/profile" prefetch={true}>
                   <User className="h-4 w-4" aria-hidden="true" />
                   Profile
                 </Link>
@@ -362,7 +362,7 @@ export function SideMenu() {
                 onClick={() => setIsOpen(false)}
                 className={`${path === "/employer/profile" ? "text-brand hover:text-brand" : ""} justify-start w-fit mt-2`}
               >
-                <Link href="/employer/profile" prefetch={false}>
+                <Link href="/employer/profile" prefetch={true}>
                   <User className="h-4 w-4" aria-hidden="true" />
                   Profile
                 </Link>
@@ -376,10 +376,8 @@ export function SideMenu() {
                 onClick={handleSignOut}
                 className="justify-start w-fit mt-1"
               >
-                <Link href="/employer/profile" prefetch={false}>
-                  <LogOut className="h-4 w-4" aria-hidden="true" />
-                  Sign out
-                </Link>
+                <LogOut className="h-4 w-4" aria-hidden="true" />
+                Sign out
               </Button>
             )}
           </div>

@@ -53,11 +53,6 @@ interface JobDetailsContent {
 // Job List Content (Server Component)
 // ----------------------------------------
 async function JobListContent({ filters, jobSeekerId }: JobDetailsContent) {
-  "use cache";
-  cacheLife("max");
-  cacheTag(`jobs-${jobSeekerId}`);
-  console.log("🔵 DB HIT: fetching jobs");
-
   const response = await fetchJobs(jobSeekerId, filters);
 
   if (!response.success) {
@@ -92,6 +87,11 @@ async function JobListContent({ filters, jobSeekerId }: JobDetailsContent) {
 async function JobListContentLoader(
   props: PageProps & { jobSeekerId: string },
 ) {
+  "use cache";
+  cacheLife("max");
+  cacheTag(`jobs-${props.jobSeekerId}`);
+  console.log("🔵 DB HIT: fetching jobs");
+
   const searchParams = await props.searchParams;
 
   const page =

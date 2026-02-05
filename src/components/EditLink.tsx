@@ -31,7 +31,7 @@ export function EditLink({
     >
       <Link
         href={`${href}?callbackUrl=${encodeURIComponent(pathname)}`}
-        prefetch={false}
+        prefetch={true}
       >
         <SquarePen />
       </Link>

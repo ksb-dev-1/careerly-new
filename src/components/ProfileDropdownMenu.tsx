@@ -97,7 +97,7 @@ export function ProfileDropdownMenu({ image, role }: ProfileDropdownProps) {
             <Link
               href={profileRoute}
               className="cursor-pointer"
-              prefetch={false}
+              prefetch={true}
             >
               <User className="mr-2 h-4 w-4" aria-hidden="true" />
               Profile

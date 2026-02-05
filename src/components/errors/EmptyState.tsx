@@ -38,6 +38,7 @@ export function EmptyState({
         <Link
           href={href}
           className="flex items-center gap-2 text-brand mt-4 hover:text-brand-hover"
+          prefetch={true}
         >
           {btnIcon}
           <span>{btnLabel}</span>
