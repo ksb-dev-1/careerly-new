@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Mulish } from "next/font/google";
 import "./globals.css";
@@ -8,9 +9,10 @@ import { Providers } from "@/providers/Providers";
 // components
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { NavigationProgress } from "@/components/NavigationProgress";
 
 // 3rd party
-import { SpeedInsights } from "@vercel/speed-insights/next";
+// import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const fontFamily = Mulish({
   subsets: ["latin"],
@@ -30,12 +32,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${fontFamily.className} antialiased`}>
-        <Providers>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <SpeedInsights />
-        </Providers>
+        <Suspense>
+          <NavigationProgress />
+          <Providers>
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+          </Providers>
+          {/* <SpeedInsights /> */}
+        </Suspense>
       </body>
     </html>
   );

@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 // components
-import { Button } from "./ui/button";
+import { CustomLink } from "@/components/CustomLink";
+import { Button } from "@/components/ui/button";
 
 // 3rd party
 import { SquarePen } from "lucide-react";
@@ -29,12 +29,13 @@ export function EditLink({
       )}
       aria-label="edit-link"
     >
-      <Link
+      <CustomLink
         href={`${href}?callbackUrl=${encodeURIComponent(pathname)}`}
         prefetch={true}
+        isActive={pathname === href}
       >
         <SquarePen />
-      </Link>
+      </CustomLink>
     </Button>
   );
 }

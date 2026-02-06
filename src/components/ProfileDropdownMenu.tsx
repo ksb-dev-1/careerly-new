@@ -4,13 +4,14 @@
 // Imports
 // ----------------------------------------
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 // prisma
 import { UserRole } from "@/generated/prisma/browser";
 
 // components
+import { CustomLink } from "@/components/CustomLink";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -48,10 +49,14 @@ const AVATAR_SIZE = 32;
 // Profile dropdown component
 // ----------------------------------------
 export function ProfileDropdownMenu({ image, role }: ProfileDropdownProps) {
+  const [open, setOpen] = useState<boolean>(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const path = usePathname();
 
   const handleSignOut = async () => {
+    setOpen(false);
     setIsSigningOut(true);
+
     try {
       await signOut({ callbackUrl: "/" });
       toast.success("Signed out successfully");
@@ -66,7 +71,7 @@ export function ProfileDropdownMenu({ image, role }: ProfileDropdownProps) {
   const profileRoute = role ? ROLE_ROUTES[role] : null;
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger
         className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-full ml-2"
         aria-label="Open user menu"
@@ -93,15 +98,16 @@ export function ProfileDropdownMenu({ image, role }: ProfileDropdownProps) {
         <DropdownMenuSeparator />
 
         {profileRoute && (
-          <DropdownMenuItem asChild>
-            <Link
+          <DropdownMenuItem asChild onClick={() => setOpen(false)}>
+            <CustomLink
               href={profileRoute}
               className="cursor-pointer"
               prefetch={true}
+              isActive={path === profileRoute}
             >
               <User className="mr-2 h-4 w-4" aria-hidden="true" />
               Profile
-            </Link>
+            </CustomLink>
           </DropdownMenuItem>
         )}
 

@@ -4,7 +4,6 @@
 // Imports
 // ----------------------------------------
 import { useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 // generated
@@ -14,6 +13,7 @@ import { Resume } from "@/generated/prisma/browser";
 import { ApplyForJobButton } from "@/components/job-seeker/ApplyForJobButton";
 
 // components
+import { CustomLink } from "@/components/CustomLink";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -122,14 +122,16 @@ export function ApplyForJobDialog({ resume, jobId }: ApplyForJobDialogProps) {
                     asChild
                     className="w-full bg-brand/10 text-brand hover:bg-brand/20 border border-brand/20 font-medium flex items-center gap-2"
                   >
-                    <Link
-                      href={`/job-seeker/profile?callbackUrl=${encodeURIComponent(
-                        pathname,
-                      )}`}
+                    <CustomLink
+                      href={`/job-seeker/profile?callbackUrl=${encodeURIComponent(pathname)}`}
                       prefetch={true}
+                      isActive={pathname === "/job-seeker/profile"}
                     >
-                      Upload New Resume <MoveRight className="h-4 w-4 mt-1" />
-                    </Link>
+                      <span className="inline-flex items-center gap-1">
+                        Upload New Resume
+                        <MoveRight className="h-4 w-4 mt-1" />
+                      </span>
+                    </CustomLink>
                   </Button>
 
                   <p className="text-center text-sm text-slate-600 dark:text-muted-foreground">
@@ -154,14 +156,15 @@ export function ApplyForJobDialog({ resume, jobId }: ApplyForJobDialogProps) {
                   asChild
                   className="w-full text-red-600 dark:text-red-400 border border-red-600 dark:border-red-400 font-medium flex items-center gap-2 bg-red-200 dark:bg-red-950/50 hover:bg-red-200/70 dark:hover:bg-red-950/80"
                 >
-                  <Link
+                  <CustomLink
                     href={`/job-seeker/profile?callbackUrl=${encodeURIComponent(
                       pathname,
                     )}`}
                     prefetch={true}
+                    isActive={pathname === "/job-seeker/profile"}
                   >
                     Upload Resume <MoveRight className="h-4 w-4 mt-1" />
-                  </Link>
+                  </CustomLink>
                 </Button>
 
                 <p className="text-center text-sm text-slate-600 dark:text-muted-foreground">

@@ -4,7 +4,6 @@
 // Imports
 // ----------------------------------------
 import { Suspense, useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 // generated
@@ -14,6 +13,7 @@ import { UserRole } from "@/generated/prisma/browser";
 import { useAutoCloseOnGreaterThanOrEqualToBreakpoint } from "@/hooks/useAutoCloseModalOnBreakpoint";
 
 // components
+import { CustomLink } from "@/components/CustomLink";
 import { ThemeSwitch } from "@/components/ThemeSwitch";
 import { ProfileDropdownMenu } from "@/components/ProfileDropdownMenu";
 import {
@@ -78,20 +78,23 @@ const EMPLOYER_NAV_ITEMS: NavItem[] = [
 // Navbar wrapper component
 // ----------------------------------------
 function NavbarWrapper({ children }: { children: React.ReactNode }) {
+  const path = usePathname();
+
   return (
-    <header className="fixed z-30 top-0 left-0 right-0 w-full border-b h-16 bg-background flex items-center justify-center">
+    <header className="w-full border-b h-16 bg-background flex items-center justify-center">
       <nav className="w-full flex items-center justify-between px-4">
         <div className="flex items-center">
           <Suspense>
             <SideMenu />
           </Suspense>
 
-          <Link
+          <CustomLink
             href="/"
             className="font-extrabold text-2xl text-brand hover:text-brand-hover transition-colors"
+            isActive={path === "/"}
           >
             Careerly
-          </Link>
+          </CustomLink>
         </div>
 
         <div className="hidden md:flex items-center gap-2">
@@ -128,10 +131,14 @@ function NavbarLoading() {
 // Navbar without auth component
 // ----------------------------------------
 function NavbarWithoutAuth() {
+  const path = usePathname();
+
   return (
     <NavbarWrapper>
       <Button asChild size="sm" variant="outline" className="ml-2">
-        <Link href="/sign-in">Sign in</Link>
+        <CustomLink href="/sign-in" isActive={path === "/sign-in"}>
+          Sign in
+        </CustomLink>
       </Button>
     </NavbarWrapper>
   );
@@ -174,10 +181,10 @@ function JobSeekerNavbar() {
               variant="ghost"
               className={`${isActive ? "text-brand hover:text-brand" : ""}`}
             >
-              <Link href={href} prefetch={true}>
+              <CustomLink href={href} prefetch={true} isActive={isActive}>
                 {icon}
                 {label}
-              </Link>
+              </CustomLink>
             </Button>
           );
         })}
@@ -213,10 +220,10 @@ function EmployerNavbar() {
               variant="ghost"
               className={`${isActive ? "text-brand hover:text-brand" : ""}`}
             >
-              <Link href={href} prefetch={true}>
+              <CustomLink href={href} prefetch={true} isActive={isActive}>
                 {icon}
                 {label}
-              </Link>
+              </CustomLink>
             </Button>
           );
         })}
@@ -288,7 +295,9 @@ export function SideMenu() {
                   className="justify-start w-fit"
                   onClick={() => setIsOpen(false)}
                 >
-                  <Link href="/sign-in">Sign In</Link>
+                  <CustomLink href="/sign-in" isActive={path === "/sign-in"}>
+                    Sign In
+                  </CustomLink>
                 </Button>
               </nav>
             )}
@@ -307,10 +316,14 @@ export function SideMenu() {
                       onClick={() => setIsOpen(false)}
                       className={`${isActive ? "text-brand hover:text-brand" : ""} justify-start w-fit`}
                     >
-                      <Link href={href} prefetch={true}>
+                      <CustomLink
+                        href={href}
+                        prefetch={true}
+                        isActive={isActive}
+                      >
                         {icon}
                         {label}
-                      </Link>
+                      </CustomLink>
                     </Button>
                   );
                 })}
@@ -331,10 +344,14 @@ export function SideMenu() {
                       onClick={() => setIsOpen(false)}
                       className={`${isActive ? "text-brand hover:text-brand" : ""} justify-start w-fit`}
                     >
-                      <Link href={href} prefetch={true}>
+                      <CustomLink
+                        href={href}
+                        prefetch={true}
+                        isActive={isActive}
+                      >
                         {icon}
                         {label}
-                      </Link>
+                      </CustomLink>
                     </Button>
                   );
                 })}
@@ -348,10 +365,14 @@ export function SideMenu() {
                 onClick={() => setIsOpen(false)}
                 className={`${path === "/job-seeker/profile" ? "text-brand hover:text-brand" : ""} justify-start w-fit mt-2`}
               >
-                <Link href="/job-seeker/profile" prefetch={true}>
+                <CustomLink
+                  href="/job-seeker/profile"
+                  prefetch={true}
+                  isActive={path === "/job-seeker/profile"}
+                >
                   <User className="h-4 w-4" aria-hidden="true" />
                   Profile
-                </Link>
+                </CustomLink>
               </Button>
             )}
 
@@ -362,10 +383,14 @@ export function SideMenu() {
                 onClick={() => setIsOpen(false)}
                 className={`${path === "/employer/profile" ? "text-brand hover:text-brand" : ""} justify-start w-fit mt-2`}
               >
-                <Link href="/employer/profile" prefetch={true}>
+                <CustomLink
+                  href="/employer/profile"
+                  prefetch={true}
+                  isActive={path === "/employer/profile"}
+                >
                   <User className="h-4 w-4" aria-hidden="true" />
                   Profile
-                </Link>
+                </CustomLink>
               </Button>
             )}
 
@@ -376,8 +401,10 @@ export function SideMenu() {
                 onClick={handleSignOut}
                 className="justify-start w-fit mt-1"
               >
-                <LogOut className="h-4 w-4" aria-hidden="true" />
-                Sign out
+                <span className="flex items-center gap-2">
+                  <LogOut className="h-4 w-4" aria-hidden="true" />
+                  Sign out
+                </span>
               </Button>
             )}
           </div>

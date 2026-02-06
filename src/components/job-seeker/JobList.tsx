@@ -1,7 +1,6 @@
 // ----------------------------------------
 // Imports
 // ----------------------------------------
-import Link from "next/link";
 
 // lib
 import { JobWithRelationships } from "@/lib/job-seeker/fetch-jobs";
@@ -11,6 +10,7 @@ import { ActiveFilters } from "@/components/job-seeker/ActiveFilters";
 import { Filters } from "@/components/job-seeker/Filters";
 import { MobileFilters } from "@/components/job-seeker/MobileFilters";
 import { BookmarkButton } from "@/components/job-seeker/BookmarkButton";
+import { CustomLink } from "@/components/CustomLink";
 import { JobCardHeader } from "@/components/JobCardHeader";
 import { JobCardMetadata } from "@/components/JobCardMetadata";
 import { JobCardFooter } from "@/components/JobCardFooter";
@@ -44,7 +44,7 @@ function JobCard({ job }: { job: JobWithRelationships }) {
 
   return (
     <div key={id} className="relative">
-      <Link href={`/job-seeker/jobs/${id}`} prefetch={false}>
+      <CustomLink href={`/job-seeker/jobs/${id}`} prefetch={false}>
         <Card
           className={`${isFeatured ? "bg-brand/5 border-brand/20" : ""} h-full outline-brand/50 hover:outline-1 transition-all duration-100`}
         >
@@ -70,7 +70,7 @@ function JobCard({ job }: { job: JobWithRelationships }) {
           {/* Job footer */}
           <JobCardFooter variant="job-list" postedOn={createdAt} />
         </Card>
-      </Link>
+      </CustomLink>
 
       {/* Bookmark button */}
       <BookmarkButton
@@ -171,7 +171,7 @@ export function JobList({
   }
 
   return (
-    <div className="max-w-custom w-full mx-auto px-4 min-h-screen pt-32 pb-16 gap-6">
+    <div className="max-w-custom w-full mx-auto px-4 min-h-screen py-16 gap-6">
       <div>
         <div className="mb-6 flex items-end justify-between">
           <div className="w-full flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-2">

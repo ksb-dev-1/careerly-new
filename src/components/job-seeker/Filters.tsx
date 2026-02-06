@@ -4,10 +4,13 @@
 // Imports
 // ----------------------------------------
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 // generated
 import { JobMode, JobType } from "@/generated/prisma/enums";
+
+// hooks
+import { useCustomRouter } from "@/hooks/useCustomRouter";
 
 // components
 import {
@@ -18,7 +21,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 
 // icons
@@ -27,7 +29,6 @@ import {
   Timer,
   Building,
   Check,
-  Gauge,
   BriefcaseBusiness,
 } from "lucide-react";
 
@@ -52,7 +53,7 @@ export function Filters() {
   const [tempExperience, setTempExperience] =
     useState<[number, number]>(DEFAULT_EXPERIENCE);
 
-  const router = useRouter();
+  const router = useCustomRouter();
   const searchParams = useSearchParams();
 
   // ----------------------------------------
@@ -137,7 +138,7 @@ export function Filters() {
     tempExperience.join() !== activeExperience.join();
 
   return (
-    <Card className="max-w-62.5 w-full gap-0! hidden md:block sticky top-22">
+    <Card className="max-w-62.5 w-full gap-0! hidden md:block sticky top-8">
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2">
           <p className="flex items-center gap-2">

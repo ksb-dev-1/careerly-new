@@ -1,7 +1,6 @@
 // ----------------------------------------
 // Imports
 // ----------------------------------------
-import Link from "next/link";
 
 // lib
 import { JobApplicationsWithBookmarkStatus } from "@/lib/job-seeker/fetch-applications";
@@ -10,6 +9,7 @@ import { JobApplicationsWithBookmarkStatus } from "@/lib/job-seeker/fetch-applic
 import { JobStatus } from "@/generated/prisma/client";
 
 // components
+import { CustomLink } from "@/components/CustomLink";
 import { JobCardHeader } from "@/components/JobCardHeader";
 import { JobCardMetadata } from "@/components/JobCardMetadata";
 import { JobCardFooter } from "@/components/JobCardFooter";
@@ -80,9 +80,9 @@ function JobCard({ job }: { job: JobApplicationsWithBookmarkStatus }) {
   return (
     <div className="relative">
       {canNavigate ? (
-        <Link href={`/job-seeker/jobs/${id}`} prefetch={false}>
+        <CustomLink href={`/job-seeker/jobs/${id}`} prefetch={false}>
           {CardContent}
-        </Link>
+        </CustomLink>
       ) : (
         <div aria-hidden="true">{CardContent}</div>
       )}
@@ -115,7 +115,7 @@ export function Applications({
   applications: JobApplicationsWithBookmarkStatus[];
 }) {
   return (
-    <div className="min-h-screen max-w-4xl w-full pt-32 pb-16 mx-auto px-4">
+    <div className="min-h-screen max-w-4xl w-full py-16 mx-auto px-4">
       <div className="mb-6 flex items-center gap-2 dark:text-background">
         <div className="w-fit bg-brand/10 border border-brand/20 text-brand p-2 rounded-tr-full rounded-br-full flex items-center gap-2">
           <FileText size={20} />

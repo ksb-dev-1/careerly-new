@@ -83,7 +83,7 @@ export function EditJobSeekerProfileForm({
   };
 
   return (
-    <div className="min-h-screen max-w-custom w-full pt-32 pb-16 mx-auto px-4">
+    <div className="min-h-screen max-w-custom w-full py-16 mx-auto px-4">
       <div className="max-w-xl w-full mx-auto">
         <Card className="max-w-xl w-full">
           <CardHeader>

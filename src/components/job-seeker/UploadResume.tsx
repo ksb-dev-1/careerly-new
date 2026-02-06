@@ -4,13 +4,16 @@
 // Imports
 // ----------------------------------------
 import { useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 // generated
 import { Resume } from "@/generated/prisma/browser";
 
 // actions
 import { uploadResume } from "@/actions/job-seeker/upload-resume";
+
+// hooks
+import { useCustomRouter } from "@/hooks/useCustomRouter";
 
 // components
 import {
@@ -66,7 +69,7 @@ export function UploadResume({ resume }: UploadResumeProps) {
   const [file, setFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
 
-  const router = useRouter();
+  const router = useCustomRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
 

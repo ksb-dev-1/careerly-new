@@ -4,10 +4,11 @@
 // Imports
 // ----------------------------------------
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 // hooks
 import { useAutoCloseOnGreaterThanOrEqualToBreakpoint } from "@/hooks/useAutoCloseModalOnBreakpoint";
+import { useCustomRouter } from "@/hooks/useCustomRouter";
 
 // generated
 import { JobType, JobMode } from "@/generated/prisma/enums";
@@ -55,7 +56,7 @@ export function MobileFilters() {
   const [tempExperience, setTempExperience] =
     useState<[number, number]>(DEFAULT_EXPERIENCE);
 
-  const router = useRouter();
+  const router = useCustomRouter();
   const searchParams = useSearchParams();
 
   useAutoCloseOnGreaterThanOrEqualToBreakpoint(open, setOpen, 768);

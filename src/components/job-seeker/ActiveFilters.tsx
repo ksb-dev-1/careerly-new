@@ -3,7 +3,10 @@
 // ----------------------------------------
 // Imports
 // ----------------------------------------
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+
+// hooks
+import { useCustomRouter } from "@/hooks/useCustomRouter";
 
 // lib
 import { JobWithRelationships } from "@/lib/job-seeker/fetch-jobs";
@@ -29,7 +32,7 @@ type FilterType = "search" | "experience" | "jobType" | "jobMode";
 export function ActiveFilters({ jobs }: ActiveFiltersProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const router = useRouter();
+  const router = useCustomRouter();
 
   const search = searchParams.get("search") ?? "";
   const experience = searchParams.get("experience") ?? "";
@@ -116,7 +119,7 @@ function FilterTag({
   type: FilterType;
   isMatched: boolean;
 }) {
-  const router = useRouter();
+  const router = useCustomRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 

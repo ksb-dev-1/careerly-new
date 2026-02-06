@@ -3,13 +3,15 @@
 // ----------------------------------------
 // Imports
 // ----------------------------------------
-import { useRouter } from "next/navigation";
 
 // generated
 import { UserRole } from "@/generated/prisma/browser";
 
 // actions
 import { googleSignin, githubSignin, resendSignin } from "@/actions/sign-in";
+
+// hooks
+import { useCustomRouter } from "@/hooks/useCustomRouter";
 
 // components
 import { SignInButton } from "@/components/sign-in/SignInButton";
@@ -53,7 +55,7 @@ const OAUTH_PROVIDERS = [
 // ----------------------------------------
 export function SigninForm() {
   const { data: session, status } = useSession();
-  const router = useRouter();
+  const router = useCustomRouter();
 
   if (status === "loading") {
     return <LoadingFallback color="text-brand" />;
@@ -73,7 +75,7 @@ export function SigninForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6">
+    <div className="min-h-screen flex items-center justify-center px-4">
       <Card className="max-w-sm w-full mx-auto">
         <CardHeader>
           <CardTitle className="font-bold text-lg">

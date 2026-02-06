@@ -153,7 +153,7 @@ interface JobDetailsProps {
 
 export function JobDetails({ job }: JobDetailsProps) {
   return (
-    <div className="min-h-screen max-w-4xl w-full pt-32 pb-16 mx-auto px-4 space-y-6">
+    <div className="min-h-screen max-w-4xl w-full py-16 mx-auto px-4 space-y-6">
       {/* Job Card */}
       <JobCard job={job} />
 

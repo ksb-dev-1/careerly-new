@@ -13,7 +13,7 @@ import { Faq } from "@/components/home/faq";
 export default function HomePage() {
   return (
     <>
-      <section className="mt-16 border-b">
+      <section className="border-b">
         <HeroSection />
       </section>
       <section className="py-16 border-b">
