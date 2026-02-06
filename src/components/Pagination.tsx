@@ -3,7 +3,10 @@
 // ----------------------------------------
 // Imports
 // ----------------------------------------
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+
+// hooks
+import { useCustomRouter } from "@/hooks/useCustomRouter";
 
 // components
 import {
@@ -23,7 +26,7 @@ type JobPaginationProps = {
 // Pagination Component
 // ----------------------------------------
 export function JobPagination({ totalPages }: JobPaginationProps) {
-  const router = useRouter();
+  const router = useCustomRouter();
   const searchParams = useSearchParams();
 
   const currentPage = Number(searchParams.get("page")) || 1;
