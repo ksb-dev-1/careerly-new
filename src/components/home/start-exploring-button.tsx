@@ -57,24 +57,26 @@
 // ----------------------------------------
 // Imports
 // ----------------------------------------
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 // auth
 import { useSession } from "next-auth/react";
+
+// hooks
+import { useCustomRouter } from "@/hooks/useCustomRouter";
 
 // generated
 import { UserRole } from "@/generated/prisma/browser";
 
 // components
 import { Skeleton } from "@/components/ui/skeleton";
+import { CustomLink } from "@/components/CustomLink";
 
 // ----------------------------------------
 // Main Component
 // ----------------------------------------
 export function StartExploringButton() {
   const { data: session, status } = useSession();
-  const router = useRouter();
+  const router = useCustomRouter();
 
   if (status === "loading") {
     return (
@@ -100,13 +102,13 @@ export function StartExploringButton() {
 
   return (
     <div className="flex items-center">
-      <Link
+      <CustomLink
         href={href}
         className="bg-brand rounded-full px-6 py-4 hover:bg-brand-hover transition text-white dark:text-background font-semibold"
         prefetch={true}
       >
         Start Exploring
-      </Link>
+      </CustomLink>
     </div>
   );
 }
