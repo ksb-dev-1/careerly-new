@@ -125,7 +125,7 @@ export function JobList({
 
   if (jobs.length === 0 && hasFilters && page === 1) {
     return (
-      <div className="max-w-custom w-full mx-auto px-4 min-h-screen pt-32 pb-16 gap-6">
+      <div className="max-w-custom w-full mx-auto px-4 min-h-screen py-16 gap-6">
         <div>
           <div className="mb-6 flex items-end justify-between">
             <div className="w-full flex flex-col md:flex-row md:items-end md:justify-between gap4 md:gap-2">
