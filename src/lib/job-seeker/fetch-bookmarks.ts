@@ -3,13 +3,9 @@
 // ----------------------------------------
 // Imports
 // ----------------------------------------
-import { cacheLife, cacheTag } from "next/cache";
-
-// auth
-import { auth } from "@/auth";
 
 // generated
-import { ApplicationStatus, Job, UserRole } from "@/generated/prisma/client";
+import { ApplicationStatus, Job } from "@/generated/prisma/client";
 
 // lib
 import { prisma } from "@/lib/prisma";
@@ -31,29 +27,18 @@ export type FetchBookmarkSuccess = {
 
 export type FetchBookmarkError = {
   success: false;
-  status: 401 | 403 | 500;
+  status: 500;
   message: string;
 };
 
 export type FetchBookmarksResponse = FetchBookmarkSuccess | FetchBookmarkError;
 
-// export type BookmarkWithJob = {
-//   job: Job & {
-//     applications: { applicationStatus: string }[];
-//   };
-// };
-
 // ----------------------------------------
-// Fetch cached bookmarks
+// Fetch bookmarks
 // ----------------------------------------
-async function _fetchCachedBookmarks(
-  jobSeekerId?: string,
+export async function fetchBookmarks(
+  jobSeekerId: string,
 ): Promise<FetchBookmarksResponse> {
-  "use cache";
-  cacheLife("max");
-  cacheTag(`bookmarks-${jobSeekerId}`);
-  console.log("🔵 DB HIT: fetching bookmarks");
-
   try {
     const bookmarks = await prisma.bookmark.findMany({
       where: { userId: jobSeekerId },
@@ -99,32 +84,4 @@ async function _fetchCachedBookmarks(
       message: (error as Error).message || "Internal Server Error",
     };
   }
-}
-
-// ----------------------------------------
-// Fetch bookmarks
-// ----------------------------------------
-export async function fetchBookmarks(): Promise<FetchBookmarksResponse> {
-  const session = await auth();
-
-  const jobSeekerId = session?.user.id;
-  const role = session?.user.role;
-
-  if (!jobSeekerId) {
-    return {
-      success: false,
-      message: "You must be signed in to fetch bookmarks",
-      status: 401,
-    };
-  }
-
-  if (role !== UserRole.JOB_SEEKER) {
-    return {
-      success: false,
-      message: "Only users with the Job Seeker role can fetch bookmarks",
-      status: 403,
-    };
-  }
-
-  return _fetchCachedBookmarks(jobSeekerId);
 }

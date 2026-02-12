@@ -3,9 +3,10 @@
 // ----------------------------------------
 import { Suspense } from "react";
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { cacheLife, cacheTag } from "next/cache";
 
 // lib
+import { jobSeekerAuthGuard } from "@/lib/job-seeker/job-seeker-auth-guard";
 import { fetchBookmarks } from "@/lib/job-seeker/fetch-bookmarks";
 
 // components
@@ -28,18 +29,16 @@ export const metadata: Metadata = {
 // ----------------------------------------
 // Posted Job List content
 // ----------------------------------------
-async function BookmarksContent() {
-  const response = await fetchBookmarks();
+async function BookmarksContent({ jobSeekerId }: { jobSeekerId: string }) {
+  "use cache";
+  cacheLife("max");
+  cacheTag(`bookmarks-${jobSeekerId}`);
+  console.log("🔵 DB HIT: fetching bookmarks");
+
+  const response = await fetchBookmarks(jobSeekerId);
 
   if (!response.success) {
-    switch (response.status) {
-      case 401:
-        redirect("/sign-in");
-      case 403:
-        return redirect("/select-role");
-      default:
-        return <ServerError message={response.message} />;
-    }
+    return <ServerError message={response.message} />;
   }
 
   if (response.bookmarks.length === 0) {
@@ -57,12 +56,21 @@ async function BookmarksContent() {
 }
 
 // ----------------------------------------
+//  Auth content loader
+// ----------------------------------------
+async function AuthContentLoader() {
+  const jobSeekerId = await jobSeekerAuthGuard();
+
+  return <BookmarksContent jobSeekerId={jobSeekerId} />;
+}
+
+// ----------------------------------------
 //  Page component
 // ----------------------------------------
 export default async function BookmarksPage() {
   return (
     <Suspense fallback={<LoadingFallback color="text-brand" />}>
-      <BookmarksContent />
+      <AuthContentLoader />
     </Suspense>
   );
 }

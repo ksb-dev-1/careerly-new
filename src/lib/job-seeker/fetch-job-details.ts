@@ -1,18 +1,9 @@
 // ----------------------------------------
 // Imports
 // ----------------------------------------
-import { cacheLife, cacheTag } from "next/cache";
-
-// auth
-import { auth } from "@/auth";
 
 // generated
-import {
-  ApplicationStatus,
-  Job,
-  Resume,
-  UserRole,
-} from "@/generated/prisma/client";
+import { ApplicationStatus, Job, Resume } from "@/generated/prisma/client";
 
 // lib
 import { prisma } from "@/lib/prisma";
@@ -38,7 +29,7 @@ export type FetchJobDetailsSuccess = {
 
 export type FetchJobDetailsError = {
   success: false;
-  status: 400 | 401 | 403 | 404 | 500;
+  status: 400 | 404 | 500;
   message: string;
 };
 
@@ -49,16 +40,10 @@ export type FetchJobDetailsResponse =
 // ----------------------------------------
 // Fetch cached job details
 // ----------------------------------------
-async function _fetchCachedJobDetails(
+export async function fetchJobDetails(
   jobSeekerId: string,
   jobId: string,
 ): Promise<FetchJobDetailsResponse> {
-  "use cache";
-  cacheLife("max");
-  cacheTag(`job-details-${jobSeekerId}`);
-  cacheTag(`job-details-${jobId}-${jobSeekerId}`);
-  console.log("🔵 DB HIT: fetching job details", jobId);
-
   try {
     // 1️⃣ Validate jobId
     const idCheck = z.uuid().safeParse(jobId);
@@ -112,34 +97,4 @@ async function _fetchCachedJobDetails(
       status: 500,
     };
   }
-}
-
-// ----------------------------------------
-// Fetch job details
-// ----------------------------------------
-export async function fetchJobDetails(
-  jobId: string,
-): Promise<FetchJobDetailsResponse> {
-  const session = await auth();
-
-  const jobSeekerId = session?.user.id;
-  const role = session?.user.role;
-
-  if (!jobSeekerId) {
-    return {
-      success: false,
-      message: "You must be signed in to fetch job details",
-      status: 401,
-    };
-  }
-
-  if (role !== UserRole.JOB_SEEKER) {
-    return {
-      success: false,
-      message: "Only users with the Job Seeker role can fetch job details",
-      status: 403,
-    };
-  }
-
-  return _fetchCachedJobDetails(jobSeekerId, jobId);
 }

@@ -3,9 +3,10 @@
 // ----------------------------------------
 import { Suspense } from "react";
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { cacheLife, cacheTag } from "next/cache";
 
 // lib
+import { jobSeekerAuthGuard } from "@/lib/job-seeker/job-seeker-auth-guard";
 import { fetchJobDetails } from "@/lib/job-seeker/fetch-job-details";
 
 // components
@@ -36,18 +37,24 @@ export const metadata: Metadata = {
 // ----------------------------------------
 // Posted job details content
 // ----------------------------------------
-async function JobDetailsContent({ jobId }: { jobId: string }) {
-  const response = await fetchJobDetails(jobId);
+async function JobDetailsContent({
+  jobSeekerId,
+  jobId,
+}: {
+  jobSeekerId: string;
+  jobId: string;
+}) {
+  "use cache";
+  cacheLife("max");
+  cacheTag(`job-details-${jobSeekerId}`);
+  cacheTag(`job-details-${jobId}-${jobSeekerId}`);
+  console.log("🔵 DB HIT: fetching job details", jobId);
+
+  const response = await fetchJobDetails(jobSeekerId, jobId);
 
   // Handle errors
   if (!response.success) {
     switch (response.status) {
-      case 401:
-        redirect("sign-in");
-
-      case 403:
-        redirect("/select-role");
-
       case 400:
         return (
           <EmptyState
@@ -80,10 +87,11 @@ async function JobDetailsContent({ jobId }: { jobId: string }) {
 //  Auth Content Loader
 // ----------------------------------------
 async function JobDetailsContentLoader(props: PageProps) {
+  const jobSeekerId = await jobSeekerAuthGuard();
   const params = await props.params;
   const { jobId } = params;
 
-  return <JobDetailsContent jobId={jobId} />;
+  return <JobDetailsContent jobSeekerId={jobSeekerId} jobId={jobId} />;
 }
 
 // ----------------------------------------

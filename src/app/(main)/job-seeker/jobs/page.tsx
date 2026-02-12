@@ -3,9 +3,10 @@
 // ----------------------------------------
 import { Suspense } from "react";
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { cacheLife, cacheTag } from "next/cache";
 
 // lib
+import { jobSeekerAuthGuard } from "@/lib/job-seeker/job-seeker-auth-guard";
 import { fetchJobs } from "@/lib/job-seeker/fetch-jobs";
 
 // components
@@ -30,6 +31,7 @@ interface PageProps {
 }
 
 interface JobDetailsContent {
+  jobSeekerId: string;
   filters: {
     page: number;
     jobType?: string[];
@@ -43,18 +45,16 @@ interface JobDetailsContent {
 // ----------------------------------------
 // Job List Content (Server Component)
 // ----------------------------------------
-async function JobListContent({ filters }: JobDetailsContent) {
-  const response = await fetchJobs(filters);
+async function JobListContent({ jobSeekerId, filters }: JobDetailsContent) {
+  "use cache";
+  cacheLife("max");
+  cacheTag(`jobs-${jobSeekerId}`);
+  console.log("🔵 DB HIT: fetching jobs", filters);
+
+  const response = await fetchJobs(jobSeekerId, filters);
 
   if (!response.success) {
-    switch (response.status) {
-      case 401:
-        redirect("/sign-in");
-      case 403:
-        return redirect("/select-role");
-      default:
-        return <ServerError message={response.message} />;
-    }
+    return <ServerError message={response.message} />;
   }
 
   const hasFilters =
@@ -83,6 +83,8 @@ async function JobListContent({ filters }: JobDetailsContent) {
 // Search Params Parser
 // ----------------------------------------
 async function JobListContentLoader(props: PageProps) {
+  const jobSeekerId = await jobSeekerAuthGuard();
+
   const searchParams = await props.searchParams;
 
   const page =
@@ -123,7 +125,7 @@ async function JobListContentLoader(props: PageProps) {
     limit,
   };
 
-  return <JobListContent filters={filters} />;
+  return <JobListContent jobSeekerId={jobSeekerId} filters={filters} />;
 }
 
 // ----------------------------------------
