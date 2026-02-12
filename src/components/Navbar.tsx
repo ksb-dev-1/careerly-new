@@ -181,7 +181,7 @@ function JobSeekerNavbar() {
               variant="ghost"
               className={`${isActive ? "text-brand hover:text-brand" : ""}`}
             >
-              <CustomLink href={href} prefetch={true} isActive={isActive}>
+              <CustomLink href={href} prefetch={false} isActive={isActive}>
                 {icon}
                 {label}
               </CustomLink>
@@ -220,7 +220,7 @@ function EmployerNavbar() {
               variant="ghost"
               className={`${isActive ? "text-brand hover:text-brand" : ""}`}
             >
-              <CustomLink href={href} prefetch={true} isActive={isActive}>
+              <CustomLink href={href} prefetch={false} isActive={isActive}>
                 {icon}
                 {label}
               </CustomLink>
@@ -318,7 +318,7 @@ export function SideMenu() {
                     >
                       <CustomLink
                         href={href}
-                        prefetch={true}
+                        prefetch={false}
                         isActive={isActive}
                       >
                         {icon}
@@ -346,7 +346,7 @@ export function SideMenu() {
                     >
                       <CustomLink
                         href={href}
-                        prefetch={true}
+                        prefetch={false}
                         isActive={isActive}
                       >
                         {icon}
@@ -367,7 +367,7 @@ export function SideMenu() {
               >
                 <CustomLink
                   href="/job-seeker/profile"
-                  prefetch={true}
+                  prefetch={false}
                   isActive={path === "/job-seeker/profile"}
                 >
                   <User className="h-4 w-4" aria-hidden="true" />
@@ -385,7 +385,7 @@ export function SideMenu() {
               >
                 <CustomLink
                   href="/employer/profile"
-                  prefetch={true}
+                  prefetch={false}
                   isActive={path === "/employer/profile"}
                 >
                   <User className="h-4 w-4" aria-hidden="true" />

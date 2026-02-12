@@ -31,7 +31,7 @@ export function EditLink({
     >
       <CustomLink
         href={`${href}?callbackUrl=${encodeURIComponent(pathname)}`}
-        prefetch={true}
+        prefetch={false}
         isActive={pathname === href}
       >
         <SquarePen />

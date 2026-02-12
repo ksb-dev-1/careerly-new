@@ -3,20 +3,12 @@
 // ----------------------------------------
 import { Suspense } from "react";
 import { Metadata } from "next";
-import { cacheLife, cacheTag } from "next/cache";
 import { redirect } from "next/navigation";
-
-// auth
-import { auth } from "@/auth";
-
-// generated
-import { UserRole } from "@/generated/prisma/enums";
 
 // lib
 import { fetchJobs } from "@/lib/job-seeker/fetch-jobs";
 
 // components
-import { UnauthorizedError } from "@/components/errors/UnauthorizedError";
 import { ServerError } from "@/components/errors/ServerError";
 import { EmptyState } from "@/components/errors/EmptyState";
 import { LoadingFallback } from "@/components/LoadingFallback";
@@ -38,7 +30,6 @@ interface PageProps {
 }
 
 interface JobDetailsContent {
-  jobSeekerId: string;
   filters: {
     page: number;
     jobType?: string[];
@@ -52,11 +43,18 @@ interface JobDetailsContent {
 // ----------------------------------------
 // Job List Content (Server Component)
 // ----------------------------------------
-async function JobListContent({ filters, jobSeekerId }: JobDetailsContent) {
-  const response = await fetchJobs(jobSeekerId, filters);
+async function JobListContent({ filters }: JobDetailsContent) {
+  const response = await fetchJobs(filters);
 
   if (!response.success) {
-    return <ServerError message={response.message} />;
+    switch (response.status) {
+      case 401:
+        redirect("/sign-in");
+      case 403:
+        return redirect("/select-role");
+      default:
+        return <ServerError message={response.message} />;
+    }
   }
 
   const hasFilters =
@@ -84,14 +82,7 @@ async function JobListContent({ filters, jobSeekerId }: JobDetailsContent) {
 // ----------------------------------------
 // Search Params Parser
 // ----------------------------------------
-async function JobListContentLoader(
-  props: PageProps & { jobSeekerId: string },
-) {
-  "use cache";
-  cacheLife("max");
-  cacheTag(`jobs-${props.jobSeekerId}`);
-  console.log("🔵 DB HIT: fetching jobs");
-
+async function JobListContentLoader(props: PageProps) {
   const searchParams = await props.searchParams;
 
   const page =
@@ -117,26 +108,7 @@ async function JobListContentLoader(
 
   const filters = { page, jobType, jobMode, experience, search, limit };
 
-  return <JobListContent jobSeekerId={props.jobSeekerId} filters={filters} />;
-}
-
-// ----------------------------------------
-//  Auth Content Loader
-// ----------------------------------------
-async function AuthContentLoader(props: PageProps) {
-  const session = await auth();
-
-  if (!session?.user.id) {
-    redirect("/sign-in");
-  }
-
-  if (session.user.role !== UserRole.JOB_SEEKER) {
-    return (
-      <UnauthorizedError message="Only user with job seeker role can view jobs." />
-    );
-  }
-
-  return <JobListContentLoader {...props} jobSeekerId={session.user.id} />;
+  return <JobListContent filters={filters} />;
 }
 
 // ----------------------------------------
@@ -145,7 +117,7 @@ async function AuthContentLoader(props: PageProps) {
 export default async function JobListPage(props: PageProps) {
   return (
     <Suspense fallback={<LoadingFallback color="text-brand" />}>
-      <AuthContentLoader {...props} />
+      <JobListContentLoader {...props} />
     </Suspense>
   );
 }

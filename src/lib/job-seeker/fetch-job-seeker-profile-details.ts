@@ -4,12 +4,13 @@
 import { cacheLife, cacheTag } from "next/cache";
 
 // generated
-import { Resume } from "@/generated/prisma/client";
+import { Resume, UserRole } from "@/generated/prisma/client";
 
 // lib
 import { JobSeekerProfileFormData } from "@/lib/validation/job-seeker-profile-validation-schema";
 import { Project, SocialLink } from "@/lib/validation";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/auth";
 
 // ----------------------------------------
 // Types
@@ -29,7 +30,7 @@ export type FetchJobseekerProfileDetailsSuccess = {
 
 export type FetchJobseekerProfileDetailsError = {
   success: false;
-  status: 404 | 500;
+  status: 401 | 403 | 404 | 500;
   message: string;
 };
 
@@ -40,7 +41,7 @@ export type FetchJobseekerProfileDetailsResponse =
 // ----------------------------------------
 // Fetch job seeker profile details
 // ----------------------------------------
-export async function fetchJobSeekerProfileDetails(
+export async function _fetchCachedJobSeekerProfileDetails(
   jobSeekerId?: string,
 ): Promise<FetchJobseekerProfileDetailsResponse> {
   "use cache";
@@ -63,7 +64,7 @@ export async function fetchJobSeekerProfileDetails(
     });
 
     if (!user) {
-      return { success: false, status: 404, message: "User not found." };
+      return { success: false, status: 404, message: "Profile not found!" };
     }
 
     const profile = user.jobSeekerProfile;
@@ -115,4 +116,32 @@ export async function fetchJobSeekerProfileDetails(
       message: "Failed to fetch jobseeker details. Please try again.",
     };
   }
+}
+
+// ----------------------------------------
+// Fetch applications
+// ----------------------------------------
+export async function fetchJobSeekerProfileDetails(): Promise<FetchJobseekerProfileDetailsResponse> {
+  const session = await auth();
+
+  const jobSeekerId = session?.user.id;
+  const role = session?.user.role;
+
+  if (!jobSeekerId) {
+    return {
+      success: false,
+      message: "You must be signed in to fetch applications",
+      status: 401,
+    };
+  }
+
+  if (role !== UserRole.JOB_SEEKER) {
+    return {
+      success: false,
+      message: "Only users with the Job Seeker role can fetch applications",
+      status: 403,
+    };
+  }
+
+  return _fetchCachedJobSeekerProfileDetails(jobSeekerId);
 }

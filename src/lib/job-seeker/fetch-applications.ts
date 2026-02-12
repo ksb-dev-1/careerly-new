@@ -6,7 +6,9 @@
 import { prisma } from "@/lib/prisma";
 
 // 3rd party
-import { Job, ApplicationStatus } from "@/generated/prisma/client";
+import { Job, ApplicationStatus, UserRole } from "@/generated/prisma/client";
+import { auth } from "@/auth";
+import { cacheLife, cacheTag } from "next/cache";
 
 // ----------------------------------------
 // Types
@@ -25,7 +27,7 @@ export type FetchApplicationsSuccess = {
 
 export type FetchApplicationsError = {
   success: false;
-  status: 500;
+  status: 401 | 403 | 500;
   message: string;
 };
 
@@ -41,11 +43,16 @@ export type JobApplicationWithJob = {
 };
 
 // ----------------------------------------
-// Data fetching helper function
+// Fetch cached applications
 // ----------------------------------------
-export async function fetchApplications(
+async function _fetchCachedApplications(
   jobSeekerId?: string,
 ): Promise<FetchApplicationsResponse> {
+  "use cache";
+  cacheLife("max");
+  cacheTag(`applications-${jobSeekerId}`);
+  console.log("🔵 DB HIT: fetching applications");
+
   try {
     const applications = await prisma.jobApplication.findMany({
       where: { userId: jobSeekerId },
@@ -93,4 +100,32 @@ export async function fetchApplications(
       message: (error as Error).message ?? "Internal Server Error",
     };
   }
+}
+
+// ----------------------------------------
+// Fetch applications
+// ----------------------------------------
+export async function fetchApplications(): Promise<FetchApplicationsResponse> {
+  const session = await auth();
+
+  const jobSeekerId = session?.user.id;
+  const role = session?.user.role;
+
+  if (!jobSeekerId) {
+    return {
+      success: false,
+      message: "You must be signed in to fetch applications",
+      status: 401,
+    };
+  }
+
+  if (role !== UserRole.JOB_SEEKER) {
+    return {
+      success: false,
+      message: "Only users with the Job Seeker role can fetch applications",
+      status: 403,
+    };
+  }
+
+  return _fetchCachedApplications(jobSeekerId);
 }

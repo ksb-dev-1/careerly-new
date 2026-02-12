@@ -3,20 +3,12 @@
 // ----------------------------------------
 import { Suspense } from "react";
 import { Metadata } from "next";
-import { cacheLife, cacheTag } from "next/cache";
 import { redirect } from "next/navigation";
-
-// auth
-import { auth } from "@/auth";
-
-// generated
-import { UserRole } from "@/generated/prisma/client";
 
 // lib
 import { fetchApplications } from "@/lib/job-seeker/fetch-applications";
 
 // components
-import { UnauthorizedError } from "@/components/errors/UnauthorizedError";
 import { ServerError } from "@/components/errors/ServerError";
 import { LoadingFallback } from "@/components/LoadingFallback";
 import { EmptyState } from "@/components/errors/EmptyState";
@@ -36,17 +28,18 @@ export const metadata: Metadata = {
 // ----------------------------------------
 // Posted Job List content
 // ----------------------------------------
-async function ApplicationsContent({ jobSeekerId }: { jobSeekerId: string }) {
-  "use cache";
-  cacheLife("max");
-  cacheTag(`applications-${jobSeekerId}`);
-  console.log("🔵 DB HIT: fetching applications");
+async function ApplicationsContent() {
+  const response = await fetchApplications();
 
-  const response = await fetchApplications(jobSeekerId);
-
-  // Handle errors
   if (!response.success) {
-    return <ServerError message={response.message} />;
+    switch (response.status) {
+      case 401:
+        redirect("/sign-in");
+      case 403:
+        return redirect("/select-role");
+      default:
+        return <ServerError message={response.message} />;
+    }
   }
 
   if (response.applications.length === 0) {
@@ -64,29 +57,12 @@ async function ApplicationsContent({ jobSeekerId }: { jobSeekerId: string }) {
 }
 
 // ----------------------------------------
-//  Auth Content
-// ----------------------------------------
-async function AuthContent() {
-  const session = await auth();
-
-  if (!session?.user.id) redirect("/sign-in");
-
-  if (session.user.role !== UserRole.JOB_SEEKER) {
-    return (
-      <UnauthorizedError message="Fetching applied jobs is restricted to users with the Job Seeker role." />
-    );
-  }
-
-  return <ApplicationsContent jobSeekerId={session.user.id} />;
-}
-
-// ----------------------------------------
 //  Page component
 // ----------------------------------------
 export default async function ApplicationsPage() {
   return (
     <Suspense fallback={<LoadingFallback color="text-brand" />}>
-      <AuthContent />
+      <ApplicationsContent />
     </Suspense>
   );
 }

@@ -3,20 +3,12 @@
 // ----------------------------------------
 import { Suspense } from "react";
 import { Metadata } from "next";
-import { cacheLife, cacheTag } from "next/cache";
 import { redirect } from "next/navigation";
-
-// auth
-import { auth } from "@/auth";
-
-// generated
-import { UserRole } from "@/generated/prisma/enums";
 
 // lib
 import { fetchBookmarks } from "@/lib/job-seeker/fetch-bookmarks";
 
 // components
-import { UnauthorizedError } from "@/components/errors/UnauthorizedError";
 import { ServerError } from "@/components/errors/ServerError";
 import { LoadingFallback } from "@/components/LoadingFallback";
 import { EmptyState } from "@/components/errors/EmptyState";
@@ -36,17 +28,18 @@ export const metadata: Metadata = {
 // ----------------------------------------
 // Posted Job List content
 // ----------------------------------------
-async function BookmarksContent({ jobSeekerId }: { jobSeekerId: string }) {
-  "use cache";
-  cacheLife("max");
-  cacheTag(`bookmarks-${jobSeekerId}`);
-  console.log("🔵 DB HIT: fetching bookmarks");
+async function BookmarksContent() {
+  const response = await fetchBookmarks();
 
-  const response = await fetchBookmarks(jobSeekerId);
-
-  // Handle errors
   if (!response.success) {
-    return <ServerError message={response.message} />;
+    switch (response.status) {
+      case 401:
+        redirect("/sign-in");
+      case 403:
+        return redirect("/select-role");
+      default:
+        return <ServerError message={response.message} />;
+    }
   }
 
   if (response.bookmarks.length === 0) {
@@ -64,31 +57,12 @@ async function BookmarksContent({ jobSeekerId }: { jobSeekerId: string }) {
 }
 
 // ----------------------------------------
-//  Auth Content Loader
-// ----------------------------------------
-async function AuthContentLoader() {
-  const session = await auth();
-
-  if (!session?.user.id) {
-    redirect("/sign-in");
-  }
-
-  if (session?.user.role !== UserRole.JOB_SEEKER) {
-    return (
-      <UnauthorizedError message="Only user with job seeker role can access bookmarks." />
-    );
-  }
-
-  return <BookmarksContent jobSeekerId={session.user.id} />;
-}
-
-// ----------------------------------------
 //  Page component
 // ----------------------------------------
 export default async function BookmarksPage() {
   return (
     <Suspense fallback={<LoadingFallback color="text-brand" />}>
-      <AuthContentLoader />
+      <BookmarksContent />
     </Suspense>
   );
 }

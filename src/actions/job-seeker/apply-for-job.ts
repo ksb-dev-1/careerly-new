@@ -12,7 +12,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
 // generated
-import { ApplicationStatus } from "@/generated/prisma/client";
+import { ApplicationStatus, JobStatus } from "@/generated/prisma/client";
 
 // emails
 import { sendJobApplyConfirmationEmail } from "@/emails/_lib/send-job-apply-confirmation";
@@ -65,7 +65,6 @@ export async function applyForJob(
   }
 
   const idCheck = z.uuid().safeParse(jobId);
-
   if (!idCheck.success || !jobId) {
     return {
       success: false,
@@ -76,6 +75,30 @@ export async function applyForJob(
 
   try {
     const result = await prisma.$transaction(async (tx) => {
+      // 1️⃣ Check if the user already applied
+      const existingApp = await tx.jobApplication.findUnique({
+        where: { userId_jobId: { userId: jobSeekerId, jobId } },
+      });
+
+      if (existingApp) {
+        throw new Error("You have already applied to this job");
+      }
+
+      // 2️⃣ Atomically decrement openings if > 0 and job is OPEN
+      const updatedJob = await tx.job.updateMany({
+        where: {
+          id: jobId,
+          jobStatus: JobStatus.OPEN,
+          openings: { gt: 0 },
+        },
+        data: { openings: { decrement: 1 } },
+      });
+
+      if (updatedJob.count === 0) {
+        throw new Error("This job is no longer accepting applications");
+      }
+
+      // 3️⃣ Fetch job info for email and caching
       const job = await tx.job.findUnique({
         where: { id: jobId },
         select: {
@@ -85,10 +108,9 @@ export async function applyForJob(
         },
       });
 
-      if (!job) {
-        return null;
-      }
+      if (!job) return null;
 
+      // 4️⃣ Create job application
       await tx.jobApplication.create({
         data: {
           jobId,
@@ -116,6 +138,7 @@ export async function applyForJob(
       };
     }
 
+    // 5️⃣ Send confirmation email
     await sendJobApplyConfirmationEmail({
       to: session.user.email,
       from: process.env.EMAIL_FROM,
@@ -123,6 +146,7 @@ export async function applyForJob(
       companyName: result.companyName,
     });
 
+    // 6️⃣ Update caches
     updateTag(`jobs-${jobSeekerId}`);
     updateTag(`bookmarks-${jobSeekerId}`);
     updateTag(`applications-${jobSeekerId}`);
@@ -137,13 +161,19 @@ export async function applyForJob(
       status: 200,
       isApplied: true,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error applying for job:", error);
 
     return {
       success: false,
       status: 500,
-      message: "Failed to apply for job",
+      message: error.message || "Failed to apply for job",
     };
   }
 }
+
+// ✅ Key Takeaways
+
+// 1. findUnique + update = two separate queries → not atomic → race condition
+// 2. updateMany with condition = one atomic query → safe for concurrent users
+// 3. Always check updatedJob.count to see if the decrement succeeded.
