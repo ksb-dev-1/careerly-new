@@ -110,23 +110,6 @@ export function Filters() {
     router.push(`/job-seeker/jobs?${params.toString()}`);
   };
 
-  // ----------------------------------------
-  // Clear all
-  // ----------------------------------------
-  // const handleClearAll = () => {
-  //   setTempJobType([]);
-  //   setTempJobMode([]);
-  //   setTempExperience(DEFAULT_EXPERIENCE);
-
-  //   const params = new URLSearchParams(searchParams.toString());
-  //   params.set("page", "1");
-  //   params.delete("jobType");
-  //   params.delete("jobMode");
-  //   params.delete("experience");
-
-  //   router.push(`/job-seeker/jobs?${params.toString()}`);
-  // };
-
   const totalSelections =
     tempJobType.length +
     tempJobMode.length +
@@ -197,18 +180,6 @@ export function Filters() {
             <span>{tempExperience[1]} yrs</span>
           </div>
         </div>
-
-        {/* {totalSelections > 0 && (
-          <div className="flex justify-end">
-            <Badge
-              variant="outline"
-              onClick={handleClearAll}
-              className="border bg-red-100 text-red-600 hover:bg-red-200 border-red-300 dark:bg-red-950/40 dark:text-red-500 dark:hover:bg-red-950 dark:border-red-800 cursor-default"
-            >
-              Clear All
-            </Badge>
-          </div>
-        )} */}
       </CardContent>
 
       <CardFooter className="mt-6">

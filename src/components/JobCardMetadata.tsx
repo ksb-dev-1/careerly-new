@@ -2,16 +2,10 @@
 // Imports
 // ----------------------------------------
 
-// utils
 import { formatJobTypeOrMode } from "@/lib/utils";
-
-// generated
 import { Currency, JobMode, JobType } from "@/generated/prisma/client";
-
-// components
 import { CardContent } from "@/components/ui/card";
 
-// 3rd party
 import {
   DollarSign,
   IndianRupee,
@@ -30,8 +24,6 @@ function CurrencyIcon({ currency }: { currency: Currency }) {
   if (currency === "USD") return <DollarSign size={16} />;
   if (currency === "INR") return <IndianRupee size={16} />;
   if (currency === "EUR") return <Euro size={16} />;
-
-  // fallback icon
   return <DollarSign size={16} />;
 }
 
@@ -72,7 +64,8 @@ function JobDetailRow({
 // Job Card Metadata
 // ----------------------------------------
 interface JobMetadataProps {
-  experience: string;
+  experienceMin: number | null;
+  experienceMax: number | null;
   salary: number;
   currency: Currency;
   jobType: JobType;
@@ -81,13 +74,19 @@ interface JobMetadataProps {
 }
 
 export function JobCardMetadata({
-  experience,
+  experienceMin,
+  experienceMax,
   salary,
   currency,
   jobType,
   jobMode,
   location,
 }: JobMetadataProps) {
+  const experience =
+    experienceMin === experienceMax
+      ? `${experienceMin}`
+      : `${experienceMin}-${experienceMax}`;
+
   return (
     <CardContent>
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
@@ -95,7 +94,7 @@ export function JobCardMetadata({
         <JobDetailRow
           icon={<BriefcaseBusiness size={16} />}
           value={experience}
-          isExperience={true}
+          isExperience
         />
 
         {/* Salary */}
@@ -105,13 +104,13 @@ export function JobCardMetadata({
           currency={currency}
         />
 
-        {/* Job type */}
+        {/* Job Type */}
         <JobDetailRow
           icon={<Timer size={16} />}
           value={formatJobTypeOrMode(jobType)}
         />
 
-        {/* Job mode */}
+        {/* Job Mode */}
         <JobDetailRow
           icon={<Building size={16} />}
           value={formatJobTypeOrMode(jobMode)}

@@ -34,7 +34,7 @@ interface JobDetailsContent {
     page: number;
     jobType?: string[];
     jobMode?: string[];
-    experience?: string;
+    experience?: [number, number];
     search?: string;
     limit?: number;
   };
@@ -59,7 +59,7 @@ async function JobListContent({ filters }: JobDetailsContent) {
 
   const hasFilters =
     (filters.search && filters.search.trim() !== "") ||
-    (filters.experience && filters.experience.trim() !== "") ||
+    !!filters.experience ||
     (filters.jobType?.length ?? 0) > 0 ||
     (filters.jobMode?.length ?? 0) > 0;
 
@@ -101,12 +101,27 @@ async function JobListContentLoader(props: PageProps) {
   const search =
     typeof searchParams.search === "string" ? searchParams.search : "";
 
-  const experience =
-    typeof searchParams.experience === "string" ? searchParams.experience : "";
+  // ✅ FIXED EXPERIENCE PARSING
+  let experience: [number, number] | undefined;
+
+  if (typeof searchParams.experience === "string") {
+    const parts = searchParams.experience.split("-").map(Number);
+
+    if (parts.length === 2 && !parts.some(isNaN)) {
+      experience = [parts[0], parts[1]];
+    }
+  }
 
   const limit = 6;
 
-  const filters = { page, jobType, jobMode, experience, search, limit };
+  const filters = {
+    page,
+    jobType,
+    jobMode,
+    experience, // now correctly typed
+    search,
+    limit,
+  };
 
   return <JobListContent filters={filters} />;
 }

@@ -29,7 +29,8 @@ function JobCard({ job }: { job: BookmarksWithIsApplied }) {
     companyLogo,
     companyName,
     createdAt,
-    experience,
+    experienceMax,
+    experienceMin,
     salary,
     currency,
     jobType,
@@ -64,7 +65,8 @@ function JobCard({ job }: { job: BookmarksWithIsApplied }) {
 
       {/* Job card metadata */}
       <JobCardMetadata
-        experience={experience}
+        experienceMin={experienceMin}
+        experienceMax={experienceMax}
         salary={salary}
         currency={currency}
         jobType={jobType}

@@ -11,7 +11,8 @@ export const placeholderJobs = [
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Adobe",
     companyName: "Adobe",
-    experience: "2-4",
+    experienceMin: 2,
+    experienceMax: 4,
     role: "UI/UX Designer",
     jobType: JobType.FULL_TIME,
     location: "Bangalore, India",
@@ -50,7 +51,8 @@ As a UI/UX Designer, you will shape intuitive and visually engaging user experie
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Neilsen",
     companyName: "Nielsen",
-    experience: "1-2",
+    experienceMin: 1,
+    experienceMax: 2,
     role: "User Research Analyst",
     jobType: JobType.FULL_TIME,
     location: "Pune, India",
@@ -87,7 +89,8 @@ We are seeking a User Research Analyst to generate actionable insights through q
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Hubspot",
     companyName: "HubSpot",
-    experience: "2-5",
+    experienceMin: 2,
+    experienceMax: 5,
     role: "Digital Marketing Specialist",
     jobType: JobType.FULL_TIME,
     location: "Mumbai, India",
@@ -124,7 +127,8 @@ You will plan and execute digital marketing strategies to drive growth, engageme
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Netflix",
     companyName: "Netflix",
-    experience: "3-6",
+    experienceMin: 3,
+    experienceMax: 6,
     role: "Motion Graphics Designer",
     jobType: JobType.FULL_TIME,
     location: "Hyderabad, India",
@@ -161,7 +165,8 @@ We are looking for a Motion Graphics Designer to create engaging visuals that su
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Google",
     companyName: "Google",
-    experience: "3-5",
+    experienceMin: 3,
+    experienceMax: 5,
     role: "Frontend Engineer",
     jobType: JobType.FULL_TIME,
     location: "San Francisco, USA",
@@ -198,7 +203,8 @@ As a Frontend Engineer, you will build performant and accessible web application
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Amazon",
     companyName: "Amazon",
-    experience: "4-7",
+    experienceMin: 4,
+    experienceMax: 7,
     role: "Backend Engineer",
     jobType: JobType.FULL_TIME,
     location: "Bangalore, India",
@@ -236,7 +242,8 @@ Join Amazon's backend team to design highly scalable and fault-tolerant systems.
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Microsoft",
     companyName: "Microsoft",
-    experience: "2-4",
+    experienceMin: 2,
+    experienceMax: 4,
     role: "Full Stack Developer",
     jobType: JobType.FULL_TIME,
     location: "Hyderabad, India",
@@ -273,7 +280,8 @@ Work across frontend and backend systems powering Microsoft cloud products.
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Netflix",
     companyName: "Netflix",
-    experience: "5-8",
+    experienceMin: 5,
+    experienceMax: 8,
     role: "Senior Software Engineer",
     jobType: JobType.FULL_TIME,
     location: "Los Gatos, USA",
@@ -310,7 +318,8 @@ Help build highly reliable backend systems that serve millions of Netflix users.
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Startup",
     companyName: "TechNova",
-    experience: "1-3",
+    experienceMin: 1,
+    experienceMax: 3,
     role: "Junior Software Developer",
     jobType: JobType.INTERNSHIP,
     location: "Pune, India",
@@ -348,7 +357,8 @@ Perfect opportunity for early-career developers to work on real-world products.
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Spotify",
     companyName: "Spotify",
-    experience: "1-3",
+    experienceMin: 1,
+    experienceMax: 3,
     role: "Audio Content Specialist",
     jobType: JobType.INTERNSHIP,
     location: "Mumbai, India",
@@ -385,7 +395,8 @@ You will manage and curate audio content to deliver high-quality listening exper
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Sap",
     companyName: "SAP",
-    experience: "4-6",
+    experienceMin: 4,
+    experienceMax: 6,
     role: "Machine Learning Engineer",
     jobType: JobType.FULL_TIME,
     location: "Berlin, Germany",
@@ -422,7 +433,8 @@ You will develop enterprise-grade machine learning solutions to solve complex bu
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Booking",
     companyName: "Booking.com",
-    experience: "2-5",
+    experienceMin: 2,
+    experienceMax: 5,
     role: "Product Designer",
     jobType: JobType.FULL_TIME,
     location: "Amsterdam, Netherlands",
@@ -459,7 +471,8 @@ Design seamless and intuitive experiences that help millions of users book trave
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Openai",
     companyName: "OpenAI Labs",
-    experience: "3-5",
+    experienceMin: 3,
+    experienceMax: 5,
     role: "AI Engineer",
     jobType: JobType.FULL_TIME,
     location: "Bangalore, India",
@@ -496,7 +509,8 @@ We are seeking an AI Engineer to develop and deploy machine learning models that
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Deloitte",
     companyName: "Deloitte",
-    experience: "2-4",
+    experienceMin: 2,
+    experienceMax: 4,
     role: "Business Analyst",
     jobType: JobType.FULL_TIME,
     location: "Gurgaon, India",
@@ -533,7 +547,8 @@ As a Business Analyst, you will help organizations make informed decisions throu
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Shopify",
     companyName: "Shopify",
-    experience: "2-4",
+    experienceMin: 2,
+    experienceMax: 4,
     role: "Growth Marketing Manager",
     jobType: JobType.FULL_TIME,
     location: "New York, USA",
@@ -570,7 +585,8 @@ Drive growth through experimentation, analytics, and performance marketing strat
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Amazon",
     companyName: "Amazon",
-    experience: "3-6",
+    experienceMin: 3,
+    experienceMax: 6,
     role: "Business Intelligence Analyst",
     jobType: JobType.FULL_TIME,
     location: "Toronto, Canada",
@@ -607,7 +623,8 @@ Enable data-driven decisions by building insights and dashboards for business te
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=McKinsey",
     companyName: "McKinsey & Company",
-    experience: "2-5",
+    experienceMin: 2,
+    experienceMax: 5,
     role: "Management Consultant",
     jobType: JobType.FULL_TIME,
     location: "Munich, Germany",
@@ -644,7 +661,8 @@ Help global organizations solve complex strategic and operational challenges.
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Zendesk",
     companyName: "Zendesk",
-    experience: "1-3",
+    experienceMin: 1,
+    experienceMax: 3,
     role: "Customer Support Specialist",
     jobType: JobType.FULL_TIME,
     location: "Austin, USA",
@@ -681,7 +699,8 @@ Deliver exceptional customer support experiences across digital channels.
   {
     companyLogo: "https://api.dicebear.com/7.x/initials/svg?seed=Ubisoft",
     companyName: "Ubisoft",
-    experience: "3-5",
+    experienceMin: 3,
+    experienceMax: 5,
     role: "3D Animation Artist",
     jobType: JobType.FULL_TIME,
     location: "Paris, France",

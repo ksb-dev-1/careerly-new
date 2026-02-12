@@ -2,7 +2,6 @@
 // Imports
 // ----------------------------------------
 
-// lib
 import { JobWithRelationships } from "@/lib/job-seeker/fetch-jobs";
 
 // components
@@ -17,7 +16,7 @@ import { JobCardFooter } from "@/components/JobCardFooter";
 import { JobPagination } from "@/components/Pagination";
 import { Card } from "@/components/ui/card";
 
-// 3rd Party
+// icons
 import { BriefcaseBusiness, FolderOpen } from "lucide-react";
 
 // ----------------------------------------
@@ -29,7 +28,8 @@ function JobCard({ job }: { job: JobWithRelationships }) {
     role,
     companyName,
     createdAt,
-    experience,
+    experienceMin,
+    experienceMax,
     salary,
     currency,
     jobType,
@@ -46,9 +46,11 @@ function JobCard({ job }: { job: JobWithRelationships }) {
     <div key={id} className="relative">
       <CustomLink href={`/job-seeker/jobs/${id}`} prefetch={false}>
         <Card
-          className={`${isFeatured ? "bg-brand/5 border-brand/20" : ""} h-full outline-brand/50 hover:outline-1 transition-all duration-100`}
+          className={`${
+            isFeatured ? "bg-brand/5 border-brand/20" : ""
+          } h-full outline-brand/50 hover:outline-1 transition-all duration-100`}
         >
-          {/* Job card header */}
+          {/* Header */}
           <JobCardHeader
             companyLogo={companyLogo}
             role={role}
@@ -57,9 +59,10 @@ function JobCard({ job }: { job: JobWithRelationships }) {
             appliedOn={appliedOn}
           />
 
-          {/* Job card metadata */}
+          {/* Metadata */}
           <JobCardMetadata
-            experience={experience}
+            experienceMin={experienceMin}
+            experienceMax={experienceMax}
             salary={salary}
             currency={currency}
             jobType={jobType}
@@ -67,25 +70,23 @@ function JobCard({ job }: { job: JobWithRelationships }) {
             location={location}
           />
 
-          {/* Job footer */}
+          {/* Footer */}
           <JobCardFooter variant="job-list" postedOn={createdAt} />
         </Card>
       </CustomLink>
 
-      {/* Bookmark button */}
+      {/* Bookmark */}
       <BookmarkButton
         jobId={id}
         isBookmarked={isBookmarked}
         className="absolute bottom-4 right-4"
       />
 
-      {/* Feature tag */}
-      {isFeatured ? (
-        <span className="text-xs font-medium absolute top-0 right-0 bg-brand text-white dark:text-background rounded-tr-xl rounded-bl-xl px-3 py-1 ">
+      {/* Featured Tag */}
+      {isFeatured && (
+        <span className="text-xs font-medium absolute top-0 right-0 bg-brand text-white dark:text-background rounded-tr-xl rounded-bl-xl px-3 py-1">
           Featured
         </span>
-      ) : (
-        ""
       )}
     </div>
   );
@@ -102,7 +103,7 @@ interface JobListProps {
     page: number;
     jobType?: string[];
     jobMode?: string[];
-    experience?: string;
+    experience?: [number, number];
     search?: string;
     limit?: number;
   };
@@ -115,20 +116,29 @@ export function JobList({
   filters,
 }: JobListProps) {
   const { page, jobType, jobMode, experience, search } = filters;
+
+  // ✅ Filter checks fixed
   const isFilterApplied =
-    search !== "" || jobType?.length || jobMode?.length || experience !== "";
+    (search && search.trim() !== "") ||
+    !!jobType?.length ||
+    !!jobMode?.length ||
+    !!experience;
 
   const hasFilters =
     (search && search.trim() !== "") ||
     (jobType?.length ?? 0) > 0 ||
-    (jobMode?.length ?? 0) > 0;
+    (jobMode?.length ?? 0) > 0 ||
+    !!experience;
 
+  // ----------------------------------------
+  // Empty filtered state
+  // ----------------------------------------
   if (jobs.length === 0 && hasFilters && page === 1) {
     return (
       <div className="max-w-custom w-full mx-auto px-4 min-h-screen py-16 gap-6">
         <div>
           <div className="mb-6 flex items-end justify-between">
-            <div className="w-full flex flex-col md:flex-row md:items-end md:justify-between gap4 md:gap-2">
+            <div className="w-full flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-2">
               <div className="flex items-center gap-2 dark:text-background">
                 <div className="w-fit bg-brand/10 border border-brand/20 text-brand p-2 rounded-tr-full rounded-br-full flex items-center gap-2">
                   <BriefcaseBusiness size={20} />
@@ -143,15 +153,15 @@ export function JobList({
               </p>
             </div>
 
-            {/* Mobile filters */}
             <MobileFilters />
           </div>
 
-          {/* Active filters */}
-          {isFilterApplied ? <ActiveFilters jobs={jobs} /> : null}
+          {isFilterApplied && <ActiveFilters jobs={jobs} />}
         </div>
+
         <div className="flex items-start gap-6">
           <Filters />
+
           <div className="w-full border h-100 p-6 flex flex-col items-center justify-center rounded-xl shadow-sm bg-card">
             <div className="relative h-10 w-10 rounded-lg bg-muted">
               <FolderOpen className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
@@ -170,6 +180,9 @@ export function JobList({
     );
   }
 
+  // ----------------------------------------
+  // Normal listing
+  // ----------------------------------------
   return (
     <div className="max-w-custom w-full mx-auto px-4 min-h-screen py-16 gap-6">
       <div>
@@ -189,24 +202,22 @@ export function JobList({
             </p>
           </div>
 
-          {/* Mobile filters */}
           <MobileFilters />
         </div>
 
-        {/* Active filters */}
-        {isFilterApplied ? <ActiveFilters jobs={jobs} /> : null}
+        {isFilterApplied && <ActiveFilters jobs={jobs} />}
       </div>
+
       <div className="flex items-start gap-6">
         <Filters />
+
         <div className="w-full">
-          {/* Job listings */}
           <div className="grid gap-6">
             {jobs.map((job) => (
               <JobCard key={job.id} job={job} />
             ))}
           </div>
 
-          {/* Pagination */}
           <JobPagination totalPages={totalPages} />
         </div>
       </div>

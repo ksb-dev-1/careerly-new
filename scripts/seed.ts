@@ -12,7 +12,7 @@ async function insertJobs() {
       const job = placeholderJobs[i];
       const skills = job.skills.map((skill) => skill.toLowerCase());
 
-      // ✅ Markdown → HTML (awaited)
+      // Markdown → Sanitized HTML
       const rawHtml = await marked.parse(job.description);
       const safeHtml = sanitizeHtml(rawHtml);
 
@@ -26,7 +26,11 @@ async function insertJobs() {
           location: job.location,
           salary: job.salary,
           currency: job.currency,
-          experience: job.experience,
+
+          // ✅ Use new fields directly
+          experienceMin: job.experienceMin,
+          experienceMax: job.experienceMax,
+
           openings: job.openings,
           description: safeHtml,
           jobStatus: job.jobStatus ?? "OPEN",

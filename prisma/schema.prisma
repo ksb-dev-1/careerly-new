@@ -13,6 +13,10 @@ datasource db {
   provider = "postgresql"
 }
 
+//----------------------------------------
+// ENUMS
+//----------------------------------------
+
 enum JobStatus {
   OPEN
   CLOSED
@@ -61,14 +65,19 @@ enum Category {
   CUSTOMER_SUPPORT
 }
 
+//----------------------------------------
+// USER
+//----------------------------------------
+
 model User {
-  id               String            @id @default(uuid())
+  id               String   @id @default(uuid())
   name             String?
-  email            String            @unique
+  email            String   @unique
   emailVerified    DateTime?
   image            String?
   imagePublicId    String?
-  role             UserRole?
+  role             UserRole @default(JOB_SEEKER)
+
   accounts         Account[]
   sessions         Session[]
   bookmarks        Bookmark[]
@@ -81,9 +90,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([email])
   @@index([role])
 }
+
+//----------------------------------------
+// AUTH
+//----------------------------------------
 
 model Account {
   id                String  @id @default(uuid())
@@ -91,6 +103,7 @@ model Account {
   type              String
   provider          String
   providerAccountId String
+
   refresh_token     String?
   access_token      String?
   expires_at        Int?
@@ -123,90 +136,119 @@ model Session {
   @@index([expires])
 }
 
+//----------------------------------------
+// JOB
+//----------------------------------------
+
 model Job {
-  id           String           @id @default(uuid())
+  id           String   @id @default(uuid())
   employerId   String?
-  employer     User?            @relation(fields: [employerId], references: [id], onDelete: SetNull)
+  employer     User?    @relation(fields: [employerId], references: [id], onDelete: SetNull)
+
   companyLogo  String?
   companyName  String
   role         String
-  jobType      JobType          @default(FULL_TIME)
-  jobMode      JobMode          @default(ONSITE)
+
+  jobType      JobType  @default(FULL_TIME)
+  jobMode      JobMode  @default(ONSITE)
+
   location     String
   salary       Int
-  currency     Currency         @default(INR)
-  experience   String
-  openings     Int
-  skills       String[]
+  currency     Currency @default(INR)
+
+  experienceMin Int?
+  experienceMax Int?
+
+  openings     Int @default(1)
+
+  skills       String[] @default([])
+
   description  String
-  jobStatus    JobStatus        @default(OPEN)
+
+  jobStatus    JobStatus @default(OPEN)
+  category     Category
+
+  isFeatured   Boolean @default(false)
+  isDeleted    Boolean @default(false)
+  deletedAt    DateTime?
+
   bookmarks    Bookmark[]
   applications JobApplication[]
-
-  category   Category
-  isFeatured Boolean  @default(false)
-
-  isDeleted Boolean   @default(false)
-  deletedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // CRITICAL PERFORMANCE INDEXES
+  // 🚀 Core query index
   @@index([jobStatus, isDeleted, isFeatured, createdAt(sort: Desc)])
-  @@index([employerId])
-  @@index([role])
-  @@index([companyName])
-  @@index([location])
+
+  // 🚀 Filter indexes (only what you actually filter by)
   @@index([category])
   @@index([jobType])
   @@index([jobMode])
+  @@index([employerId])
 }
+
+//----------------------------------------
+// BOOKMARK
+//----------------------------------------
 
 model Bookmark {
   id     String @id @default(uuid())
   userId String
   jobId  String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  job    Job    @relation(fields: [jobId], references: [id], onDelete: Restrict)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job  Job  @relation(fields: [jobId], references: [id], onDelete: Restrict)
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
   @@unique([userId, jobId])
   @@index([userId])
   @@index([jobId])
 }
 
-model Resume {
-  id       String @id @default(uuid())
-  url      String
-  publicId String
-  userId   String @unique
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  fileName String
-  fileSize Int?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+//----------------------------------------
+// JOB APPLICATION
+//----------------------------------------
 
 model JobApplication {
   id                String            @id @default(uuid())
   userId            String
   jobId             String
   applicationStatus ApplicationStatus @default(PENDING)
-  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  job               Job               @relation(fields: [jobId], references: [id], onDelete: Restrict)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job  Job  @relation(fields: [jobId], references: [id], onDelete: Restrict)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([userId, jobId])
   @@index([jobId])
-  @@index([userId, jobId])
   @@index([applicationStatus])
 }
+
+//----------------------------------------
+// RESUME
+//----------------------------------------
+
+model Resume {
+  id       String @id @default(uuid())
+  url      String
+  publicId String
+  fileName String
+  fileSize Int?
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//----------------------------------------
+// EMPLOYER PROFILE
+//----------------------------------------
 
 model EmployerProfile {
   id     String @id @default(uuid())
@@ -224,13 +266,18 @@ model EmployerProfile {
   updatedAt DateTime @updatedAt
 }
 
+//----------------------------------------
+// JOB SEEKER PROFILE
+//----------------------------------------
+
 model JobSeekerProfile {
   id     String @id @default(uuid())
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   experience Int?
-  skills     String[]     @default([])
+  skills     String[] @default([])
+
   projects   Project[]
   socials    SocialLink[]
 
@@ -241,42 +288,49 @@ model JobSeekerProfile {
   updatedAt DateTime @updatedAt
 }
 
+//----------------------------------------
+// PROJECT
+//----------------------------------------
+
 model Project {
-  id                 String           @id @default(uuid())
+  id                 String @id @default(uuid())
   jobSeekerProfileId String
-  jobSeekerProfile   JobSeekerProfile @relation(fields: [jobSeekerProfileId], references: [id], onDelete: Cascade)
+  jobSeekerProfile JobSeekerProfile @relation(fields: [jobSeekerProfileId], references: [id], onDelete: Cascade)
 
   name String
   link String
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
   @@index([jobSeekerProfileId])
 }
 
+//----------------------------------------
+// SOCIAL LINK
+//----------------------------------------
+
 model SocialLink {
-  id                 String           @id @default(uuid())
+  id                 String @id @default(uuid())
   jobSeekerProfileId String
-  jobSeekerProfile   JobSeekerProfile @relation(fields: [jobSeekerProfileId], references: [id], onDelete: Cascade)
+  jobSeekerProfile JobSeekerProfile @relation(fields: [jobSeekerProfileId], references: [id], onDelete: Cascade)
 
   platform String
   url      String
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
   @@index([jobSeekerProfileId])
 }
+
+//----------------------------------------
+// VERIFICATION TOKEN
+//----------------------------------------
 
 model VerificationToken {
   id         String   @id @default(uuid())
   identifier String
   token      String   @unique
   expires    DateTime
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
   @@unique([identifier, token])
 }

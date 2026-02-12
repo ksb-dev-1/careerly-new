@@ -77,7 +77,8 @@ function JobCard({ job }: JobCardProps) {
     role,
     companyName,
     createdAt,
-    experience,
+    experienceMax,
+    experienceMin,
     salary,
     currency,
     jobType,
@@ -107,7 +108,8 @@ function JobCard({ job }: JobCardProps) {
 
         {/* Job card metadata */}
         <JobCardMetadata
-          experience={experience}
+          experienceMin={experienceMin}
+          experienceMax={experienceMax}
           salary={salary}
           currency={currency}
           jobType={jobType}
